@@ -11,8 +11,7 @@
  * - Hash导航 (#slide-5 跳到第5张)
  * - 自动给每个slide添加 data-screen-label
  *
- * 交付边界：浏览器里的 HTML 演示版就是最终交付物。
- * 不提供 PDF / PPTX 导出路径，不生成打印样式。
+ * 交付形态：浏览器里的 HTML 演示版。
  *
  * 用法：
  *   <deck-stage>

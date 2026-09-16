@@ -83,7 +83,7 @@ npx skills add alchaincyf/huashu-design
 | 能力 | 交付物 | 典型耗时 |
 |------|--------|----------|
 | 交互原型（App / Web） | 单文件 HTML · 真 iPhone bezel · 可点击 · Playwright 验证 | 10–15 min |
-| 演讲幻灯片 | HTML deck（浏览器全屏演讲 · 键盘翻页）· 不产出 PDF / PPTX | 15–25 min |
+| 演讲幻灯片 | HTML deck（浏览器全屏演讲 · 键盘翻页） | 15–25 min |
 | 时间轴动画 | MP4（25fps / 60fps 插帧）+ GIF（palette 优化）+ BGM | 8–12 min |
 | 设计变体 | 3+ 并排对比 · Tweaks 实时调参 · 跨维度探索 | 10 min |
 | 信息图 / 可视化 | 印刷级排版 · 可导 PNG / SVG | 10 min |
@@ -114,7 +114,7 @@ Stage + Sprite 时间片段模型 · `useTime` / `useSprite` / `interpolate` / `
 
 ### HTML Slides · 浏览器即舞台
 
-HTML deck 在浏览器里全屏演讲 · 键盘翻页 · 右下计数器 · `localStorage` 记忆位置 · 每页独立 HTML，作用域天然隔离。**交付物就是 HTML 本身**——不生成 PDF / PPTX，也不需要为了导出格式牺牲视觉表达。
+HTML deck 在浏览器里全屏演讲 · 键盘翻页 · 右下计数器 · `localStorage` 记忆位置 · 每页独立 HTML，作用域天然隔离。**交付物就是 HTML 本身**——浏览器里的演示即终态，视觉表达不迁就任何格式。
 
 <p align="center"><img src="https://github.com/alchaincyf/huashu-design/releases/download/v2.0/c2-slides-pptx.gif" width="100%"></p>
 
@@ -239,7 +239,6 @@ Claude Design 是**更好的图形工具**，huashu-design 是**让图形工具�
 
 ## Limitations
 
-- **不产出 PDF / PPTX**。交付物是 HTML——幻灯片场景下就是浏览器里的演示版。需要可编辑 PPTX 或分发用 PDF 时，请另配专门的转换工具。
 - **Framer Motion 级别的复杂动画不行**。3D、物理模拟、粒子系统超出 skill 边界。
 - **完全空白的品牌从零设计质量会掉到 60–65 分**。凭空画 hi-fi 本来就是 last resort。
 

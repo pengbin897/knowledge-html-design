@@ -83,7 +83,7 @@ No buttons, no panels, no Figma plugin. Agent-agnostic — drops into Claude Cod
 | Capability | Deliverable | Typical time |
 |---|---|---|
 | Interactive prototype (App / Web) | Single-file HTML · real iPhone bezel · clickable · Playwright-verified | 10–15 min |
-| Slide decks | HTML deck (full-screen browser presentation · keyboard paging) · no PDF / PPTX output | 15–25 min |
+| Slide decks | HTML deck (full-screen browser presentation · keyboard paging) | 15–25 min |
 | Motion design | MP4 (25fps / 60fps interpolation) + GIF (palette-optimized) + BGM | 8–12 min |
 | Design variations | 3+ side-by-side · Tweaks live params · cross-dimension exploration | 10 min |
 | Infographic / data viz | Print-quality typography · exports to PNG / SVG | 10 min |
@@ -116,7 +116,7 @@ Stage + Sprite time-slice model · `useTime` / `useSprite` / `interpolate` / `Ea
 
 ### HTML Slides · Browser Is the Stage
 
-HTML decks presented full-screen in the browser · keyboard paging · slide counter · `localStorage` position memory · one self-contained HTML per slide, so styling can never leak across pages. **The HTML is the deliverable** — no PDF / PPTX is generated, and nothing is sacrificed to a hypothetical export format.
+HTML decks presented full-screen in the browser · keyboard paging · slide counter · `localStorage` position memory · one self-contained HTML per slide, so styling can never leak across pages. **The HTML is the deliverable** — the browser presentation is the final state, and the visuals never bend to a file format.
 
 <p align="center"><img src="https://github.com/alchaincyf/huashu-design/releases/download/v2.0/c2-slides-pptx-en.gif" width="100%"></p>
 
@@ -227,7 +227,6 @@ Claude Design is a **better graphics tool**. Huashu-design makes **the graphics-
 
 ## Limitations
 
-- **No PDF / PPTX output.** The deliverable is HTML — for slide decks that means the browser presentation itself. Pair it with a dedicated converter if you need editable PPTX or a distributable PDF.
 - **Framer-Motion-tier complex animations are out of scope.** 3D, physics simulation, particle systems exceed the skill's boundaries.
 - **Brand-from-zero design quality drops to 60–65 points.** Drawing hi-fi from nothing was always a last resort.
 
