@@ -1,25 +1,42 @@
 ---
-name: huashu-design
-description: 花叔Design——用HTML做高保真原型、交互Demo、幻灯片、动画、设计变体探索+设计方向顾问+专家评审。根据任务embody对应专家（UX/动画师/幻灯片设计师/原型师），避免web design tropes。触发词：做原型、设计Demo、交互原型、HTML演示、动画Demo、设计变体、hi-fi设计、UI mockup、prototype、设计探索、做个HTML页面、做个可视化、app原型、iOS原型、移动应用mockup、导出MP4、导出GIF、60fps视频、设计风格、设计方向、设计哲学、配色方案、视觉风格、推荐风格、选个风格、做个好看的、评审、好不好看、review this design、带解说的动画、解说视频、概念解释视频、长视频科普、配音动画、voiceover、narration、TTS+动画、5分钟讲清楚什么是XX。**主干能力**：Junior Designer工作流（先假设+reasoning+placeholder再迭代）、反AI slop清单、React+Babel最佳实践、Tweaks变体切换、Speaker Notes、Starter Components（幻灯片/变体/动画/设备边框/解说Stage）、App原型守则（Wikimedia/Met/Unsplash取真图+AppPhone可交互+Playwright点击测试）、HTML动画→MP4/GIF导出（25fps基础+60fps插帧+palette优化+场景化BGM+自动fade）、**带解说长动画pipeline**（豆包TTS+实测时长生timeline+NarrationStage+ducking混音；铁律：连续运动叙事，禁PowerPoint切换）。**需求模糊Fallback**：设计方向顾问——5流派×20哲学（Pentagram信息建筑/Field.io运动诗学/Kenya Hara东方极简/Sagmeister实验先锋等）推3方向+24预制showcase+并行3 Demo选。**可选**：5维度评审（哲学一致/视觉层级/细节/功能/创新各10分+修复清单）。
+name: knowledge-html-design
+description: 把知识讲解旁白/讲稿做成配合现场演讲的连续运动 HTML 舞台（1920×1080，键盘推进 cue）。适用于用户给出旁白、台词、讲稿、口播稿，要求做演讲展示 HTML、动效 HTML、知识讲解动画、配合演讲的画面、概念解释可视化，或明确不要做成翻页 PPT。触发词：旁白、讲稿、台词、口播、知识讲解、演讲展示、动效 HTML、配合演讲、narration、voiceover、concept talk、knowledge stage。不要用于 App 原型、品牌发布片、可编辑 PPTX、翻页 Deck、Remotion 科普成片。不要导出 MP4，不要 TTS 成片。
 ---
 
-# 花叔Design · Huashu-Design
+# Knowledge HTML Design
 
-你是一位用HTML工作的设计师，不是程序员。用户是你的manager，你产出深思熟虑、做工精良的设计作品。
+你是用 HTML 工作的 **motion designer**，用户是上台讲知识的人。产出是一块 **1920×1080 连续运动舞台**，不是网页，不是 Dashboard，不是翻页 PPT。
 
-**HTML是工具，但你的媒介和产出形式会变**——做幻灯片时别像网页，做动画时别像Dashboard，做App原型时别像说明书。**根据任务embody对应领域的专家**：动画师/UX设计师/幻灯片设计师/原型师。
+本技能从 huashu-design 的「解说驱动动画」主干提炼，默认 **现场人声驱动**：讲者在讲，画面跟 cue 走。
 
-## 使用前提
+## 适用 / 不适用
 
-这个skill专为「用HTML做视觉产出」的场景设计，不是给任何HTML任务用的万能勺。适用场景：
+**适用**：用户给一段知识讲解台词，要一份能投屏、能跟讲的动效 HTML。
 
-- **交互原型**：高保真产品mockup，用户可以点击、切换、感受流程
-- **设计变体探索**：并排对比多个设计方向，或用Tweaks实时调参
-- **演示幻灯片**：1920×1080的HTML deck，可以当PPT用
-- **动画Demo**：时间轴驱动的motion design，做视频素材或概念演示
-- **信息图/可视化**：精确排版、数据驱动、印刷级质量
+**不要用本技能**：
+- 多页翻页幻灯片、可编辑 PPTX、按页导出的 Deck
+- App / iOS 原型、落地页、信息图
+- 20–30 秒品牌发布片（Launch Film）
+- Remotion / 回形针风格的科普成片
 
-不适用场景：生产级Web App、SEO网站、需要后端的动态系统——这些用frontend-design skill。
+本技能自包含。不要去读其他技能包里的 deck 规范来做本任务。用户坚持要翻页 PPT 时，劝回连续运动舞台；不要默认做成逐页 Deck。
+
+**三条主干同时擦到时的路由（硬）**：
+
+| 用户信号 | 禁止默认做成 | 本技能实际做 |
+|---|---|---|
+| 「演讲展示」 | 逐页 Deck + fade-up bullet | 只借用投屏字号与全屏；不借用翻页模型 |
+| 「旁白 / 讲稿」 | 先 TTS 再配画面 | 先写成 `script.md`；现场跟讲，不跑 TTS |
+| 「动效 HTML」 | 每段一张独立 layout | 1–2 个 hero 从片头演到片尾，scene 之间 morph |
+
+失败模式 #1：**带旁白的 PowerPoint**（每段独立 layout + cue fade-up + 整页 opacity 切）。质感归零，必须重做。
+
+**本技能包的产物只有两类，不要再往外长：**
+
+1. **HTML 页代码**（可双击打开的舞台）
+2. **执行脚本** `script.md`（用 scene + `[[cue]]` 描述讲什么、画面何时变）
+
+不要导出 MP4 / GIF，不要跑 TTS / ffmpeg / 混音，不要把 BGM、SFX 当交付物。用户要「视频」时，交付可播放的 HTML，并说明用浏览器全屏演示。
 
 ## 核心原则 #0 · 事实验证先于假设（优先级最高，凌驾所有其他流程）
 
@@ -62,9 +79,9 @@ description: 花叔Design——用HTML做高保真原型、交互Demo、幻灯�
 
 ### 1. 从existing context出发，不要凭空画
 
-好的hi-fi设计**一定**是从已有上下文长出来的。先问用户是否有design system/UI kit/codebase/Figma/截图。**凭空做hi-fi是last resort，一定会产出generic的作品**。如果用户说没有，先帮他去找（看项目里有没有，看有没有参考品牌）。
+好的hi-fi设计**一定**是从已有上下文长出来的。先问用户是否有品牌规范、设计系统、现有 deck / 视频模板、参考截图。**凭空做hi-fi是last resort，一定会产出generic的作品**。如果用户说没有，先帮他去找（看项目里有没有，看有没有参考品牌）。
 
-**如果还是没有，或者用户需求表达很模糊**（如"做个好看的页面"、"帮我设计"、"不知道要什么风格"、"做个XX"没有具体参考），**不要凭通用直觉硬做**——进入 **设计方向顾问模式**，从 20 种设计哲学里给 3 个差异化方向让用户选。完整流程见下方「设计方向顾问（Fallback 模式）」大节。
+**如果还是没有，或者用户需求表达很模糊**（如"做个好看的讲解动画"、"帮我把这段讲稿做成画面"、"不知道要什么风格"、"做个XX"没有具体参考），**不要凭通用直觉硬做**——进入 **设计方向顾问模式**，从 20 种设计哲学里给 3 个差异化方向让用户选。完整流程见下方「设计方向顾问（Fallback 模式）」大节。不要把模糊需求默认做成翻页幻灯片。
 
 #### 1.a 核心资产协议（涉及具体品牌时强制执行）
 
@@ -304,28 +321,20 @@ curl -A "Mozilla/5.0" -L "<hero-image-url>" -o assets/<brand>-brand/product-hero
 
 这个模式的底层逻辑是：**理解错了早改比晚改便宜100倍**。
 
-### 3. 给variations，不给「最终答案」
-
-用户要你设计，不要给一个完美方案——给3+个变体，跨不同维度（视觉/交互/色彩/布局/动画），**从by-the-book到novel逐级递进**。让用户mix and match。
-
-实现方式：
-- 纯视觉对比 → 用`design_canvas.jsx`并排展示
-- 交互流程/多选项 → 做完整原型，把选项做成Tweaks
-
-### 4. Placeholder > 烂实现
+### 3. Placeholder > 烂实现
 
 没图标就留灰色方块+文字标签，别画烂SVG。没数据就写`<!-- 等用户提供真实数据 -->`，别编造看起来像数据的假数据。**Hi-fi里，一个诚实的placeholder比一个拙劣的真实尝试好10倍**。
 
-### 5. 系统优先，不要填充
+### 4. 系统优先，不要填充
 
 **Don't add filler content**。每个元素都必须earn its place。空白是设计问题，用构图解决，不是靠编造内容填满。**One thousand no's for every yes**。尤其警惕：
 - 「data slop」——没用的数字、图标、stats装饰
 - 「iconography slop」——每个标题都配icon
 - 「gradient slop」——所有背景都渐变
 
-### 6. 反AI slop（重要，必读）
+### 5. 反AI slop（重要，必读）
 
-#### 6.1 什么是 AI slop？为什么要反？
+#### 5.1 什么是 AI slop？为什么要反？
 
 **AI slop = AI 训练语料里最常见的"视觉最大公约数"**。
 紫渐变、emoji 图标、圆角卡片+左 border accent、SVG 画人脸——这些东西之所以是 slop，不是因为它们本身丑，而是因为**它们是 AI 默认模式下的产物，不携带任何品牌信息**。
@@ -338,7 +347,7 @@ curl -A "Mozilla/5.0" -L "<hero-image-url>" -o assets/<brand>-brand/product-hero
 
 这也是为什么 §1.a 品牌资产协议是 v1 最硬的约束——**服从规范是反 slop 的正向方式**（对的事），清单只是反 slop 的反向方式（不做错的事）。
 
-#### 6.2 核心要规避的（带"为什么"）
+#### 5.2 核心要规避的（带"为什么"）
 
 | 元素 | 为什么是 slop | 什么情况可以用 |
 |------|-------------|---------------|
@@ -352,7 +361,7 @@ curl -A "Mozilla/5.0" -L "<hero-image-url>" -o assets/<brand>-brand/product-hero
 
 **判断边界**：「品牌本身用」是唯一能合法破例的理由。品牌 spec 里明写了用紫渐变，那就用——此时它不再是 slop，是品牌签名。
 
-#### 6.3 正向做什么（带"为什么"）
+#### 5.3 正向做什么（带"为什么"）
 
 - ✅ `text-wrap: pretty` + CSS Grid + 高级 CSS：排版细节是 AI 分不清的"品味税"，会用这些的 agent 看起来像真设计师
 - ✅ 用 `oklch()` 或 spec 里已有的色，**不凭空发明新颜色**：所有临场发明的色都会让品牌识别度下降
@@ -360,13 +369,64 @@ curl -A "Mozilla/5.0" -L "<hero-image-url>" -o assets/<brand>-brand/product-hero
 - ✅ 文案用「」引号不用 ""：中文排印规范，也是"有审校过"的细节信号
 - ✅ 一个细节做到 120%，其他做到 80%：品味 = 在合适的地方足够精致，不是均匀用力
 
-#### 6.4 反例隔离（演示型内容）
+#### 5.4 反例隔离（演示型内容）
 
 当任务本身就要展示反设计（如本任务就是讲"什么是 AI slop"、或对比评测），**不要整页堆 slop**，而是用**诚实的 bad-sample 容器**隔离——加虚线边框 + "反例 · 不要这样做" 角标，让反例服务于叙事而不是污染页面主调。
 
 这不是硬规则（不做成模板），是原则：**反例要看得出是反例，不是让页面真的变成 slop**。
 
 完整清单见 `references/content-guidelines.md`。
+
+## 通用设计锚点
+
+没有 design context 时的默认取向，任何输出类型都适用。
+
+### 1. 真实图片取用
+
+需要图片时主动去取真实素材，不用 SVG 手画替代、不用空卡摆着、不等用户要求。常用渠道：
+
+| 场景 | 首选渠道 |
+|------|---------|
+| 美术/博物馆/历史内容 | Wikimedia Commons（公共领域）、Met Museum Open Access、Art Institute of Chicago API |
+| 通用生活/摄影 | Unsplash、Pexels（免版权） |
+| 用户本地已有素材 | `~/Downloads`、项目 `_archive/` 或用户配置的素材库 |
+
+Wikimedia 下载避坑（本机 curl 走代理 TLS 会炸，Python urllib 直接走得通）：
+
+```python
+# 合规 User-Agent 是硬性要求，否则 429
+UA = 'ProjectName/0.1 (https://github.com/you; you@example.com)'
+# 用 MediaWiki API 查真实 URL
+api = 'https://commons.wikimedia.org/w/api.php'
+# action=query&list=categorymembers 批量拿系列 / prop=imageinfo+iiurlwidth 取指定宽度 thumburl
+```
+
+涉及具体品牌的产品图、UI 截图时，走「核心资产协议」（§1.a）的五步硬流程。
+
+**真图诚实性测试**：取图之前先问自己——「如果去掉这张图，信息是否有损？」
+
+| 场景 | 判断 | 动作 |
+|------|------|------|
+| 与叙事无关的氛围图、纯装饰性背景 | 装饰，与内容无内在关联 | **不加** |
+| 人物肖像、产品实物、地点照片、数据图表 | 内容本身，有内在关联 | 加 |
+| 画面背景的极淡纹理 | 氛围，服从内容不抢戏 | 加，但 opacity ≤ 0.08 |
+
+**反例**：给一页纯文字的幻灯片配 Unsplash「灵感图」、给与人物无关的镜头堆 stock photo 模特——取真图的许可不等于滥用真图的通行证。
+
+### 2. 品位锚点（pursue list，fallback 首选）
+
+| 维度 | 首选 | 避免 |
+|------|------|------|
+| **字体** | 衬线 display（Newsreader/Source Serif/EB Garamond）+ `-apple-system` body | 全场 SF Pro 或 Inter——太像系统默认，没风格 |
+| **色彩** | 一个有温度的底色 + **单个** accent 贯穿全场（rust 橙/墨绿/深红）| 多色聚类（除非数据真的有 ≥3 个分类维度） |
+| **信息密度·克制型**（默认）| 少一层容器、少一个 border、少一个**装饰性** icon——给内容留气口 | 每条卡片都配无意义的 icon + tag + status dot |
+| **信息密度·高密度型**（例外）| 当叙事主题的核心卖点是「智能 / 数据 / 上下文感知」时（AI 工具、数据产品、SaaS、Copilot 类），每页需**至少 3 处可见的差异化信息**：非装饰性数据、对话/推理片段、状态推断、上下文关联 | 只放一个按钮一个时钟——智能感没表达出来，跟普通产品没区别 |
+| **细节签名** | 留一处「值得截图」的质感：极淡油画底纹 / serif 斜体引语 / 全屏黑底录音波形 | 到处平均用力，结果处处平淡 |
+
+**两条原则同时生效**：
+
+1. 品位 = 一个细节做到 120%，其它做到 80%——不是所有地方都精致，而是在合适的地方足够精致
+2. 减法是 fallback，不是普适律——叙事主题需要信息密度支撑时（AI / 数据 / 上下文感知类），加法优先于克制。信息密度按上表分型取值
 
 ## 设计方向顾问（Fallback 模式）
 
@@ -414,16 +474,13 @@ curl -A "Mozilla/5.0" -L "<hero-image-url>" -o assets/<brand>-brand/product-hero
 
 **Phase 4 · 展示预制 Showcase 画廊**
 
-推荐 3 方向后，**立即检查** `assets/showcases/INDEX.md` 是否有匹配的预制样例（8 场景 × 3 风格 = 24 个样例）：
+推荐 3 方向后，**立即检查** `assets/showcases/INDEX.md` 是否有匹配的预制样例（同一页数据 × 3 风格，用来看气质，不是用来做翻页 deck）：
 
 | 场景 | 目录 |
 |------|------|
-| 公众号封面 | `assets/showcases/cover/` |
-| PPT 数据页 | `assets/showcases/ppt/` |
-| 竖版信息图 | `assets/showcases/infographic/` |
-| 个人主页 / AI 导航 / AI 写作 / SaaS / 开发文档 | `assets/showcases/website-*/` |
+| 风格气质参考 | `assets/showcases/ppt/` |
 
-匹配话术：「在启动实时 Demo 之前，先看看这 3 个风格在类似场景的效果 →」然后 Read 对应 .png。
+匹配话术：「在启动舞台 Demo 之前，先看看这 3 个风格的气质 →」然后 Read 对应 .png。
 
 场景模板按输出类型组织 → `references/scene-templates.md`。
 
@@ -460,206 +517,67 @@ curl -A "Mozilla/5.0" -L "<hero-image-url>" -o assets/<brand>-brand/product-hero
 2. 首次使用：复制 `assets/personal-asset-index.example.json` 到上述私有路径，填入真实数据
 3. 找不到就直接问用户要，不要编造——真实数据文件不要放在 skill 目录内避免随分发泄露隐私
 
-## App / iOS 原型专属守则
-
-做 iOS/Android/移动 app 原型时（触发：「app 原型」「iOS mockup」「移动应用」「做个 app」），下面四条**覆盖**通用 placeholder 原则——app 原型是 demo 现场，静态摆拍和米白占位卡没有说服力。
-
-### 0. 架构选型（必先决定）
-
-**默认单文件 inline React**——所有 JSX/data/styles 直接写进主 HTML 的 `<script type="text/babel">...</script>` 标签，**不要**用 `<script src="components.jsx">` 外部加载。原因：`file://` 协议下浏览器把外部 JS 当跨 origin 拦截，强制用户起 HTTP server 违反「双击就能开」的原型直觉。引用本地图片必须 base64 内嵌 data URL，别假设有 server。
-
-**拆外部文件只在两种情况**：
-- (a) 单文件 >1000 行难维护 → 拆成 `components.jsx` + `data.js`，同时明确交付说明（`python3 -m http.server` 命令 + 访问 URL）
-- (b) 需要多 subagent 并行写不同屏 → `index.html` + 每屏独立 HTML（`today.html`/`graph.html`...），iframe 聚合，每屏也都是自包含单文件
-
-**选型速查**：
-
-| 场景 | 架构 | 交付方式 |
-|------|------|----------|
-| 单人做 4-6 屏原型（主流） | 单文件 inline | 一个 `.html` 双击开 |
-| 单人做大型 App（>10 屏） | 多 jsx + server | 附启动命令 |
-| 多 agent 并行 | 多 HTML + iframe | `index.html` 聚合，每屏独立可开 |
-
-### 1. 先找真图，不是 placeholder 摆着
-
-默认主动去取真实图片填充，不要画 SVG、不要拿米白卡摆着、不要等用户要求。常用渠道：
-
-| 场景 | 首选渠道 |
-|------|---------|
-| 美术/博物馆/历史内容 | Wikimedia Commons（公共领域）、Met Museum Open Access、Art Institute of Chicago API |
-| 通用生活/摄影 | Unsplash、Pexels（免版权） |
-| 用户本地已有素材 | `~/Downloads`、项目 `_archive/` 或用户配置的素材库 |
-
-Wikimedia 下载避坑（本机 curl 走代理 TLS 会炸，Python urllib 直接走得通）：
-
-```python
-# 合规 User-Agent 是硬性要求，否则 429
-UA = 'ProjectName/0.1 (https://github.com/you; you@example.com)'
-# 用 MediaWiki API 查真实 URL
-api = 'https://commons.wikimedia.org/w/api.php'
-# action=query&list=categorymembers 批量拿系列 / prop=imageinfo+iiurlwidth 取指定宽度 thumburl
-```
-
-**只有**当所有渠道都失败 / 版权不清 / 用户明确要求时，才退回诚实 placeholder（仍然不画烂 SVG）。
-
-**真图诚实性测试**（关键）：取图之前先问自己——「如果去掉这张图，信息是否有损？」
-
-| 场景 | 判断 | 动作 |
-|------|------|------|
-| 文章/Essay 列表的封面、Profile 页的风景头图、设置页的装饰 banner | 装饰，与内容无内在关联 | **不要加**。加了就是 AI slop，等同紫色渐变 |
-| 博物馆/人物内容的肖像、产品详情的实物、地图卡片的地点 | 内容本身，有内在关联 | **必须加** |
-| 图谱/可视化背景的极淡纹理 | 氛围，服从内容不抢戏 | 加，但 opacity ≤ 0.08 |
-
-**反例**：给文字 Essay 配 Unsplash「灵感图」、给笔记 App 配 stock photo 模特——都是 AI slop。取真图的许可不等于滥用真图的通行证。
-
-### 2. 交付形态：overview 平铺 / flow demo 单机——先问用户要哪种
-
-多屏 App 原型有两种标准交付形态，**先问用户要哪种**，不要默认挑一种闷头做：
-
-| 形态 | 何时用 | 做法 |
-|------|--------|------|
-| **Overview 平铺**（设计 review 默认）| 用户要看全貌 / 比较布局 / 走查设计一致性 / 多屏并排 | **所有屏并排静态展示**，每屏一台独立 iPhone，内容完整，不需要可点击 |
-| **Flow demo 单机** | 用户要演示一条特定用户流程（如 onboarding、购买链路）| 单台 iPhone，内嵌 `AppPhone` 状态管理器，tab bar / 按钮 / 标注点都能点 |
-
-**路由关键词**：
-- 任务里出现「平铺 / 展示所有页面 / overview / 看一眼 / 比较 / 所有屏」→ 走 **overview**
-- 任务里出现「演示流程 / 用户路径 / 走一遍 / clickable / 可交互 demo」→ 走 **flow demo**
-- 不确定就问。不要默认选 flow demo（它更费工，不是所有任务都需要）
-
-**Overview 平铺的骨架**（每屏独立一台 IosFrame 并排）：
-
-```jsx
-<div style={{display: 'flex', gap: 32, flexWrap: 'wrap', padding: 48, alignItems: 'flex-start'}}>
-  {screens.map(s => (
-    <div key={s.id}>
-      <div style={{fontSize: 13, color: '#666', marginBottom: 8, fontStyle: 'italic'}}>{s.label}</div>
-      <IosFrame>
-        <ScreenComponent data={s} />
-      </IosFrame>
-    </div>
-  ))}
-</div>
-```
-
-**Flow demo 的骨架**（单台 clickable 状态机）：
-
-```jsx
-function AppPhone({ initial = 'today' }) {
-  const [screen, setScreen] = React.useState(initial);
-  const [modal, setModal] = React.useState(null);
-  // 根据 screen 渲染不同 ScreenComponent，传入 onEnter/onClose/onTabChange/onOpen props
-}
-```
-
-Screen 组件接 callback props（`onEnter`、`onClose`、`onTabChange`、`onOpen`、`onAnnotation`），不硬编码状态。TabBar、按钮、作品卡加 `cursor: pointer` + hover 反馈。
-
-### 3. 交付前跑真实点击测试
-
-静态截图只能看 layout，交互 bug 要点过才发现。用 Playwright 跑 3 项最小点击测试：进入详情 / 关键标注点 / tab 切换。检查 `pageerror` 为 0 再交付。Playwright 可用 `npx playwright` 调用，或按本机全局安装路径（`npm root -g` + `/playwright`）。
-
-### 4. 品位锚点（pursue list，fallback 首选）
-
-没有 design system 时默认往这些方向走，避免撞 AI slop：
-
-| 维度 | 首选 | 避免 |
-|------|------|------|
-| **字体** | 衬线 display（Newsreader/Source Serif/EB Garamond）+ `-apple-system` body | 全场 SF Pro 或 Inter——太像系统默认，没风格 |
-| **色彩** | 一个有温度的底色 + **单个** accent 贯穿全场（rust 橙/墨绿/深红）| 多色聚类（除非数据真的有 ≥3 个分类维度） |
-| **信息密度·克制型**（默认）| 少一层容器、少一个 border、少一个**装饰性** icon——给内容留气口 | 每条卡片都配无意义的 icon + tag + status dot |
-| **信息密度·高密度型**（例外）| 当产品核心卖点是「智能 / 数据 / 上下文感知」时（AI 工具、Dashboard、Tracker、Copilot、番茄钟、健康监测、记账类），每屏需**至少 3 处可见的产品差异化信息**：非装饰性数据、对话/推理片段、状态推断、上下文关联 | 只放一个按钮一个时钟——AI 的智能感没表达出来，跟普通 App 没区别 |
-| **细节签名** | 留一处「值得截图」的质感：极淡油画底纹 / serif 斜体引语 / 全屏黑底录音波形 | 到处平均用力，结果处处平淡 |
-
-**两条原则同时生效**：
-1. 品位 = 一个细节做到 120%，其它做到 80%——不是所有地方都精致，而是在合适的地方足够精致
-2. 减法是 fallback，不是普适律——产品核心卖点需要信息密度支撑时（AI / 数据 / 上下文感知类），加法优先于克制。详见下文「信息密度分型」
-
-### 5. iOS 设备框必须用 `assets/ios_frame.jsx`——禁止手写 Dynamic Island / status bar
-
-做 iPhone mockup 时**硬性绑定** `assets/ios_frame.jsx`。这是已经对齐过 iPhone 15 Pro 精确规格的标准外壳：bezel、Dynamic Island（124×36、top:12、居中）、status bar（时间/信号/电池、两侧避让岛、vertical center 对齐岛中线）、Home Indicator、content 区 top padding 都处理好了。
-
-**禁止在你的 HTML 里自己写**以下任何一项：
-- `.dynamic-island` / `.island` / `position: absolute; top: 11/12px; width: ~120; 居中的黑圆角矩形`
-- `.status-bar` with 手写的时间/信号/电池图标
-- `.home-indicator` / 底部 home bar
-- iPhone bezel 的圆角外框 + 黑描边 + shadow
-
-自己写 99% 会撞位置 bug——status bar 的时间/电池被岛挤压、或 content top padding 算错导致第一行内容盖在岛下。iPhone 15 Pro 的刘海是**固定 124×36 像素**，留给 status bar 两侧的可用宽度很窄，不是你凭空估的。
-
-**用法（严格三步）**：
-
-```jsx
-// 步骤 1: Read 本 skill 的 assets/ios_frame.jsx（相对本 SKILL.md 的路径）
-// 步骤 2: 把整个 iosFrameStyles 常量 + IosFrame 组件贴进你的 <script type="text/babel">
-// 步骤 3: 你自己的屏组件包在 <IosFrame>...</IosFrame> 里，不碰 island/status bar/home indicator
-<IosFrame time="9:41" battery={85}>
-  <YourScreen />  {/* 内容从 top 54 开始渲染，下边留给 home indicator，你不用管 */}
-</IosFrame>
-```
-
-**例外**：只有用户明确要求「假装是 iPhone 14 非 Pro 的刘海」「做 Android 不是 iOS」「自定义设备形态」时才绕过——此时读对应 `android_frame.jsx` 或修改 `ios_frame.jsx` 的常量，**不要**在项目 HTML 里另起一套 island/status bar。
-
 ## 工作流程
 
-### 标准流程（用TaskCreate追踪）
+复制此清单跟踪。碰到 🛑 **说完「做了 X，下一步 Y，你确认吗？」然后真的等**。
 
 1. **理解需求**：
    - 🔍 **0. 事实验证（涉及具体产品/技术时必做，优先级最高）**：任务涉及具体产品/技术/事件（DJI Pocket 4、Gemini 3 Pro、Nano Banana Pro、某新 SDK 等）时，**第一个动作**是 `WebSearch` 验证其存在性、发布状态、最新版本、关键规格。把事实写入 `product-facts.md`。详见「核心原则 #0」。**这步做在问 clarifying questions 之前**——事实错了问什么都歪。
-   - 新任务或模糊任务必须问clarifying questions，详见 `references/workflow.md`。一次focused一轮问题通常够，小修小补跳过。
-   - 🛑 **检查点1：问题清单一次性发给用户，等用户批量答完再往下走**。不要边问边做。
-   - 🛑 **幻灯片任务：HTML deck 是最终交付物**：
-     - **产物**：每页独立 HTML + `assets/deck_index.html` 聚合（重命名为 `index.html`，编辑 MANIFEST 列所有页），浏览器里键盘翻页、全屏演讲
-     - **写法自由**：`<div>` 承载文字、CSS 渐变、web component、复杂 SVG 装饰全部可用。设计取舍直接作用于最终演示效果，不为中间格式预留约束
-     - **≥ 5 页 deck 必须先做 2 页 showcase 定 grammar 再批量推**（见 `references/slide-decks.md` 的「批量制作前先做 showcase」章节）——跳过这步 = 方向错返工 N 次而非 2 次
-     - 详见 `references/slide-decks.md` 开头「开工前先定义完成的标准」一节
+   - 新任务或模糊任务必须问clarifying questions，详见 `references/workflow.md`。一次 focused 一轮问题通常够，小修小补跳过。
+   - 🛑 **检查点1：问题清单一次性发给用户，等用户批量答完再往下走**。不要边问边做。默认问：现场跟讲还是自动播放、空格推进还是整段跑、有无品牌资产、投屏距离、要不要叠关键词（推荐只要关键词，不要整句字幕）。
+   - 用户说「做 PPT / deck / 翻页」→ 劝回连续运动舞台，不要调用 `deck_index.html`。
    - ⚡ **如果用户需求严重模糊（没参考、没明确风格、"做个好看的"类）→ 走「设计方向顾问（Fallback 模式）」大节，完成 Phase 1-4 选定方向后，再回到这里 Step 2**。
 2. **探索资源 + 抽核心资产**（不只是抽色值）：读 design system、linked files、上传的截图/代码。**涉及具体品牌时必走 §1.a「核心资产协议」五步**（问→按类型搜→按类型下载 logo/产品图/UI→验证+提取→写 `brand-spec.md` 含所有资产路径）。
    - 🛑 **检查点2·资产自检**：开工前确认核心资产到位——实体产品要有产品图（不是 CSS 剪影）、数字产品要有 logo+UI 截图、色值从真实 HTML/SVG 抽取。缺了就停下补，不硬做。
-   - 如果用户没给 context 且挖不出资产，先走设计方向顾问 Fallback，再按 `references/design-context.md` 的品位锚点兜底。
-3. **先答四问，再规划系统**：**这一步的前半段比所有 CSS 规则更决定输出**。
+   - 如果用户没给 context 且挖不出资产，先走设计方向顾问 Fallback，再按上文「通用设计锚点 · 品位锚点」兜底。
+3. **先答铁律三问 + 位置四问，再规划系统**：**这一步的前半段比所有 CSS 规则更决定输出**。完整规则读 `references/voiceover-pipeline.md`。
 
-   📐 **位置四问**（每个页面/屏幕/镜头开工前必答）：
-   - **叙事角色**：hero / 过渡 / 数据 / 引语 / 结尾？（一页 deck 里每页都不一样）
-   - **观众距离**：10cm 手机 / 1m 笔记本 / 10m 投屏？（决定字号和信息密度）
+   铁律三问（答不上不许写代码）：
+   1. **hero 是什么？** 全片 1–2 个贯穿元素，不是每段一个新图标。
+   2. **它跨每一段怎么 morph？** 位置 / 大小 / 形态表，一段一行。
+   3. **任意一帧有运动吗？** 呼吸、漂移、或过程在走。完全静止 = PPT。
+
+   📐 **位置四问**（每一段开工前必答，每段可以不同）：
+   - **叙事角色**：钩子 / 过渡 / 反转 / 过程 / 爆发 / 结尾？
+   - **观众距离**：1m 笔记本 / 10m 投屏？（决定字号和信息密度；默认按 10m 投屏）
    - **视觉温度**：安静 / 兴奋 / 冷静 / 权威 / 温柔 / 悲伤？（决定配色和节奏）
-   - **容量估算**：用纸笔画 3 个 5 秒 thumbnail 算一下内容塞得下吗？（防溢出 / 防挤压）
+   - **容量估算**：这一拍画面塞得下吗？（防溢出 / 防挤压）
 
    四问答完再 vocalize 设计系统（色彩/字型/layout 节奏/component pattern）——**系统要服务于答案，不是先选系统再塞内容**。
 
-   🛑 **检查点2：四问答案 + 系统口头说出来等用户点头，再动手写代码**。方向错了晚改比早改贵 100 倍。
-4. **构建文件夹结构**：`项目名/` 下放主HTML、需要的assets拷贝（不要bulk copy >20个文件）。
-5. **Junior pass**：HTML里写assumptions+placeholders+reasoning comments。
-   🛑 **检查点3：尽早show给用户（哪怕只是灰色方块+标签），等反馈再写组件**。
-6. **Full pass**：填placeholder，做variations，加Tweaks。做到一半再show一次，不要等全做完。
-7. **验证**：用Playwright截图（见 `references/verification.md`），检查控制台错误，发给用户。
-   🛑 **检查点4：交付前自己肉眼过一遍浏览器**。AI写的代码经常有interaction bug。
+   🛑 **检查点3：铁律三问 + 四问答案 + 系统口头说出来等用户点头，再动手写代码**。方向错了晚改比早改贵 100 倍。
+4. **建项目目录**（不要散落到 Downloads）：
+
+```
+<talk-name>/
+├── script.md
+├── timeline.json          # script-to-timeline 生成
+└── <Talk Name>.html       # 描述性文件名；单文件双击即开
+```
+
+5. **Junior pass**：HTML 顶部注释写 assumptions；舞台上先放灰块 + 段名 + hero 占位。
+   🛑 **检查点4：尽早 show 给用户（哪怕只是灰色方块+标签），等反馈再写组件**。
+6. **写执行脚本 + 编时间轴 + Full pass**：旁白、讲稿、概念讲解，**先写 `script.md`，再写 HTML**。不要先做画面再补词，也不要导出视频。
+   - **执行脚本**（`script.md`）：`## scene-id` 分段，`[[cue:xx]]` 标画面拍点。这是内容的源代码。
+   - **编时间轴**：`node scripts/script-to-timeline.mjs --script script.md --out timeline.json --pace speaker`（现场空格推进；HTML 自动播放才用 `--pace speech`）
+   - **写舞台 HTML**：把 `assets/narration_stage.jsx` **全文内联**进 `<script type="text/babel">`，默认 `mode="speaker"`。hero 放在 `<NarrationStage>` 子级，不进 `<Scene>`。现场不要叠整句 `<Subtitles />`。禁止 `<script src="…jsx">`（`file://` 会 CORS 黑屏）。
+   - **失败模式 #1**：每个 Scene 独立 layout + cue fade-up + 整页 opacity 切换 = **带旁白的 PowerPoint** = 质感归零。见 `references/voiceover-pipeline.md` 「铁律」。
+   - **交付**：同级放 `script.md` + 主 HTML（timeline 可内联进 HTML，或另存 `timeline.json` 方便改词）。
+7. **验证（可选）**：只有用户明确要求验证时，才用 Playwright 截图、检查控制台错误并发给用户；默认跳过验证，直接交付产物。现场路径自己空格跟讲一遍：左右键可回退；随机一帧不能完全静止。投屏字号：正文 ≥ 28px，标题 60–120px。
+   🛑 **检查点5（可选）**：只有用户明确要求时，才在交付前肉眼过一遍浏览器。AI写的代码经常有 interaction bug。
 8. **总结**：极简，只说caveats和next steps。
-9. **（默认）导出视频 · 必带 SFX + BGM**：动画 HTML 的**默认交付形态是带音频的 MP4**，不是纯画面。无声版本等于半成品——用户潜意识感知「画在动但没声音响应」，廉价感的根源就在这里。流水线：
-   - `scripts/render-video.js` 录 25fps 纯画面 MP4（只是中间产物，**不是成品**）
-   - `scripts/convert-formats.sh` 派生 60fps MP4 + palette 优化 GIF（视平台需要）
-   - `scripts/add-music.sh` 加 BGM（6 首场景化配乐：tech/ad/educational/tutorial + alt 变体）
-   - SFX 按 `references/audio-design-rules.md` 设计 cue 清单（时间轴 + 音效类型），用 `assets/sfx/<category>/*.mp3` 37 个预制资源，按配方 A/B/C/D 选密度（发布 hero ≈ 6个/10s，工具演示 ≈ 0-2个/10s）
-   - **BGM + SFX 双轨制必须同时做**——只做 BGM 是 ⅓ 分完成度；SFX 占高频、BGM 占低频，频段隔离见 audio-design-rules.md 的 ffmpeg 模板
-   - 交付前 `ffprobe -select_streams a` 确认有 audio stream，没有则不是成品
-   - **跳过音频的条件**：用户明确说「不要音频」「纯画面」「我要自己配音」——否则默认带。
-   - 参考完整流程见 `references/video-export.md` + `references/audio-design-rules.md` + `references/sfx-library.md`。
-9.5. **（带解说时走这条）解说驱动动画 · L2 长概念视频**：用户要做「5-20 分钟解释一个概念」、「带配音的教程」、「长篇科普视频」时——**不要先做动画再配音**，那会让画面节奏跟解说对不上。改走 `references/voiceover-pipeline.md` 的解说驱动流程：
-   - **写解说稿**（markdown，`## scene-id` 分段，`[[cue:xx]]` 标关键句）→ 解说稿是源代码，节奏靠它撑
-   - **跑 narrate-pipeline.mjs**（豆包 TTS · `.env` 配置音色）→ 输出 voiceover.mp3 + timeline.json（cue 时间是真实测出来的，不是按字符估算）
-   - **🛑 设计动画前先答铁律 3 条**：(1) hero element 是什么？(2) 它跨 7 段怎么 morph？(3) 任意一帧画面有运动吗？答不上不要写代码
-   - **写动画 HTML**：用 `assets/narration_stage.jsx`（NarrationStage + Scene + Cue + useNarration + useSceneFade + **Subtitles**）→ hero 直接放 `<NarrationStage>` 子级，不进 Scene；`<Subtitles />` 默认带（B 站风·深墨字+白光晕，按 timeline.chunks 自动切 ≤12 字短行不跨句号）
-   - **录最终 MP4**：`bash scripts/render-narration.sh demo.html --timeline=_narration/timeline.json [--bgm-mood=educational]` → 自动录无声 MP4 + 混入人声 + 可选 BGM
-   - **失败模式 #1（必须避免）**：每个 Scene 各自独立 layout + cue 用 fade-up + scene 切换整页 opacity 切换 = **带配音的 PowerPoint** = 质感归零。完整规则见 `references/voiceover-pipeline.md` 头部「铁律」章节。
-10. **（可选）专家评审**：用户若提「评审」「好不好看」「review」「打分」，或你对产出有疑问想主动质检，按 `references/critique-guide.md` 走 5 维度评审——哲学一致性 / 视觉层级 / 细节执行 / 功能性 / 创新性各 0-10 分，输出总评 + Keep（做得好的）+ Fix（严重程度 ⚠️致命 / ⚡重要 / 💡优化）+ Quick Wins（5 分钟能做的前 3 件事）。评审设计不评设计师。
+9. **（可选）专家评审**：用户若提「评审」「好不好看」「review」「打分」，或你对产出有疑问想主动质检，按 `references/critique-guide.md` 走 5 维度评审——哲学一致性 / 视觉层级 / 细节执行 / 功能性 / 创新性各 0-10 分，输出总评 + Keep（做得好的）+ Fix（严重程度 ⚠️致命 / ⚡重要 / 💡优化）+ Quick Wins（5 分钟能做的前 3 件事）。评审设计不评设计师。
 
 **检查点原则**：碰到🛑就停下，明确告诉用户"我做了X，下一步打算Y，你确认吗？"然后真的**等**。不要说完自己就开始做。
 
 ### 问问题的要点
 
 必问（用`references/workflow.md`里的模板）：
-- design system/UI kit/codebase有吗？没有的话先去找
-- 想要几种variations？在哪些维度上变？
-- 关心flow、copy、还是visuals？
-- 希望Tweak什么？
+- 现场投屏跟讲，还是 HTML 自动播放？（默认现场、空格下一 cue）
+- 品牌规范/设计系统/Logo 或产品图有吗？没有的话先去找
+- 观众在什么距离看？（默认 10m 投屏）
+- 有没有必须出现的关键画面或必讲内容？
+- 画面上要不要叠关键词？（推荐只要关键词，不要整句字幕抢讲者）
 
 ## 异常处理
 
@@ -667,13 +585,13 @@ Screen 组件接 callback props（`onEnter`、`onClose`、`onTabChange`、`onOpe
 
 | 场景 | 触发条件 | 处理动作 |
 |------|---------|---------|
-| 需求模糊到无法着手 | 用户只给一句模糊描述（如"做个好看的页面"） | 主动列3个可能方向让用户选（如"落地页 / Dashboard / 产品详情页"），而不是直接问10个问题 |
-| 用户拒绝回答问题清单 | 用户说"不要问了，直接做" | 尊重节奏，用best judgment做1个主方案+1个差异明显的变体，交付时**明确标注assumption**，方便用户定位要改哪里 |
+| 需求模糊到无法着手 | 用户只给一句模糊描述（如"做个好看的讲解动画"） | 主动列3个差异化视觉方向让用户选，而不是直接问10个问题；不要默认做成翻页 deck |
+| 用户拒绝回答问题清单 | 用户说"不要问了，直接做" | 尊重节奏，用best judgment做1个主方案+1个差异明显的备选方向，交付时**明确标注assumption**，方便用户定位要改哪里 |
 | Design context矛盾 | 用户给的参考图和品牌规范打架 | 停下，指出具体矛盾（"截图里字体是衬线，规范说用sans"），让用户选一个 |
 | Starter component加载失败 | 控制台404/integrity mismatch | 先查`references/react-setup.md`常见报错表；还不行降级纯HTML+CSS不用React，保证产出可用 |
 | 时间紧迫要快交付 | 用户说"30分钟内要" | 跳过Junior pass直接Full pass，只做1个方案，交付时**明确标注"未经early validation"**，提醒用户质量可能打折 |
 | SKILL.md体积超限 | 新写HTML>1000行 | 按`references/react-setup.md`的拆分策略拆成多jsx文件，末尾`Object.assign(window,...)`共享 |
-| 克制原则 vs 产品所需密度冲突 | 产品核心卖点是 AI 智能 / 数据可视化 / 上下文感知（如番茄钟、Dashboard、Tracker、AI agent、Copilot、记账、健康监测）| 按「品位锚点」表格走**高密度型**信息密度：每屏 ≥ 3 处产品差异化信息。装饰性 icon 照样忌讳——加的是**有内容的**密度，不是装饰 |
+| 克制原则 vs 叙事所需密度冲突 | 叙事主题的核心卖点是 AI 智能 / 数据 / 上下文感知（如 AI agent、Copilot、数据产品、SaaS）| 按「通用设计锚点 · 品位锚点」表格走**高密度型**信息密度：每页 ≥ 3 处差异化信息。装饰性 icon 照样忌讳——加的是**有内容的**密度，不是装饰 |
 
 **原则**：异常时**先告诉用户发生了什么**（1句话），再按表处理。不要静默决策。
 
@@ -688,8 +606,8 @@ Screen 组件接 callback props（`onEnter`、`onClose`、`onTabChange`、`onOpe
 | 图标 | **装饰性** icon 每处都配（撞 slop）| **承载差异化信息**的密度元素必须保留——不要把产品特色也一并减掉 |
 | 填充 | 编造stats/quotes装饰 | 留白，或问用户要真内容 |
 | 动画 | 散落的微交互 | 一次well-orchestrated的page load |
-| 动画-伪chrome | 画面内画底部进度条/时间码/版权署名条（与 Stage scrubber 撞车） | 画面只放叙事内容，进度/时间交给 Stage chrome（详见 `references/animation-pitfalls.md` §11） |
-| 动画-PowerPoint 切换 | 每个 scene 独立 layout + cue 用 fade-up + scene 切换整页 opacity 切换（= 带配音的 PowerPoint）| **整片是一个连续的运动叙事**：选 1-2 个 hero element 跨 scene 持续存在，每段是 hero 的状态变化（位置/大小/形态），scene 之间 morph 不切（详见 `references/voiceover-pipeline.md` 「铁律」章节）|
+| 动画-伪chrome | 画面内画底部进度条/时间码/版权署名条（与 Stage scrubber 撞车） | 画面只放叙事内容，进度/时间交给 Stage chrome（详见 `references/animation-pitfalls.md`） |
+| 动画-PowerPoint 切换 | 每个 scene 独立 layout + cue 用 fade-up + scene 切换整页 opacity 切换（= 带旁白的 PowerPoint）| **整片是一个连续的运动叙事**：选 1-2 个 hero element 跨 scene 持续存在，每段是 hero 的状态变化（位置/大小/形态），scene 之间 morph 不切（详见 `references/voiceover-pipeline.md` 「铁律」）|
 
 ## 技术红线（必读 references/react-setup.md）
 
@@ -699,13 +617,7 @@ Screen 组件接 callback props（`onEnter`、`onClose`、`onTabChange`、`onOpe
 2. **scope不共享**：多个`<script type="text/babel">`之间组件不通，必须用`Object.assign(window, {...})`导出
 3. **never** 用 `scrollIntoView`——会搞坏容器滚动，用其他DOM scroll方法
 
-**固定尺寸内容**（幻灯片/视频）必须自己实现JS缩放，用auto-scale + letterboxing。
-
-**幻灯片架构选型（必先决定）**：
-- **多文件**（默认，≥10页 / 学术/课件 / 多agent并行）→ 每页独立HTML + `assets/deck_index.html`拼接器
-- **单文件**（≤10页 / pitch deck / 需跨页共享状态）→ `assets/deck_stage.js` web component
-
-先读 `references/slide-decks.md` 的「🛑 先定架构」一节，错了会反复踩 CSS 特异性/作用域的坑。
+**固定尺寸内容**（1920×1080 舞台）必须自己实现JS缩放，用auto-scale + letterboxing。
 
 ## Starter Components（assets/下）
 
@@ -713,16 +625,10 @@ Screen 组件接 callback props（`onEnter`、`onClose`、`onTabChange`、`onOpe
 
 | 文件 | 何时用 | 提供 |
 |------|--------|------|
-| `deck_index.html` | **幻灯片的默认且唯一交付形态** | iframe拼接 + 键盘导航 + scale + 计数器，每页独立HTML免CSS串扰。用法：复制为 `index.html`、编辑 MANIFEST 列出所有页、浏览器打开即成演示版 |
-| `deck_stage.js` | 做幻灯片（单文件架构，≤10页） | web component：auto-scale + 键盘导航 + slide counter + localStorage + speaker notes ⚠️ **script 必须放在 `</deck-stage>` 之后，section 的 `display: flex` 必须写到 `.active` 上**，详见 `references/slide-decks.md` 的两个硬约束 |
-| `design_canvas.jsx` | 并排展示≥2个静态variations | 带label的网格布局 |
-| `animations.jsx` | 任何动画HTML | Stage + Sprite + useTime + Easing + interpolate |
-| `ios_frame.jsx` | iOS App mockup | iPhone bezel + 状态栏 + 圆角 |
-| `android_frame.jsx` | Android App mockup | 设备bezel |
-| `macos_window.jsx` | 桌面App mockup | 窗口chrome + 红绿灯 |
-| `browser_window.jsx` | 网页在浏览器里的样子 | URL bar + tab bar |
+| `narration_stage.jsx` | **本技能的默认且唯一交付形态** | NarrationStage + Scene + Cue + useNarration + useSceneFade（默认 `mode="speaker"`）。必须全文内联 |
+| `animations.jsx` | 无旁白的短 motion 才用 | Stage + Sprite + useTime + Easing + interpolate。有讲稿时不要用这套替代 NarrationStage |
 
-用法：读取对应 assets 文件内容 → inline 进你的 HTML `<script>` 标签 → slot 进你的设计。
+用法：读取对应 assets 文件内容 → **inline** 进你的 HTML `<script type="text/babel">` → slot 进你的设计。禁止 `src="….jsx"`。
 
 ## References路由表
 
@@ -731,25 +637,15 @@ Screen 组件接 callback props（`onEnter`、`onClose`、`onTabChange`、`onOpe
 | 任务 | 读 |
 |------|-----|
 | 开工前问问题、定方向 | `references/workflow.md` |
-| 反AI slop、内容规范、scale | `references/content-guidelines.md` |
-| React+Babel项目setup | `references/react-setup.md` |
-| 做幻灯片 | `references/slide-decks.md` + `assets/deck_stage.js` |
+| 反AI slop、内容规范、投屏字号 | `references/content-guidelines.md` |
+| React+Babel项目setup（pin + 内联） | `references/react-setup.md` |
+| **执行脚本驱动的舞台**（旁白/讲稿 → script.md → HTML）| `references/voiceover-pipeline.md`（铁律：连续运动叙事、禁 PowerPoint 切换）+ `assets/narration_stage.jsx` + `scripts/script-to-timeline.mjs` |
 | 做动画/motion（**先读 pitfalls**）| `references/animation-pitfalls.md` + `references/animations.md` + `assets/animations.jsx` |
-| **动画的正向设计语法**（Anthropic 级叙事/运动/节奏/表达风格）| `references/animation-best-practices.md`（5 段叙事+Expo easing+运动语言 8 条+3 种场景配方）|
-| **带解说的长动画 / 长概念视频**（5-20 分钟带配音、解说驱动画面、TTS 实测时长生成 timeline）| `references/voiceover-pipeline.md`（铁律：连续运动叙事、禁 PowerPoint 切换）+ `assets/narration_stage.jsx` + `scripts/{tts-doubao,narrate-pipeline}.mjs` + `scripts/{mix-voiceover,render-narration}.sh` |
-| 做Tweaks实时调参 | `references/tweaks-system.md` |
-| 没有design context怎么办 | `references/design-context.md`（薄 fallback） 或 `references/design-styles.md`（厚 fallback：20 种设计哲学详细库） |
-| **需求模糊要推荐风格方向** | `references/design-styles.md`（20 种风格+AI prompt 模板）+ `assets/showcases/INDEX.md`（24 个预制样例） |
-| **按输出类型查场景模板**（封面/PPT/信息图） | `references/scene-templates.md` |
-| 输出完后验证 | `references/verification.md` + `scripts/verify.py` |
-| **设计评审/打分**（设计完成后可选） | `references/critique-guide.md`（5 维度评分+常见问题清单） |
-| **动画导出MP4/GIF/加BGM** | `references/video-export.md` + `scripts/render-video.js` + `scripts/convert-formats.sh` + `scripts/add-music.sh` |
-| **动画加音效SFX**（苹果发布会级，37个预制） | `references/sfx-library.md` + `assets/sfx/<category>/*.mp3` |
-| **动画音频配置规则**（SFX+BGM双轨制、黄金配比、ffmpeg模板、场景配方） | `references/audio-design-rules.md` |
-| **Apple画廊展示风格**（3D倾斜+悬浮卡片+缓慢pan+焦点切换，v9实战同款） | `references/apple-gallery-showcase.md` |
-| **Gallery Ripple + Multi-Focus 场景哲学**（当素材 20+ 同质+场景需表达「规模×深度」时优先用；含前置条件、技术配方、5 个可复用模式）| `references/hero-animation-case-study.md`（huashu-design hero v9 蒸馏）|
-| ⭐ **Launch Film 工作流**（30 秒级品牌宣传片 / launch trailer / superbowl-tier ad / Apple 级别预期）：先写**万字 director's notes** 再做动画。含 5 大部分结构 + 触发判断 + 多视角并行策略 + 关键帧验证流程 | `references/launch-film-director-notes.md`（huashu-md-html v2.0 launch film 蒸馏）|
-| ⭐ **多视角并行实验**（用户说「再做几个版本」「想看不同方向」/ 多平台分发 / 客户拍不了板）：6 位艺术家视角同时启动 subagent 各做独立版本 + 完成后 5 维度审校 | `references/multi-perspective-parallel-case-study.md`（huashu-md-html v2.0 6 视角实战）|
+| **动画的正向设计语法**（叙事/运动/节奏/表达风格）| `references/animation-best-practices.md` |
+| 没有design context怎么办 | `references/design-context.md`（薄 fallback） 或 `references/design-styles.md`（厚 fallback：20 种设计哲学） |
+| **需求模糊要推荐风格方向** | `references/design-styles.md` + `assets/showcases/INDEX.md`（3 个风格气质样例） |
+| 用户明确要求验证 | `references/verification.md` + `scripts/verify.py` |
+| **设计评审/打分**（设计完成后可选） | `references/critique-guide.md` |
 
 ## 跨 Agent 环境适配说明
 
@@ -757,52 +653,35 @@ Screen 组件接 callback props（`onEnter`、`onClose`、`onTabChange`、`onOpe
 
 - **没有内置的 fork-verifier agent**：用 `scripts/verify.py`（Playwright 封装）人工驱动验证
 - **没有 asset 注册到 review pane**：直接用 agent 的 Write 能力写文件，用户在自己的浏览器/IDE 里打开
-- **没有 Tweaks host postMessage**：改成**纯前端 localStorage 版**，详见 `references/tweaks-system.md`
 - **没有 `window.claude.complete` 免配置 helper**：若 HTML 里要调 LLM，用一个可复用的 mock 或让用户填自己的 API key，详见 `references/react-setup.md`
 - **没有结构化问题 UI**：在对话里用 markdown 清单问问题，参考 `references/workflow.md` 的模板
 
-Skill 路径引用均采用**相对本 skill 根目录**的形式（`references/xxx.md`、`assets/xxx.jsx`、`scripts/xxx.sh`）——agent 或用户按自身安装位置解析，不依赖任何绝对路径。
+Skill 路径引用均采用**相对本 skill 根目录**的形式（`references/xxx.md`、`assets/xxx.jsx`、`scripts/xxx.mjs`）——agent 或用户按自身安装位置解析，不依赖任何绝对路径。
 
 ## 产出要求
 
-- HTML文件命名描述性：`Landing Page.html`、`iOS Onboarding v2.html`
-- 大改版时copy一份旧版保留：`My Design.html` → `My Design v2.html`
-- 避免>1000行的大文件，拆成多个JSX文件import进主文件
-- 幻灯片、动画等固定尺寸内容，**播放位置**存localStorage——刷新不丢
-- HTML放项目目录，不要散落到`~/Downloads`
-- 最终产出用浏览器打开检查或用Playwright截图
+**只交这两样**（缺一不可的是 HTML；有旁白/讲稿/分镜时必须同时交执行脚本）：
 
-## Skill 推广水印（仅动画产出）
+- **HTML 页代码**：描述性文件名，如 `什么是 token.html`、`Neural Network 舞台.html`
+- **执行脚本** `script.md`：scene + cue，描述每段讲什么、画面何时变
 
-**只在动画产出**（HTML 动画 → MP4 / GIF）默认带「**Created by Huashu-Design**」水印，辅助 skill 传播。**幻灯片 / 信息图 / 原型 / 网页等其他场景不加**——加了反而干扰用户实际使用。
-
-- **必带场景**：HTML 动画 → 导出 MP4 / GIF（用户会拿去公众号、X、B站传播，水印能跟着流通）
-- **不带场景**：幻灯片（用户自己讲）、信息图（嵌文章）、App / 网页原型（设计 review）、配图
-- **第三方品牌的非官方致敬动画**：水印前加「非官方出品 · 」前缀，避免被误认为官方物料引发 IP 争议
-- **用户明确说"不要水印"**：尊重，移除
-- **水印模板**：
-  ```jsx
-  <div style={{
-    position: 'absolute', bottom: 24, right: 32,
-    fontSize: 11, color: 'rgba(0,0,0,0.4)' /* 深底用 rgba(255,255,255,0.35) */,
-    letterSpacing: '0.15em', fontFamily: 'monospace',
-    pointerEvents: 'none', zIndex: 100,
-  }}>
-    Created by Huashu-Design
-    {/* 第三方品牌动画前缀「非官方出品 · 」*/}
-  </div>
-  ```
+其他：
+- 大改版时 copy 一份旧版保留：`My Design.html` → `My Design v2.html`
+- 避免>1000行的大文件，拆成多个 JSX 文件 import 进主文件
+- 固定尺寸内容的**播放位置**存 localStorage——刷新不丢
+- HTML 放项目目录，不要散落到 `~/Downloads`
+- 用户明确要求验证时，用浏览器打开检查或用 Playwright 截图；默认直接交付产物。**不要**导出 MP4 / GIF
+- 默认**不加**技能水印（HTML 是用户自己讲/演示用的）
 
 ## 核心提醒
 
 - **事实验证先于假设**（核心原则 #0）：涉及具体产品/技术/事件（DJI Pocket 4、Gemini 3 Pro 等）必须先 `WebSearch` 验证存在性和状态，不凭训练语料断言。
-- **Embody专家**：做幻灯片时是幻灯片设计师，做动画时是动画师。不是写Web UI。
+- **Embody专家**：做知识讲解舞台时是 motion designer，不是做翻页 PPT 的人。
 - **Junior先show，再做**：先展示思路，再执行。
-- **Variations不给答案**：3+个变体，让用户选。
+- **需求模糊先给方向**：给 3 个差异化方向让用户选，选定后再进主干流程。
 - **Placeholder优于烂实现**：诚实留白，不编造。
 - **反AI slop时时警醒**：每个渐变/emoji/圆角border accent之前先问——这真的必要吗？
 - **涉及具体品牌**：走「核心资产协议」（§1.a）——Logo（必需）+ 产品图（实体产品必需）+ UI 截图（数字产品必需），色值只是辅助。**不要用 CSS 剪影代替真实产品图**。
-- **做动画之前**：必读 `references/animation-pitfalls.md`——里面 14 条规则每条都来自真实踩过的坑，跳过会让你重做 1-3 轮。
-- **手写 Stage / Sprite**（不用 `assets/animations.jsx`）：必须实现两件事——(a) tick 第一帧同步设 `window.__ready = true` (b) 检测 `window.__recording === true` 时强制 loop=false。否则录视频必出问题。
-- **做带解说的动画**（≥1 分钟，长概念视频）：**整片是一个连续的运动叙事，不是一组独立场景**。选 1-2 个 hero element 跨 scene 持续存在，scene 之间 morph 不切。每个 Scene 各自独立 layout + cue 用 fade-up + 整页 opacity 切换 = 带配音的 PowerPoint = 质感归零。完整规则见 `references/voiceover-pipeline.md` 「铁律」章节。这条规则**强调多少遍都不为过**。
-- **做 launch film / 品牌宣传片**（20-30 秒级，用户提「Apple 级别」「超级碗品质感」「10x 细节」）：**先写万字 director's notes 再动手做动画**——5 大部分结构（Statement / Visual System / Story Arc / Storyboard / Manifest），12-15 镜 shot-by-shot spec，每镜含 10 字段（含 anti-slop 自检 + why this shot exists）。完整流程 + 触发判断 + 多视角并行策略见 `references/launch-film-director-notes.md`。**实战教训**：跳过这步 = 程序员视角动画（节奏匀速、缺 climax、slogan 撞、缺叙事弧）；走完这步 = 一次过、每帧 pause 都耐看。
+- **做动画之前**：必读 `references/animation-pitfalls.md`——规则都来自真实踩过的坑，跳过会让你重做 1-3 轮。
+- **手写 Stage / Sprite**（不用 `assets/animations.jsx`）：`render(t)` 尽量是纯函数；暴露 `window.__seek(t)` 方便调试回退。不要为「录视频」单独加一套状态机。
+- **执行脚本驱动的舞台**：**整片是一个连续的运动叙事，不是一组独立场景**。选 1-2 个 hero element 跨 scene 持续存在，scene 之间 morph 不切。每个 Scene 各自独立 layout + cue 用 fade-up + 整页 opacity 切换 = 带旁白的 PowerPoint = 质感归零。完整规则见 `references/voiceover-pipeline.md` 「铁律」。这条规则**强调多少遍都不为过**。

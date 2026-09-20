@@ -59,8 +59,7 @@
 - **字体系统**：至少 6 个字号层级，每层级含字体名 + weight + size + letter-spacing + 用途
 - **网格系统**：画布尺寸 + 外边距 + column grid + baseline grid + 关键安全区 + 黄金分割锚点
 - **动画系统**：easing 库（4 条以内）+ duration 字典 + stagger 法则 + scene 过渡规则
-- **Chrome 元素**：贯穿全片的小细节（counter / chip / ticker / watermark / texture），每个含位置 + 入退场时机
-- **音频系统**：BGM 30 秒走向曲线（分层）+ SFX 字典（10+ cues 含时间码 + 音量 + 频段隔离）
+- **Chrome 元素**：贯穿全片的小细节（counter / chip / ticker / texture），每个含位置 + 入退场时机
 - **反 AI slop checklist**：per-shot 自检表（10-15 项）
 
 铁律：**所有视觉决策都从 Visual System 推导，不要在 shot list 里临时发明新值**。
@@ -88,7 +87,7 @@ SHOT NN · NAME
 [VISUAL]      画面构图 + 元素位置 + 运动方向
 [TYPE]        排版 spec（字体 / 字号 / 字距 / 行高 / 颜色 / 对齐）
 [ANIM]        每元素 in/out 时机 + easing + duration + stagger + delay
-[AUDIO]       music beat + SFX cue（每镜对应 BGM 节奏 + 必含 SFX 时间表）
+[SCRIPT]      对照执行脚本：这一镜对应 script.md 哪一段 / 哪个 cue
 [CHROME]      四角元素状态（哪些 chrome 在 / 哪些 fade in/out / 哪个 pulse）
 [ANTI-SLOP]   这一镜通过了哪些自检项 + 有什么 120% 细节签名
 [WHY]         承接上一镜的逻辑 + 推进下一镜的钩子
@@ -104,12 +103,8 @@ SHOT NN · NAME
 
 - 字体加载 URL（含 preconnect）
 - CSS 变量（直接可粘贴）
-- BGM 来源选择标准 + Suno/Udio prompt 关键词 + 备选库
-- SFX 字典（按时间码逐 cue 列出文件路径 + 音量）
-- **关键帧验证计划**：12-15 张 pause-and-check 关键帧时间码，每帧验证项列出（fonts / positions / chrome state）
-- 录制参数（fps / codec / bitrate / preset）
-- ffmpeg 音频混合命令（含 audio stream 验证）
-- 交付物清单（mp4 / mp4-60fps / gif / poster.png / silent.mp4 / shot-list.csv）
+- **关键帧验证计划**：12-15 张 pause-and-check 关键帧时间码（浏览器暂停或 Playwright 截图）
+- 交付物清单（HTML + `script.md` / director's notes + 关键帧 PNG）
 - 全链路时间估算（小时级精度）
 
 ---
@@ -246,7 +241,7 @@ v5f · 草间彌生 Yayoi Kusama（圆点 + 重复 + 单一强色）
 | 「这个项目 1 万字脚本再做动画」 | ✅ 触发 | 用户明确指明 |
 | 「简单 motion graphic，logo 转一下」 | ❌ 不触发 | 用 animations.md 标准流程 |
 | 「做个 onboarding 动画 demo」 | ❌ 不触发 | 用 animations.md |
-| 「教程视频带配音」 | ❌ 不触发 | 走 voiceover-pipeline.md |
+| 「教程 / 带旁白的讲解」 | ❌ 不走 launch film | 走 voiceover-pipeline.md：先写 script.md 再写 HTML |
 | 「单个 hero animation」 | ⚠️ 看复杂度 | 如果是高规格 hero，触发；普通 hero 用 hero-animation-case-study.md |
 
 ---
@@ -257,13 +252,7 @@ v5f · 草间彌生 Yayoi Kusama（圆点 + 重复 + 单一强色）
 
 `assets/director-notes-samples/launch-film-30s-sample.md`（约 78KB · 11500 字 · 13 镜 · 5 大部分齐全）
 
-原始项目位置（含对应实施 HTML + 关键帧）：
-
-- `~/.claude/skills/huashu-md-html/demos/v5-director-notes.md`（director's notes）
-- `~/.claude/skills/huashu-md-html/demos/v5-six-forms.html`（HTML 实施）
-- `~/.claude/skills/huashu-md-html/demos/v5-keyframes/`（关键帧验证截图）
-
-写新项目时强烈建议**先 Read 这份样本**，理解工作量和细节密度，再决定要不要全套走流程。
+写新项目时强烈建议**先 Read 这份样本**，理解工作量和细节密度，再决定要不要全套走流程。本仓库不附带原始实施 HTML / 关键帧截图。
 
 ---
 
@@ -276,16 +265,16 @@ v5f · 草间彌生 Yayoi Kusama（圆点 + 重复 + 单一强色）
 → 30 秒片至少 12-15 镜（每镜 2-3 秒）。镜少 = 节奏匀速 = 没 climax。
 
 ❌ **director's notes 写完就交付，不做实施**
-→ 文档不是交付物，动画才是。文档 + 动画一起交付，文档作为「设计依据」附录。
+→ 文档不是终态。终态是 HTML + 执行脚本；director's notes 只是设计依据。
 
 ❌ **多视角并行时让 subagent 看其他版本**
 → 各 subagent 必须独立，否则趋同。审校阶段才对比。
 
-❌ **跳过关键帧验证直接录 MP4**
-→ 必然返工。关键帧验证是最便宜的 quality gate。
+❌ **跳过关键帧验证直接交 HTML**
+→ 必然返工。关键帧暂停检查是最便宜的 quality gate。
 
-❌ **把动画细节决策推迟到「等我录的时候再想」**
-→ 录制阶段是机械执行，不能做创意决策。所有决策必须在 director's notes 写死。
+❌ **把动画细节推迟到「以后再导出视频时再想」**
+→ 本技能不导出视频。所有决策必须在 director's notes / script.md 写死，然后忠实地做成 HTML。
 
 ---
 

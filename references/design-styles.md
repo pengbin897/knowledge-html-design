@@ -1,32 +1,32 @@
 # 设计哲学风格库：20种体系
 
-> 用于视觉设计（网页/PPT/PDF/信息图/配图/App等）的设计风格库。
+> 用于演示幻灯片与动画 Demo 的设计风格库。
 > 每种风格提供：哲学内核 + 核心特征 + 提示词DNA（与场景模板组合使用）。
 
 ## 风格×场景×执行路径 速查表
 
-| 风格 | 网页 | PPT | PDF | 信息图 | 封面 | AI生成 | 最佳路径 |
-|------|:---:|:---:|:---:|:-----:|:---:|:-----:|---------|
-| 01 Pentagram | ★★★ | ★★★ | ★★☆ | ★★☆ | ★★★ | ★☆☆ | HTML |
-| 02 Stamen Design | ★★☆ | ★★☆ | ★★☆ | ★★★ | ★★☆ | ★★☆ | 混合 |
-| 03 Information Architects | ★★★ | ★☆☆ | ★★★ | ★☆☆ | ★☆☆ | ★☆☆ | HTML |
-| 04 Fathom | ★★☆ | ★★★ | ★★★ | ★★★ | ★★☆ | ★☆☆ | HTML |
-| 05 Locomotive | ★★★ | ★★☆ | ★☆☆ | ★☆☆ | ★★☆ | ★★☆ | 混合 |
-| 06 Active Theory | ★★★ | ★☆☆ | ★☆☆ | ★☆☆ | ★★☆ | ★★★ | AI生成 |
-| 07 Field.io | ★★☆ | ★★☆ | ★☆☆ | ★★☆ | ★★★ | ★★★ | AI生成 |
-| 08 Resn | ★★★ | ★☆☆ | ★☆☆ | ★☆☆ | ★★☆ | ★★☆ | AI生成 |
-| 09 Experimental Jetset | ★★☆ | ★★☆ | ★★☆ | ★★☆ | ★★★ | ★★☆ | 混合 |
-| 10 Müller-Brockmann | ★★☆ | ★★★ | ★★★ | ★★★ | ★★☆ | ★☆☆ | HTML |
-| 11 Build | ★★★ | ★★★ | ★★☆ | ★☆☆ | ★★★ | ★☆☆ | HTML |
-| 12 Sagmeister & Walsh | ★★☆ | ★★★ | ★☆☆ | ★★☆ | ★★★ | ★★★ | AI生成 |
-| 13 Zach Lieberman | ★☆☆ | ★☆☆ | ★☆☆ | ★★☆ | ★★★ | ★★★ | AI生成 |
-| 14 Raven Kwok | ★☆☆ | ★★☆ | ★☆☆ | ★★☆ | ★★★ | ★★★ | AI生成 |
-| 15 Ash Thorp | ★★☆ | ★★☆ | ★☆☆ | ★☆☆ | ★★★ | ★★★ | AI生成 |
-| 16 Territory Studio | ★★☆ | ★★☆ | ★☆☆ | ★★☆ | ★★★ | ★★★ | AI生成 |
-| 17 Takram | ★★★ | ★★★ | ★★★ | ★★☆ | ★★☆ | ★☆☆ | HTML |
-| 18 Kenya Hara | ★★☆ | ★★★ | ★★★ | ★☆☆ | ★★★ | ★☆☆ | HTML |
-| 19 Irma Boom | ★☆☆ | ★★☆ | ★★★ | ★★☆ | ★★★ | ★★☆ | 混合 |
-| 20 Neo Shen | ★★☆ | ★★☆ | ★★☆ | ★★☆ | ★★★ | ★★★ | AI生成 |
+| 风格 | 幻灯片 | 动画 | AI生成 | 最佳路径 |
+|------|:-----:|:---:|:-----:|---------|
+| 01 Pentagram | ★★★ | ★★★ | ★☆☆ | HTML |
+| 02 Stamen Design | ★★☆ | ★★☆ | ★★☆ | 混合 |
+| 03 Information Architects | ★☆☆ | ★☆☆ | ★☆☆ | HTML |
+| 04 Fathom | ★★★ | ★★☆ | ★☆☆ | HTML |
+| 05 Locomotive | ★★☆ | ★★★ | ★★☆ | 混合 |
+| 06 Active Theory | ★☆☆ | ★★★ | ★★★ | AI生成 |
+| 07 Field.io | ★★☆ | ★★★ | ★★★ | AI生成 |
+| 08 Resn | ★☆☆ | ★★☆ | ★★☆ | AI生成 |
+| 09 Experimental Jetset | ★★☆ | ★★☆ | ★★☆ | 混合 |
+| 10 Müller-Brockmann | ★★★ | ★★☆ | ★☆☆ | HTML |
+| 11 Build | ★★★ | ★★☆ | ★☆☆ | HTML |
+| 12 Sagmeister & Walsh | ★★★ | ★★★ | ★★★ | AI生成 |
+| 13 Zach Lieberman | ★☆☆ | ★★★ | ★★★ | AI生成 |
+| 14 Raven Kwok | ★★☆ | ★★★ | ★★★ | AI生成 |
+| 15 Ash Thorp | ★★☆ | ★★★ | ★★★ | AI生成 |
+| 16 Territory Studio | ★★☆ | ★★★ | ★★★ | AI生成 |
+| 17 Takram | ★★★ | ★★☆ | ★☆☆ | HTML |
+| 18 Kenya Hara | ★★★ | ★★☆ | ★☆☆ | HTML |
+| 19 Irma Boom | ★★☆ | ★☆☆ | ★★☆ | 混合 |
+| 20 Neo Shen | ★★☆ | ★★★ | ★★★ | AI生成 |
 
 > 场景适配：★★★ = 强烈推荐 / ★★☆ = 适合 / ★☆☆ = 需改造
 > AI生成：★★★ = 直出效果好 / ★★☆ = 需调整 / ★☆☆ = 建议HTML执行
@@ -581,11 +581,10 @@ typography. The data tells a story of dramatic channel shift.
 
 **默认审美禁区**（用户可按自己品牌 override）：
 - ❌ 赛博霓虹/深蓝色底（#0D1117）
-- ❌ 封面图加个人署名/水印
 
 ---
 
 **版本**：v2.1
 **更新日期**：2026-02-13
-**适用场景**：网页/PPT/PDF/信息图/封面/配图/App等所有视觉设计
-**与 image-to-slides 联动**：PPT场景可直接引用本文件风格，通过 image-to-slides skill 执行生成
+**适用场景**：演示幻灯片与动画 Demo 的视觉设计
+**与 image-to-slides 联动**：幻灯片场景可直接引用本文件风格，通过 image-to-slides skill 执行生成

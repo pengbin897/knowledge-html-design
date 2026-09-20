@@ -1,6 +1,6 @@
 # React + Babel 项目规范
 
-用HTML+React+Babel做原型时必须遵守的技术规范。不遵守会炸。
+用 HTML+React+Babel 做幻灯片 / 动画时必须遵守的技术规范。不遵守会炸。
 
 ## Pinned Script Tags（必须用这些版本）
 
@@ -123,7 +123,7 @@ container.scrollTo({
 
 部分原生 design-agent 环境（如 Claude.ai Artifacts）有免配置的 `window.claude.complete`，但大部分 agent 环境（Claude Code / Codex / Cursor / Trae / etc.）本地里**没有**。
 
-如果你的 HTML 原型需要调用 LLM 做 demo（比如做个聊天 interface），两个选项：
+如果你的 HTML 需要调用 LLM 做 demo（比如做个聊天 interface），两个选项：
 
 ### 选项A：不真调，用mock
 
@@ -175,7 +175,7 @@ window.claude = {
 
 ## 典型 HTML 起手模板
 
-拷贝这个模板作为React原型的骨架：
+拷贝这个模板作为 React 页面的骨架：
 
 ```html
 <!DOCTYPE html>
@@ -183,7 +183,7 @@ window.claude = {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Prototype Name</title>
+  <title>Your Deck Name</title>
 
   <!-- React + Babel pinned -->
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>

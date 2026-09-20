@@ -9,7 +9,7 @@
 ## 触发判断：什么时候用这个风格
 
 **适合**：
-- 有10张以上真实产出要同屏展示（PPT、App、网页、信息图）
+- 有 10 张以上真实产出要同屏展示（幻灯片、动画帧）
 - 观众是专业受众（开发者、设计师、产品经理），对「质感」敏感
 - 希望传递的气质是「克制、展览式、高级、有空间感」
 - 需要焦点和全局同时存在（看细节但不失整体）
@@ -74,7 +74,7 @@
 }
 ```
 
-**反面教材**：不要贴边瓷砖（无padding无border无shadow）——那是信息图密度表达，不是展览。
+**反面教材**：不要贴边瓷砖（无padding无border无shadow）——那是数据页的密度表达，不是展览。
 
 ### 2. 3D倾斜作品墙
 
@@ -331,7 +331,7 @@ requestAnimationFrame(function tick(now) {
 
 ## 引用
 
-- 完整实现样本：`/Users/alchain/Documents/写作/01-公众号写作/项目/2026.04-huashu-design发布/配图/hero-animation-v5.html`
+- 完整实现样本：`demos/hero-animation-v10-en.html`
 - 原始灵感：claude.ai/design hero 视频
 - 参考审美：Apple 产品页、Dribbble shot 集合页
 

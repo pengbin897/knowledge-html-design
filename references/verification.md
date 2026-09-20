@@ -2,11 +2,11 @@
 
 一些 design-agent 原生环境（如 Claude.ai Artifacts）有内置的 `fork_verifier_agent` 起 subagent 用 iframe 截图检查。大部分 agent 环境（Claude Code / Codex / Cursor / Trae / 等）里没有这个内置能力——用 Playwright 手动做就能覆盖相同的验证场景。
 
-## 验证清单
+## 验证清单（按需执行）
 
-每次产出HTML后，按这个清单做一遍：
+只有用户明确要求验证时，才在产出 HTML 后按这个清单执行；默认直接交付产物，不进行 Playwright 或浏览器验证。
 
-### 1. 浏览器渲染检查（必做）
+### 1. 浏览器渲染检查
 
 最基础：**HTML能不能打开**？在macOS上：
 
@@ -21,7 +21,7 @@ open -a "Google Chrome" "/path/to/your/design.html"
 HTML文件里最常见的问题是JS报错导致白屏。用Playwright跑一遍：
 
 ```bash
-python ~/.claude/skills/claude-design/scripts/verify.py path/to/design.html
+python scripts/verify.py path/to/design.html
 ```
 
 这个脚本会：
@@ -37,23 +37,19 @@ python ~/.claude/skills/claude-design/scripts/verify.py path/to/design.html
 如果是响应式设计，抓多个viewport：
 
 ```bash
-python verify.py design.html --viewports 1920x1080,1440x900,768x1024,375x667
+python scripts/verify.py design.html --viewports 1920x1080,1440x900,768x1024,375x667
 ```
 
 ### 4. 交互检查
 
-Tweaks、动画、按钮切换——默认的静态截图看不到。**建议让用户自己开浏览器点一遍**，或者用Playwright录屏：
-
-```python
-page.video.record('interaction.mp4')
-```
+动画、状态切换——默认的静态截图看不到。**让用户自己开浏览器点一遍**，或自己空格跟讲验证。
 
 ### 5. 幻灯片逐页检查
 
 Deck类HTML，一张张截：
 
 ```bash
-python verify.py deck.html --slides 10  # 截前10张
+python scripts/verify.py deck.html --slides 10  # 截前10张
 ```
 
 生成 `deck-slide-01.png`、`deck-slide-02.png`... 方便快速浏览。
@@ -120,13 +116,7 @@ open screenshot.png
 
 ### 上传图床分享链接
 
-如果需要给远程协作者看（比如 Slack/飞书/微信），让用户用自己的图床工具或 MCP 上传：
-
-```bash
-python ~/Documents/写作/tools/upload_image.py screenshot.png
-```
-
-返回ImgBB的永久链接，可以粘贴到任何地方。
+如果需要给远程协作者看（比如 Slack/飞书/微信），让用户用自己的图床工具或 MCP 上传截图，不要依赖本机私有脚本路径。
 
 ## 验证出错时
 
@@ -157,33 +147,33 @@ python ~/Documents/写作/tools/upload_image.py screenshot.png
 - 检查`*  margin: 0; padding: 0`reset
 - Chrome DevTools里打开gridlines看实际布局
 
-## 验证=设计师的第二双眼
+## 验证=设计师的第二双眼（用户要求时）
 
-**永远要自己过一遍**。AI写代码时经常出现：
+用户明确要求验证时，建议自己过一遍。AI写代码时经常出现：
 
 - 看起来对但interaction有bug
 - 静态截图好但scroll时错位
 - 宽屏好看但窄屏崩
 - Dark mode忘了测
-- Tweaks切换后某些组件没响应
+- 状态切换后某些组件没响应
 
-**最后1分钟的验证可以省1小时的返工**。
+**最后1分钟的验证可以省1小时的返工**；但未收到明确要求时，不执行这一步。
 
 ## 常用验证脚本命令
 
 ```bash
 # 基础：打开+截图+抓错
-python verify.py design.html
+python scripts/verify.py design.html
 
 # 多viewport
-python verify.py design.html --viewports 1920x1080,375x667
+python scripts/verify.py design.html --viewports 1920x1080,375x667
 
 # 多slide
-python verify.py deck.html --slides 10
+python scripts/verify.py deck.html --slides 10
 
 # 输出到指定目录
-python verify.py design.html --output ./screenshots/
+python scripts/verify.py design.html --output ./screenshots/
 
 # headless=false，打开真实浏览器给你看
-python verify.py design.html --show
+python scripts/verify.py design.html --show
 ```

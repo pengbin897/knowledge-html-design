@@ -2,154 +2,649 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>md还是html，这是个蠢问题 · 解说 demo (v3 · 字幕+持续运动+修溢出)</title>
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>md还是html，这是个蠢问题</title>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@300;400;600;700;800&family=Noto+Serif+SC:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  body { margin: 0; background: #0a0a0a; min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 20px; box-sizing: border-box; font-family: -apple-system, sans-serif; }
-  #root { box-shadow: 0 30px 80px rgba(0,0,0,0.6); border-radius: 4px; overflow: hidden; }
-  * { box-sizing: border-box; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: #07080A; }
+body { display: flex; align-items: center; justify-content: center; }
+#frame { width: 1920px; transform-origin: center center; }
+#root { width: 1920px; }
+
 </style>
 </head>
 <body>
-<div id="root"></div>
-
+<div id="frame"><div id="root"></div></div>
+<script>
+(function fitFrame() {
+  const frame = document.getElementById('frame');
+  function fit() {
+    const h = Math.max(frame.offsetHeight, 1080);
+    const s = Math.min(window.innerWidth / 1920, window.innerHeight / h);
+    frame.style.transform = 'scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  setTimeout(fit, 50);
+})();
+</script>
 <script type="text/babel">
-// ── timeline.json (inline · 精简版，每段含 chunks 用于字幕) ───
-const TIMELINE = {"title":"md还是html，这是个蠢问题","totalDuration":198.168,"voiceover":"voiceover.mp3","scenes":[
-  {"id":"opening","start":0,"end":22.32,"duration":22.32,"chunks":[
-    {"text":"前两天，","absoluteStart":0,"absoluteEnd":0.984},
-    {"text":"Claude Code 团队的 Thariq 发了篇爆文。标题就一句话，HTML 是新的 markdown。","absoluteStart":0.984,"absoluteEnd":8.5},
-    {"text":"他说他几乎不再写 md 文件了，全让 AI 给他生成 HTML。500 万阅读，X 上立马吵翻了。","absoluteStart":8.5,"absoluteEnd":14.952},
-    {"text":"一派是 md 党，觉得 md 才是 AI 时代的源代码。另一派觉得 HTML 才是终极答案。","absoluteStart":14.952,"absoluteEnd":22.32}
-  ],"cues":[{"id":"thariq","absoluteTime":0.984},{"id":"two-camps","absoluteTime":14.952}]},
-  {"id":"md-side","start":22.82,"end":56.516,"duration":33.696,"chunks":[
-    {"text":"md 党的证据其实挺硬的。","absoluteStart":22.82,"absoluteEnd":26.5},
-    {"text":"OpenAI 去年发的 AGENTS.md，60000 多个项目用，","absoluteStart":26.5,"absoluteEnd":31.5},
-    {"text":"AWS、Anthropic、Google、微软、OpenAI，AI 半壁江山一起捐进 Linux Foundation。","absoluteStart":31.5,"absoluteEnd":38.5},
-    {"text":"Karpathy 的 llm-wiki，单一个 CLAUDE.md 文件，5 万 star。","absoluteStart":38.5,"absoluteEnd":45.14},
-    {"text":"Cloudflare 实测，同一篇博客 HTML 一万六千 token，转成 md 只要三千。省 80%。","absoluteStart":45.14,"absoluteEnd":54.764},
-    {"text":"GitHub 官方说：文档不再是描述代码，文档就是代码。","absoluteStart":54.764,"absoluteEnd":56.516}
-  ],"cues":[{"id":"agents-md","absoluteTime":27.5},{"id":"token-saving","absoluteTime":45.14},{"id":"doc-is-code","absoluteTime":54.764}]},
-  {"id":"html-side","start":57.016,"end":100.168,"duration":43.152,"chunks":[
-    {"text":"但 html 党也没说错。Thariq 的论据我都同意。","absoluteStart":57.016,"absoluteEnd":62.92},
-    {"text":"第一是空间信息。diff、调用图、架构图本来就有空间维度，html 能左右对照。","absoluteStart":62.92,"absoluteEnd":74.632},
-    {"text":"第二是动态体验。按钮颜色、easing 曲线，文字描述再多没用，html 能让你直接看见。","absoluteStart":74.632,"absoluteEnd":85.864},
-    {"text":"第三是结构化阅读。可折叠章节、tab 代码块、边栏术语表。","absoluteStart":85.864,"absoluteEnd":93},
-    {"text":"Anthropic 的 Live Artifacts，HTML 已升级为可交互、能拉实时数据的 dashboard。","absoluteStart":93,"absoluteEnd":100.168}
-  ],"cues":[{"id":"spatial","absoluteTime":62.92},{"id":"dynamic","absoluteTime":74.632},{"id":"structured","absoluteTime":85.864}]},
-  {"id":"the-real-question","start":100.668,"end":117.588,"duration":16.92,"chunks":[
-    {"text":"我看完想说，","absoluteStart":100.668,"absoluteEnd":101.748},
-    {"text":"这俩根本是在争一个蠢问题。","absoluteStart":101.748,"absoluteEnd":106},
-    {"text":"两边都赢了。但赢的是不同的问题。","absoluteStart":106,"absoluteEnd":109.044},
-    {"text":"md 党回答：我们用什么写。","absoluteStart":109.044,"absoluteEnd":112.62},
-    {"text":"html 党回答：我们给人什么看。","absoluteStart":112.62,"absoluteEnd":115.5},
-    {"text":"两个不同问题，怎么会有谁取代谁。","absoluteStart":115.5,"absoluteEnd":117.588}
-  ],"cues":[{"id":"reveal","absoluteTime":101.748},{"id":"question-md","absoluteTime":109.044},{"id":"question-html","absoluteTime":112.62}]},
-  {"id":"the-split","start":118.088,"end":158.744,"duration":40.656,"chunks":[
-    {"text":"我觉得真问题是这个。","absoluteStart":118.088,"absoluteEnd":121},
-    {"text":"md 和 html 不是替代，是分工关系。","absoluteStart":121,"absoluteEnd":126.5},
-    {"text":"以前你写 md 自己也看 md，要折中，所以 md 胜出。","absoluteStart":126.5,"absoluteEnd":131},
-    {"text":"AI 出现后，生产成本被 AI 吸收。","absoluteStart":131,"absoluteEnd":135},
-    {"text":"原来要折中的需求，被拆成了两端的极端最优。","absoluteStart":135,"absoluteEnd":140},
-    {"text":"生产端要轻、要快、要 token efficient——那就是 md。","absoluteStart":140,"absoluteEnd":148.28},
-    {"text":"消费端要丰富、要可视化、要好分享——那就是 html。","absoluteStart":148.28,"absoluteEnd":153.464},
-    {"text":"两端各自登顶，中间那个折中位置，没人需要了。","absoluteStart":153.464,"absoluteEnd":158.744}
-  ],"cues":[{"id":"split","absoluteTime":122.84},{"id":"ai-changes","absoluteTime":131},{"id":"md-side-win","absoluteTime":148.28},{"id":"html-side-win","absoluteTime":153.464}]},
-  {"id":"activity-proof","start":159.244,"end":184.084,"duration":24.84,"chunks":[
-    {"text":"最干净的活样本是 Thariq 自己。","absoluteStart":159.244,"absoluteEnd":162.5},
-    {"text":"3 月份他发《Skills 指南》，强调核心还是 markdown。","absoluteStart":162.5,"absoluteEnd":167},
-    {"text":"5 月份他发《HTML is the new markdown》。","absoluteStart":167,"absoluteEnd":169.372},
-    {"text":"同一个人，两端各自登顶，互不打架。","absoluteStart":169.372,"absoluteEnd":174},
-    {"text":"Karpathy 和 Lex Fridman 那对组合也一样。","absoluteStart":174,"absoluteEnd":177},
-    {"text":"内核是 markdown wiki，外壳是动态 HTML——是加了一层消费层。","absoluteStart":177,"absoluteEnd":184.084}
-  ],"cues":[{"id":"thariq-march","absoluteTime":164.236},{"id":"same-person","absoluteTime":169.372},{"id":"karpathy-lex","absoluteTime":176.764}]},
-  {"id":"closing","start":184.584,"end":197.88,"duration":13.296,"chunks":[
-    {"text":"所以下次你想吵这个的时候，","absoluteStart":184.584,"absoluteEnd":186.672},
-    {"text":"先问自己一句——你面对的是「写」，还是「看」？","absoluteStart":186.672,"absoluteEnd":192},
-    {"text":"写，用 md。","absoluteStart":192,"absoluteEnd":193.704},
-    {"text":"看，用 html。","absoluteStart":193.704,"absoluteEnd":195.5},
-    {"text":"工具替你处理切换，立场可以放下了。","absoluteStart":195.5,"absoluteEnd":197.88}
-  ],"cues":[{"id":"final","absoluteTime":186.672},{"id":"md-final","absoluteTime":192},{"id":"html-final","absoluteTime":193.704}]}
-]};
+/* assumptions: speaker 跟讲 · 无 TTS · 无整句字幕 · 无技能水印
+   hero: md + html 两枚字形跨 7 段 morph */
+const TIMELINE = {"title": "md还是html，这是个蠢问题", "pace": "speaker", "totalDuration": 47.20000000000002, "scenes": [{"id": "opening", "start": 0, "end": 4.800000000000001, "duration": 4.800000000000001, "text": "前两天，Claude Code 团队的 Thariq 发了篇爆文。\n标题就一句话，HTML 是新的 markdown。\n他说他几乎不再写 md 文件了，全让 AI 给他生成 HTML。\n500 万阅读，X 上立马吵翻了。\n一派是 md 党，觉得 md 才是 AI 时代的源代码。\n另一派觉得 Thariq 说得对，HTML 才是终极答案。", "chunks": [{"text": "前两天，", "start": 0, "end": 1.6, "absoluteStart": 0, "absoluteEnd": 1.6}, {"text": "Claude Code 团队的 Thariq 发了篇爆文。\n标题就一句话，HTML 是新的 markdown。\n他说他几乎不再写 md 文件了，全让 AI 给他生成 HTML。\n500 万阅读，X 上立马吵翻了。\n一派是 md 党，", "start": 1.6, "end": 3.2, "absoluteStart": 1.6, "absoluteEnd": 3.2}, {"text": "觉得 md 才是 AI 时代的源代码。\n另一派觉得 Thariq 说得对，HTML 才是终极答案。", "start": 3.2, "end": 4.800000000000001, "absoluteStart": 3.2, "absoluteEnd": 4.800000000000001}], "cues": [{"id": "thariq", "offset": 1.6, "absoluteTime": 1.6, "prompt": "Claude Code 团队的 Thariq 发了篇爆文。\n标题就一句话，HTML 是新的 markdown。\n他说他几乎不再写 md 文件了，全让 AI 给他生成 HTML。\n500 万阅读，X 上立马吵翻了。\n一派是 md 党，"}, {"id": "two-camps", "offset": 3.2, "absoluteTime": 3.2, "prompt": "觉得 md 才是 AI 时代的源代码。\n另一派觉得 Thariq 说得对，HTML 才是终极答案。"}]}, {"id": "md-side", "start": 5.200000000000001, "end": 11.6, "duration": 6.399999999999999, "text": "md 党的证据其实挺硬的。\n你看 OpenAI 去年发的 AGENTS.md，60000 多个项目用，AWS、Anthropic、Google、微软、OpenAI，AI 半壁江山一起捐进 Linux Foundation 做开放标准。\nKarpathy 的 llm-wiki，主体就是三层 markdown，单一个 CLAUDE.md 文件，5 万 star。\nCloudflare 实测过一组数据，同一篇博客，HTML 一万六千 token，转成 md 只要三千。\n省 80%。\nGitHub 官方也讲过一句，文档不再是描述代码，文档就是代码。", "chunks": [{"text": "md 党的证据其实挺硬的。\n你看 OpenAI 去年发的 AGENTS.md，", "start": 0, "end": 1.6, "absoluteStart": 5.200000000000001, "absoluteEnd": 6.800000000000001}, {"text": "60000 多个项目用，AWS、Anthropic、Google、微软、OpenAI，AI 半壁江山一起捐进 Linux Foundation 做开放标准。\nKarpathy 的 llm-wiki，主体就是三层 markdown，单一个 CLAUDE.md 文件，5 万 star。\nCloudflare 实测过一组数据，", "start": 1.5999999999999996, "end": 3.1999999999999997, "absoluteStart": 6.800000000000001, "absoluteEnd": 8.4}, {"text": "同一篇博客，HTML 一万六千 token，转成 md 只要三千。\n省 80%。\nGitHub 官方也讲过一句，文档不再是描述代码，", "start": 3.1999999999999993, "end": 4.799999999999999, "absoluteStart": 8.4, "absoluteEnd": 10}, {"text": "文档就是代码。", "start": 4.799999999999999, "end": 6.399999999999999, "absoluteStart": 10, "absoluteEnd": 11.6}], "cues": [{"id": "agents-md", "offset": 1.5999999999999996, "absoluteTime": 6.800000000000001, "prompt": "60000 多个项目用，AWS、Anthropic、Google、微软、OpenAI，AI 半壁江山一起捐进 Linux Foundation 做开放标准。\nKarpathy 的 llm-wiki，主体就是三层 markdown，单一个 CLAUDE.md 文件，5 万 star。\nCloudflare 实测过一组数据，"}, {"id": "token-saving", "offset": 3.1999999999999993, "absoluteTime": 8.4, "prompt": "同一篇博客，HTML 一万六千 token，转成 md 只要三千。\n省 80%。\nGitHub 官方也讲过一句，文档不再是描述代码，"}, {"id": "doc-is-code", "offset": 4.799999999999999, "absoluteTime": 10, "prompt": "文档就是代码。"}]}, {"id": "html-side", "start": 12, "end": 18.400000000000002, "duration": 6.400000000000002, "text": "但 html 党也没说错。\nThariq 那篇文章里几条论据我都同意。\n第一是空间信息。diff、调用图、架构图，本来就是有空间维度的，md 把它压成一行字，html 能左右对照，理解效率不是一个量级的。\n第二是动态体验。做动画 Demo，一个元素按下去什么颜色、什么 easing 曲线，文字描述再多没用，html 能让你直接看见。\n第三是结构化阅读。可折叠章节、tab 代码块、边栏术语表，跟同样的字线性堆一遍是两种东西。\nAnthropic 现在的 Live Artifacts，HTML 已经从静态产物升级成可以交互、能拉实时数据的 dashboard。", "chunks": [{"text": "但 html 党也没说错。\nThariq 那篇文章里几条论据我都同意。\n第一是空间信息。", "start": 0, "end": 1.6, "absoluteStart": 12, "absoluteEnd": 13.6}, {"text": "diff、调用图、架构图，本来就是有空间维度的，md 把它压成一行字，html 能左右对照，理解效率不是一个量级的。\n第二是动态体验。", "start": 1.5999999999999996, "end": 3.1999999999999997, "absoluteStart": 13.6, "absoluteEnd": 15.2}, {"text": "做动画 Demo，一个元素按下去什么颜色、什么 easing 曲线，文字描述再多没用，html 能让你直接看见。\n第三是结构化阅读。", "start": 3.1999999999999993, "end": 4.799999999999999, "absoluteStart": 15.2, "absoluteEnd": 16.8}, {"text": "可折叠章节、tab 代码块、边栏术语表，跟同样的字线性堆一遍是两种东西。\nAnthropic 现在的 Live Artifacts，HTML 已经从静态产物升级成可以交互、能拉实时数据的 dashboard。", "start": 4.800000000000001, "end": 6.4, "absoluteStart": 16.8, "absoluteEnd": 18.400000000000002}], "cues": [{"id": "spatial", "offset": 1.5999999999999996, "absoluteTime": 13.6, "prompt": "diff、调用图、架构图，本来就是有空间维度的，md 把它压成一行字，html 能左右对照，理解效率不是一个量级的。\n第二是动态体验。"}, {"id": "dynamic", "offset": 3.1999999999999993, "absoluteTime": 15.2, "prompt": "做动画 Demo，一个元素按下去什么颜色、什么 easing 曲线，文字描述再多没用，html 能让你直接看见。\n第三是结构化阅读。"}, {"id": "structured", "offset": 4.800000000000001, "absoluteTime": 16.8, "prompt": "可折叠章节、tab 代码块、边栏术语表，跟同样的字线性堆一遍是两种东西。\nAnthropic 现在的 Live Artifacts，HTML 已经从静态产物升级成可以交互、能拉实时数据的 dashboard。"}]}, {"id": "the-real-question", "start": 18.8, "end": 25.200000000000006, "duration": 6.400000000000006, "text": "我看完想说，这俩根本是在争一个蠢问题。\n两边都赢了。\n但赢的是不同的问题。\nmd 党回答的是，我们用什么写。\nhtml 党回答的是，我们给人什么看。\n这是两个问题。\n怎么会有谁取代谁。", "chunks": [{"text": "我看完想说，", "start": 0, "end": 1.6, "absoluteStart": 18.8, "absoluteEnd": 20.400000000000002}, {"text": "这俩根本是在争一个蠢问题。\n两边都赢了。\n但赢的是不同的问题。\nmd 党回答的是，", "start": 1.6000000000000014, "end": 3.2000000000000015, "absoluteStart": 20.400000000000002, "absoluteEnd": 22.000000000000004}, {"text": "我们用什么写。\nhtml 党回答的是，", "start": 3.200000000000003, "end": 4.8000000000000025, "absoluteStart": 22.000000000000004, "absoluteEnd": 23.600000000000005}, {"text": "我们给人什么看。\n这是两个问题。\n怎么会有谁取代谁。", "start": 4.800000000000004, "end": 6.400000000000004, "absoluteStart": 23.600000000000005, "absoluteEnd": 25.200000000000006}], "cues": [{"id": "reveal", "offset": 1.6000000000000014, "absoluteTime": 20.400000000000002, "prompt": "这俩根本是在争一个蠢问题。\n两边都赢了。\n但赢的是不同的问题。\nmd 党回答的是，"}, {"id": "question-md", "offset": 3.200000000000003, "absoluteTime": 22.000000000000004, "prompt": "我们用什么写。\nhtml 党回答的是，"}, {"id": "question-html", "offset": 4.800000000000004, "absoluteTime": 23.600000000000005, "prompt": "我们给人什么看。\n这是两个问题。\n怎么会有谁取代谁。"}]}, {"id": "the-split", "start": 25.600000000000005, "end": 33.60000000000001, "duration": 8.000000000000004, "text": "我觉得真问题是这个。\nmd 和 html 不是替代关系，是分工关系。\n以前你写 md 自己也看 md。\n那时候要折中，所以 md 胜出。\n但 AI 出现后，第一次有了一个新情况。\n生产成本可以被 AI 吸收。\nHTML 那部分太重的代价，AI 替你扛。\n你只负责消费。\n原来要折中的需求，被拆成了两端的极端最优。\n生产端要轻、要快、要 token efficient，那就是 md。\n消费端要丰富、要可视化、要好分享，那就是 html。\n两端各自登顶。\n中间那个折中位置，没人需要了。", "chunks": [{"text": "我觉得真问题是这个。\nmd 和 html 不是替代关系，", "start": 0, "end": 1.6, "absoluteStart": 25.600000000000005, "absoluteEnd": 27.200000000000006}, {"text": "是分工关系。\n以前你写 md 自己也看 md。\n那时候要折中，所以 md 胜出。\n但 AI 出现后，", "start": 1.6000000000000014, "end": 3.2000000000000015, "absoluteStart": 27.200000000000006, "absoluteEnd": 28.800000000000008}, {"text": "第一次有了一个新情况。\n生产成本可以被 AI 吸收。\nHTML 那部分太重的代价，AI 替你扛。\n你只负责消费。\n原来要折中的需求，被拆成了两端的极端最优。\n生产端要轻、要快、要 token efficient，", "start": 3.200000000000003, "end": 4.8000000000000025, "absoluteStart": 28.800000000000008, "absoluteEnd": 30.40000000000001}, {"text": "那就是 md。\n消费端要丰富、要可视化、要好分享，", "start": 4.800000000000004, "end": 6.400000000000004, "absoluteStart": 30.40000000000001, "absoluteEnd": 32.00000000000001}, {"text": "那就是 html。\n两端各自登顶。\n中间那个折中位置，没人需要了。", "start": 6.400000000000002, "end": 8.000000000000002, "absoluteStart": 32.00000000000001, "absoluteEnd": 33.60000000000001}], "cues": [{"id": "split", "offset": 1.6000000000000014, "absoluteTime": 27.200000000000006, "prompt": "是分工关系。\n以前你写 md 自己也看 md。\n那时候要折中，所以 md 胜出。\n但 AI 出现后，"}, {"id": "ai-changes", "offset": 3.200000000000003, "absoluteTime": 28.800000000000008, "prompt": "第一次有了一个新情况。\n生产成本可以被 AI 吸收。\nHTML 那部分太重的代价，AI 替你扛。\n你只负责消费。\n原来要折中的需求，被拆成了两端的极端最优。\n生产端要轻、要快、要 token efficient，"}, {"id": "md-side-win", "offset": 4.800000000000004, "absoluteTime": 30.40000000000001, "prompt": "那就是 md。\n消费端要丰富、要可视化、要好分享，"}, {"id": "html-side-win", "offset": 6.400000000000002, "absoluteTime": 32.00000000000001, "prompt": "那就是 html。\n两端各自登顶。\n中间那个折中位置，没人需要了。"}]}, {"id": "activity-proof", "start": 34.00000000000001, "end": 40.40000000000001, "duration": 6.400000000000006, "text": "最干净的活样本是 Thariq 自己。\n3 月份他发了篇 Skills 指南，强调核心还是 markdown。\n5 月份他发了 HTML 是新 markdown。\n同一个人，两端各自登顶，互不打架。\nKarpathy 和 Lex Fridman 那对组合也一样。\n内核是 markdown wiki，外壳是动态 HTML。\n不是 Lex 替换了 Karpathy，是他在 Karpathy 的基础上加了一层消费层。", "chunks": [{"text": "最干净的活样本是 Thariq 自己。\n3 月份他发了篇 Skills 指南，", "start": 0, "end": 1.6, "absoluteStart": 34.00000000000001, "absoluteEnd": 35.60000000000001}, {"text": "强调核心还是 markdown。\n5 月份他发了 HTML 是新 markdown。\n同一个人，", "start": 1.6000000000000014, "end": 3.2000000000000015, "absoluteStart": 35.60000000000001, "absoluteEnd": 37.20000000000001}, {"text": "两端各自登顶，互不打架。\nKarpathy 和 Lex Fridman 那对组合也一样。\n内核是 markdown wiki，", "start": 3.200000000000003, "end": 4.8000000000000025, "absoluteStart": 37.20000000000001, "absoluteEnd": 38.80000000000001}, {"text": "外壳是动态 HTML。\n不是 Lex 替换了 Karpathy，是他在 Karpathy 的基础上加了一层消费层。", "start": 4.800000000000004, "end": 6.400000000000004, "absoluteStart": 38.80000000000001, "absoluteEnd": 40.40000000000001}], "cues": [{"id": "thariq-march", "offset": 1.6000000000000014, "absoluteTime": 35.60000000000001, "prompt": "强调核心还是 markdown。\n5 月份他发了 HTML 是新 markdown。\n同一个人，"}, {"id": "same-person", "offset": 3.200000000000003, "absoluteTime": 37.20000000000001, "prompt": "两端各自登顶，互不打架。\nKarpathy 和 Lex Fridman 那对组合也一样。\n内核是 markdown wiki，"}, {"id": "karpathy-lex", "offset": 4.800000000000004, "absoluteTime": 38.80000000000001, "prompt": "外壳是动态 HTML。\n不是 Lex 替换了 Karpathy，是他在 Karpathy 的基础上加了一层消费层。"}]}, {"id": "closing", "start": 40.80000000000001, "end": 47.20000000000002, "duration": 6.400000000000006, "text": "所以下次你想吵这个的时候，先问自己一句。\n你现在面对的是「写」，还是「看」。\n写，用 md。\n看，用 html。\n工具替你处理切换。\n立场可以放下了。", "chunks": [{"text": "所以下次你想吵这个的时候，", "start": 0, "end": 1.6, "absoluteStart": 40.80000000000001, "absoluteEnd": 42.40000000000001}, {"text": "先问自己一句。\n你现在面对的是「写」，还是「看」。\n写，", "start": 1.6000000000000014, "end": 3.2000000000000015, "absoluteStart": 42.40000000000001, "absoluteEnd": 44.000000000000014}, {"text": "用 md。\n看，", "start": 3.200000000000003, "end": 4.8000000000000025, "absoluteStart": 44.000000000000014, "absoluteEnd": 45.600000000000016}, {"text": "用 html。\n工具替你处理切换。\n立场可以放下了。", "start": 4.800000000000004, "end": 6.400000000000004, "absoluteStart": 45.600000000000016, "absoluteEnd": 47.20000000000002}], "cues": [{"id": "final", "offset": 1.6000000000000014, "absoluteTime": 42.40000000000001, "prompt": "先问自己一句。\n你现在面对的是「写」，还是「看」。\n写，"}, {"id": "md-final", "offset": 3.200000000000003, "absoluteTime": 44.000000000000014, "prompt": "用 md。\n看，"}, {"id": "html-final", "offset": 4.800000000000004, "absoluteTime": 45.600000000000016, "prompt": "用 html。\n工具替你处理切换。\n立场可以放下了。"}]}]};
 
-// ── narration_stage.jsx (inline) ─────────────────────────────
+/**
+ * narration_stage.jsx · 知识演讲舞台引擎
+ *
+ * 从 huashu-design 的解说 Stage 抽出，默认时间源改成「讲者按空格」。
+ *
+ * 铁律：hero 挂在 <NarrationStage> 子级，不要放进 <Scene>。
+ * 失败模式：每段独立 layout + 整页 opacity 切 = 带旁白的 PPT。
+ *
+ * 用法（必须内联进 HTML，禁止 src="narration_stage.jsx"）：
+ *   const { NarrationStage, Scene, Cue, useNarration, useSceneFade } = NarrationStageLib;
+ *
+ *   <NarrationStage timeline={TIMELINE} mode="speaker" width={1920} height={1080}>
+ *     <HeroAnchor />
+ *     <Scene id="hook-pain">...</Scene>
+ *   </NarrationStage>
+ *
+ * 键盘（speaker 模式）：
+ *   Space / → / PageDown  下一拍
+ *   ← / PageUp            上一拍
+ *   Home / End            首拍 / 末拍
+ *   N                     提词条
+ *   F                     舞台全屏
+ */
+
 const NarrationStageLib = (() => {
-  const NarrationContext = React.createContext({});
-  function NarrationStage({ timeline, audioSrc, width = 1920, height = 1080, background = '#0e0e0e', controls = true, children }) {
-    const audioRef = React.useRef(null);
-    const [time, setTime] = React.useState(0);
-    const [playing, setPlaying] = React.useState(false);
+  const NarrationContext = React.createContext({
+    time: 0,
+    scene: null,
+    sceneTime: 0,
+    sceneMorph: 1,
+    isCueTriggered: () => false,
+    cueProgress: () => 0,
+    timeline: { scenes: [] },
+    mode: 'speaker',
+    beatIndex: 0,
+  });
+
+  const expoOut = (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
+
+  /** 把各段 cue 压成线性拍点列表；没有 cue 的段用段起点占一拍 */
+  function beatsFromTimeline(timeline) {
+    const beats = [];
+    for (const s of timeline.scenes || []) {
+      if (s.cues && s.cues.length) {
+        for (const c of s.cues) {
+          beats.push({
+            id: c.id,
+            time: c.absoluteTime,
+            // +1.05s：让 cue ramp（默认 0.5s）和 sceneMorph（1s）都能走完再 hold
+            hold: c.absoluteTime + 1.05,
+            sceneId: s.id,
+            prompt: c.prompt || '',
+          });
+        }
+      } else {
+        beats.push({
+          id: `${s.id}-start`,
+          time: s.start,
+          hold: s.start + 1.05,
+          sceneId: s.id,
+          prompt: (s.text || '').slice(0, 80),
+        });
+      }
+    }
+    return beats;
+  }
+
+  function findScene(timeline, time) {
+    const scenes = timeline.scenes || [];
+    if (!scenes.length) return null;
+    for (let i = 0; i < scenes.length; i++) {
+      const s = scenes[i];
+      const next = scenes[i + 1];
+      if (time >= s.start && (!next || time < next.start)) return s;
+    }
+    return scenes[0];
+  }
+
+  /**
+   * 主舞台
+   *
+   * mode:
+   *   speaker — 默认。空格推进到下一拍的 hold 点，到达后 freeze（讲者继续说话）。
+ *   audio   — 跟已有 audio 的 currentTime（仅当用户自己提供音轨时）。
+ *   省略    — 有 audioSrc 则 audio，否则 speaker。
+ * 本技能不产出 MP4 / TTS；默认走 speaker。
+   */
+  function NarrationStage({
+    timeline,
+    audioSrc = null,
+    mode: modeProp,
+    width = 1920,
+    height = 1080,
+    background = '#f4f1ea',
+    controls = true,
+    prompt: promptProp = true,
+    children,
+  }) {
+    const mode = modeProp || (audioSrc ? 'audio' : 'speaker');
     const recording = typeof window !== 'undefined' && window.__recording === true;
-    React.useEffect(() => { if (typeof window !== 'undefined') { window.__totalDuration = timeline.totalDuration; window.__ready = true; } }, [timeline.totalDuration]);
+    const beats = React.useMemo(() => beatsFromTimeline(timeline), [timeline]);
+    const audioRef = React.useRef(null);
+    const stageRef = React.useRef(null);
+    const tweenRef = React.useRef(null);
+
+    const [time, setTime] = React.useState(0);
+    const [beatIndex, setBeatIndex] = React.useState(-1);
+    const [playing, setPlaying] = React.useState(false);
+    const [showPrompt, setShowPrompt] = React.useState(promptProp);
+    const [sceneMorph, setSceneMorph] = React.useState(1);
+    const sceneIdRef = React.useRef(null);
+
+    const totalDuration = timeline.totalDuration || (beats.length ? beats[beats.length - 1].hold : 1);
+
     React.useEffect(() => {
+      if (typeof window === 'undefined') return;
+      window.__totalDuration = totalDuration;
+      window.__ready = true;
+      window.__seek = (t) => {
+        setTime(t);
+        const idx = beats.findIndex((b) => t <= b.hold + 0.01);
+        setBeatIndex(idx < 0 ? beats.length - 1 : idx);
+      };
+    }, [totalDuration, beats]);
+
+    const currentScene = React.useMemo(() => findScene(timeline, time), [timeline, time]);
+
+    // scene 一切换，用真实时间 1s 把 sceneMorph 从 0→1。
+    // 这样现场 hold 在 cue+1s 时 morph 已经走完；不会因为「段的讲话时长」把 morph 拉爆或跳过。
+    React.useEffect(() => {
+      const id = currentScene && currentScene.id;
+      if (!id) return;
+      if (sceneIdRef.current === id) return;
+      const isFirst = sceneIdRef.current === null;
+      sceneIdRef.current = id;
+      if (isFirst) {
+        setSceneMorph(1);
+        return;
+      }
+      if (recording) return;
+      let start = performance.now();
+      let raf;
+      const tick = (now) => {
+        const p = Math.min(1, (now - start) / 1000);
+        setSceneMorph(p);
+        if (p < 1) raf = requestAnimationFrame(tick);
+      };
+      setSceneMorph(0);
+      raf = requestAnimationFrame(tick);
+      return () => cancelAnimationFrame(raf);
+    }, [currentScene && currentScene.id, recording]);
+
+    // 录制模式：sceneMorph 跟时间轴，保证逐帧可 seek
+    React.useEffect(() => {
+      if (!recording || !currentScene) return;
+      setSceneMorph(Math.min(1, Math.max(0, (time - currentScene.start) / 1.0)));
+    }, [recording, time, currentScene]);
+
+    const sceneTime = currentScene ? Math.max(0, time - currentScene.start) : 0;
+
+    const allCues = React.useMemo(() => {
+      const map = {};
+      for (const s of timeline.scenes || []) {
+        for (const c of s.cues || []) map[c.id] = c;
+      }
+      return map;
+    }, [timeline.scenes]);
+
+    const isCueTriggered = React.useCallback(
+      (cueId) => {
+        const c = allCues[cueId];
+        return c ? time >= c.absoluteTime : false;
+      },
+      [allCues, time],
+    );
+
+    const cueProgress = React.useCallback(
+      (cueId, ramp = 0.5) => {
+        const c = allCues[cueId];
+        if (!c) return 0;
+        const dt = time - c.absoluteTime;
+        if (dt <= 0) return 0;
+        if (dt >= ramp) return 1;
+        return dt / ramp;
+      },
+      [allCues, time],
+    );
+
+    /** 现场：把 time 在 1s 内 expoOut 推到目标 hold 点，然后冻结 */
+    const tweenTo = React.useCallback((targetTime, targetIndex) => {
+      if (tweenRef.current) cancelAnimationFrame(tweenRef.current);
+      const from = time;
+      const dist = targetTime - from;
+      if (Math.abs(dist) < 0.001) {
+        setTime(targetTime);
+        setBeatIndex(targetIndex);
+        return;
+      }
+      const dur = 1000;
+      const t0 = performance.now();
+      const step = (now) => {
+        const p = Math.min(1, (now - t0) / dur);
+        setTime(from + dist * expoOut(p));
+        if (p < 1) {
+          tweenRef.current = requestAnimationFrame(step);
+        } else {
+          setTime(targetTime);
+          setBeatIndex(targetIndex);
+          tweenRef.current = null;
+        }
+      };
+      setBeatIndex(targetIndex);
+      tweenRef.current = requestAnimationFrame(step);
+    }, [time]);
+
+    const goBeat = React.useCallback(
+      (index) => {
+        if (!beats.length) return;
+        // -1 = 起幅（time=0，第一个 cue 尚未触发）。避免首按空格跳过第一拍。
+        const i = Math.max(-1, Math.min(beats.length - 1, index));
+        if (i < 0) {
+          tweenTo(0, -1);
+          return;
+        }
+        tweenTo(beats[i].hold, i);
+      },
+      [beats, tweenTo],
+    );
+
+    // 音频模式：rAF 跟随 currentTime
+    React.useEffect(() => {
+      if (mode !== 'audio' && !recording) return undefined;
       let raf;
       if (recording) {
         let startedAt = null;
         const tick = (now) => {
           if (startedAt === null) startedAt = now;
-          setTime(Math.min((now - startedAt) / 1000, timeline.totalDuration));
+          setTime(Math.min((now - startedAt) / 1000, totalDuration));
           raf = requestAnimationFrame(tick);
         };
         raf = requestAnimationFrame(tick);
-        if (typeof window !== 'undefined') window.__seek = (t) => { startedAt = performance.now() - t * 1000; setTime(t); };
+        if (typeof window !== 'undefined') {
+          window.__seek = (t) => {
+            startedAt = performance.now() - t * 1000;
+            setTime(t);
+          };
+        }
       } else {
         const tick = () => {
-          if (audioRef.current && !audioRef.current.paused) setTime(audioRef.current.currentTime);
+          if (audioRef.current && !audioRef.current.paused) {
+            setTime(audioRef.current.currentTime);
+          }
           raf = requestAnimationFrame(tick);
         };
         tick();
       }
       return () => cancelAnimationFrame(raf);
-    }, [recording, timeline.totalDuration]);
-    const currentScene = React.useMemo(() => {
-      if (!timeline.scenes) return null;
-      for (let i = 0; i < timeline.scenes.length; i++) {
-        const s = timeline.scenes[i]; const next = timeline.scenes[i + 1];
-        if (time >= s.start && (!next || time < next.start)) return s;
+    }, [mode, recording, totalDuration]);
+
+    // 键盘只在 speaker 且非录制时生效
+    React.useEffect(() => {
+      if (mode !== 'speaker' || recording) return undefined;
+      const onKey = (e) => {
+        const tag = (e.target && e.target.tagName) || '';
+        if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+        const k = e.key;
+        if (k === ' ' || k === 'ArrowRight' || k === 'PageDown') {
+          e.preventDefault();
+          goBeat(beatIndex + 1);
+        } else if (k === 'ArrowLeft' || k === 'PageUp') {
+          e.preventDefault();
+          goBeat(beatIndex - 1);
+        } else if (k === 'Home') {
+          e.preventDefault();
+          goBeat(-1);
+        } else if (k === 'End') {
+          e.preventDefault();
+          goBeat(beats.length - 1);
+        } else if (k === 'n' || k === 'N') {
+          setShowPrompt((v) => !v);
+        } else if (k === 'f' || k === 'F') {
+          const el = stageRef.current && stageRef.current.parentElement;
+          if (!el) return;
+          if (document.fullscreenElement) document.exitFullscreen();
+          else el.requestFullscreen && el.requestFullscreen();
+        }
+      };
+      window.addEventListener('keydown', onKey);
+      return () => window.removeEventListener('keydown', onKey);
+    }, [mode, recording, beatIndex, beats.length, goBeat]);
+
+    const handlePlayPause = () => {
+      if (!audioRef.current) return;
+      if (audioRef.current.paused) {
+        audioRef.current.play();
+        setPlaying(true);
+      } else {
+        audioRef.current.pause();
+        setPlaying(false);
       }
-      return timeline.scenes[0];
-    }, [time, timeline.scenes]);
-    const sceneTime = currentScene ? Math.max(0, time - currentScene.start) : 0;
-    const allCues = React.useMemo(() => { const m = {}; for (const s of timeline.scenes || []) for (const c of s.cues || []) m[c.id] = c; return m; }, [timeline.scenes]);
-    const isCueTriggered = React.useCallback(id => { const c = allCues[id]; return c ? time >= c.absoluteTime : false; }, [allCues, time]);
-    const cueProgress = React.useCallback((id, ramp = 0.6) => { const c = allCues[id]; if (!c) return 0; const dt = time - c.absoluteTime; if (dt <= 0) return 0; if (dt >= ramp) return 1; return dt / ramp; }, [allCues, time]);
-    const ctx = { time, scene: currentScene, sceneTime, isCueTriggered, cueProgress, timeline };
+    };
+
+    const handleSeek = (e) => {
+      const t = parseFloat(e.target.value);
+      if (audioRef.current) audioRef.current.currentTime = t;
+      setTime(t);
+    };
+
+    const beat = beatIndex >= 0 ? beats[beatIndex] : null;
+    const openingPrompt = (() => {
+      const s = timeline.scenes && timeline.scenes[0];
+      if (!s) return '';
+      if (s.chunks && s.chunks[0] && s.chunks[0].text) return s.chunks[0].text;
+      return s.text || '';
+    })();
+    const ctx = {
+      time,
+      scene: currentScene,
+      sceneTime,
+      sceneMorph,
+      isCueTriggered,
+      cueProgress,
+      timeline,
+      mode,
+      beatIndex,
+    };
+
+    const chromeWidth = width;
+
     return (
       <NarrationContext.Provider value={ctx}>
-        <div style={{ position: 'relative', width, height, background, overflow: 'hidden', color: '#1a1a1a' }}>{children}</div>
-        {!recording && <audio ref={audioRef} src={audioSrc} preload="auto" onEnded={() => setPlaying(false)} />}
+        <div ref={stageRef} style={{ position: 'relative', width, height, background, overflow: 'hidden' }}>
+          {children}
+        </div>
+        {mode === 'audio' && audioSrc && !recording && (
+          <audio ref={audioRef} src={audioSrc} preload="auto" onEnded={() => setPlaying(false)} />
+        )}
         {!recording && controls && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: '#1a1a1a', color: '#ddd', fontFamily: 'monospace', fontSize: 13, width, boxSizing: 'border-box' }}>
-            <button onClick={() => { if (audioRef.current.paused) { audioRef.current.play(); setPlaying(true); } else { audioRef.current.pause(); setPlaying(false); } }} style={{ padding: '6px 14px', background: '#fff', color: '#000', border: 0, borderRadius: 4, cursor: 'pointer', fontWeight: 600 }}>{playing ? '❚❚ Pause' : '▶ Play'}</button>
-            <input type="range" min={0} max={timeline.totalDuration} step={0.01} value={time} onChange={e => { const t = parseFloat(e.target.value); audioRef.current.currentTime = t; setTime(t); }} style={{ flex: 1 }} />
-            <span style={{ minWidth: 130, textAlign: 'right' }}>{time.toFixed(2)} / {timeline.totalDuration.toFixed(2)}s</span>
-            <span style={{ padding: '4px 10px', background: '#2a2a2a', borderRadius: 4, minWidth: 130, textAlign: 'center' }}>{currentScene ? currentScene.id : '—'}</span>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              padding: '10px 16px',
+              background: '#1a1a1a',
+              color: '#ddd',
+              fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+              fontSize: 13,
+              width: chromeWidth,
+              boxSizing: 'border-box',
+            }}
+          >
+            {mode === 'speaker' ? (
+              <>
+                <button type="button" onClick={() => goBeat(beatIndex - 1)} style={chromeBtn}>
+                  ←
+                </button>
+                <button type="button" onClick={() => goBeat(beatIndex + 1)} style={chromeBtn}>
+                  Space →
+                </button>
+              </>
+            ) : (
+              <button type="button" onClick={handlePlayPause} style={chromeBtn}>
+                {playing ? 'Pause' : 'Play'}
+              </button>
+            )}
+            {mode === 'audio' && (
+              <input
+                type="range"
+                min={0}
+                max={totalDuration}
+                step={0.01}
+                value={time}
+                onChange={handleSeek}
+                style={{ flex: 1 }}
+              />
+            )}
+            <span style={{ minWidth: 110, textAlign: 'right', opacity: 0.8 }}>
+              {time.toFixed(2)} / {totalDuration.toFixed(2)}s
+            </span>
+            <span style={chromeTag}>{currentScene ? currentScene.id : '—'}</span>
+            <span style={chromeTag}>{beat ? beat.id : '—'}</span>
+            {mode === 'speaker' && (
+              <span style={{ opacity: 0.55, marginLeft: 'auto' }}>N 提词 · F 全屏</span>
+            )}
+          </div>
+        )}
+        {!recording && mode === 'speaker' && showPrompt && ((beat && beat.prompt) || (!beat && openingPrompt)) && (
+          <div
+            style={{
+              width: chromeWidth,
+              boxSizing: 'border-box',
+              padding: '10px 20px 14px',
+              background: '#111',
+              color: '#e8e4dc',
+              fontFamily: '"Noto Sans SC", "PingFang SC", sans-serif',
+              fontSize: 18,
+              lineHeight: 1.5,
+            }}
+          >
+            {beat ? beat.prompt : openingPrompt}
           </div>
         )}
       </NarrationContext.Provider>
     );
   }
-  function useNarration() { return React.useContext(NarrationContext); }
+
+  const chromeBtn = {
+    padding: '6px 12px',
+    background: '#fff',
+    color: '#000',
+    border: 0,
+    borderRadius: 4,
+    cursor: 'pointer',
+    fontWeight: 600,
+  };
+  const chromeTag = {
+    padding: '4px 10px',
+    background: '#2a2a2a',
+    borderRadius: 4,
+    maxWidth: 180,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  };
+
+  function Scene({ id, children, keepMounted = false }) {
+    const { scene, sceneTime } = React.useContext(NarrationContext);
+    const isActive = scene && scene.id === id;
+    if (!isActive && !keepMounted) return null;
+    const content = typeof children === 'function' ? children(sceneTime, scene) : children;
+    return (
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          opacity: isActive ? 1 : 0,
+          pointerEvents: isActive ? 'auto' : 'none',
+          transition: keepMounted ? 'opacity 0.35s' : undefined,
+        }}
+      >
+        {content}
+      </div>
+    );
+  }
+
+  function Cue({ id, ramp = 0.5, children }) {
+    const { isCueTriggered, cueProgress } = React.useContext(NarrationContext);
+    return children(isCueTriggered(id), cueProgress(id, ramp));
+  }
+
+  function useNarration() {
+    return React.useContext(NarrationContext);
+  }
+
+  function visualLen(s) {
+    let n = 0;
+    for (const ch of s) n += /[a-zA-Z0-9 .,'":;\-]/.test(ch) ? 0.5 : 1;
+    return n;
+  }
+
+  function splitChunkToLines(text, maxLen = 13) {
+    const lines = [];
+    const sentences = [];
+    let buf = '';
+    for (const ch of text) {
+      buf += ch;
+      if ('。！？\n'.includes(ch)) {
+        if (buf.trim()) sentences.push(buf.trim());
+        buf = '';
+      }
+    }
+    if (buf.trim()) sentences.push(buf.trim());
+    for (const sent of sentences) {
+      if (visualLen(sent) <= maxLen) {
+        lines.push(sent);
+        continue;
+      }
+      const parts = [];
+      let pbuf = '';
+      for (const ch of sent) {
+        pbuf += ch;
+        if ('，、；：'.includes(ch)) {
+          parts.push(pbuf);
+          pbuf = '';
+        }
+      }
+      if (pbuf) parts.push(pbuf);
+      let merged = '';
+      for (const p of parts) {
+        if (visualLen(merged) + visualLen(p) <= maxLen) merged += p;
+        else {
+          if (merged) lines.push(merged);
+          merged = p;
+        }
+      }
+      if (merged) {
+        if (visualLen(merged) <= maxLen) lines.push(merged);
+        else {
+          let hbuf = '';
+          for (const ch of merged) {
+            hbuf += ch;
+            if (visualLen(hbuf) >= maxLen) {
+              lines.push(hbuf);
+              hbuf = '';
+            }
+          }
+          if (hbuf) lines.push(hbuf);
+        }
+      }
+    }
+    return lines.filter((l) => l.trim());
+  }
+
   function useSceneFade(sceneId, fadeIn = 0.5, fadeOut = 0.5) {
     const { time, timeline } = React.useContext(NarrationContext);
     if (!timeline) return 0;
-    const s = timeline.scenes.find(x => x.id === sceneId);
+    const s = timeline.scenes.find((x) => x.id === sceneId);
     if (!s) return 0;
     const inT = (time - s.start) / fadeIn;
     const outT = (s.end - time) / fadeOut;
     return Math.max(0, Math.min(1, Math.min(inT, outT)));
   }
-  function Cue({ id, ramp = 0.6, children }) {
-    const { isCueTriggered, cueProgress } = React.useContext(NarrationContext);
-    return children(isCueTriggered(id), cueProgress(id, ramp));
+
+  /** 仅自动播放时可选。现场跟讲不要叠整句字幕，会和讲者抢词。 */
+  function Subtitles({
+    bottom = 90,
+    fontSize = 32,
+    color = '#1a1a1a',
+    haloColor = 'rgba(245,241,232,0.9)',
+    maxLen = 13,
+  } = {}) {
+    const { time, scene } = React.useContext(NarrationContext);
+    if (!scene || !scene.chunks) return null;
+    const active = scene.chunks.find((c) => time >= c.absoluteStart && time < c.absoluteEnd);
+    if (!active) return null;
+    const lines = splitChunkToLines(active.text, maxLen);
+    if (!lines.length) return null;
+    const totalLen = lines.reduce((s, l) => s + visualLen(l), 0);
+    const chunkDur = active.absoluteEnd - active.absoluteStart;
+    let acc = active.absoluteStart;
+    let activeLine = lines[lines.length - 1];
+    let lineStart = active.absoluteStart;
+    for (const line of lines) {
+      const dur = (visualLen(line) / totalLen) * chunkDur;
+      if (time < acc + dur) {
+        activeLine = line;
+        lineStart = acc;
+        break;
+      }
+      acc += dur;
+    }
+    const lineProg = Math.min(1, (time - lineStart) / 0.15);
+    return React.createElement(
+      'div',
+      {
+        style: {
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom,
+          display: 'flex',
+          justifyContent: 'center',
+          pointerEvents: 'none',
+          zIndex: 50,
+        },
+      },
+      React.createElement(
+        'div',
+        {
+          key: lineStart,
+          style: {
+            fontFamily: '"PingFang SC", "Noto Sans SC", sans-serif',
+            fontSize,
+            fontWeight: 600,
+            color,
+            letterSpacing: '0.04em',
+            lineHeight: 1.2,
+            textAlign: 'center',
+            textShadow: `0 0 6px ${haloColor}, 0 0 12px ${haloColor}`,
+            opacity: lineProg,
+            transform: `translateY(${(1 - lineProg) * 4}px)`,
+          },
+        },
+        activeLine,
+      ),
+    );
   }
-  return { NarrationStage, Cue, useNarration, useSceneFade };
+
+  return {
+    NarrationStage,
+    Scene,
+    Cue,
+    useNarration,
+    useSceneFade,
+    Subtitles,
+    splitChunkToLines,
+    beatsFromTimeline,
+  };
 })();
+
+if (typeof window !== 'undefined') {
+  Object.assign(window, { NarrationStageLib });
+}
+
+
 const { NarrationStage, Cue, useNarration, useSceneFade } = NarrationStageLib;
 
 // ── 设计 token ────────────────────────────────────────────
@@ -173,8 +668,7 @@ const lerpC = (from, to, t) => ({
   opacity: lerp(from.opacity ?? 1, to.opacity ?? 1, t),
 });
 
-// ── HERO 状态表（v3：缩小 scale 避免溢出，y 留给字幕区） ──
-// 字幕条占 y=88-100 区域，所以 hero y ≤ 70%
+// ── HERO 状态表：md / html 两字从片头演到片尾 ──
 const HERO_KEYS = {
   opening:             { md: { x: 50, y: 28, scale: 1.0, opacity: 1 }, html: { x: 50, y: 55, scale: 1.0, opacity: 1 } },
   'md-side':           { md: { x: 72, y: 48, scale: 1.4, opacity: 1 }, html: { x: 92, y: 12, scale: 0.3, opacity: 0.5 } },
@@ -186,27 +680,37 @@ const HERO_KEYS = {
 };
 const SCENE_ORDER = ['opening', 'md-side', 'html-side', 'the-real-question', 'the-split', 'activity-proof', 'closing'];
 
-// ── HeroAnchor: 跨 scene hero + 持续微动（消除 3s 静止）──
+
+const useWallClock = () => {
+  const [now, setNow] = React.useState(0);
+  React.useEffect(() => {
+    let raf;
+    const t0 = performance.now();
+    const tick = (t) => { setNow((t - t0) / 1000); raf = requestAnimationFrame(tick); };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  return now;
+};
+
+// ── HeroAnchor: 跨 scene morph 用 sceneMorph；呼吸用墙钟，hold 时画面仍在动 ──
 const HeroAnchor = () => {
-  const { time, scene } = useNarration();
+  const { scene, sceneMorph } = useNarration();
+  const now = useWallClock();
   if (!scene) return null;
   const idx = SCENE_ORDER.indexOf(scene.id);
   const prevId = idx > 0 ? SCENE_ORDER[idx - 1] : scene.id;
   const fromPos = HERO_KEYS[prevId];
   const toPos = HERO_KEYS[scene.id];
-  const transitionDur = Math.min(2.0, scene.duration * 0.45);
-  const t = expoOut(Math.min(1, Math.max(0, (time - scene.start) / transitionDur)));
+  const t = expoOut(Math.min(1, Math.max(0, sceneMorph)));
   const md = lerpC(fromPos.md, toPos.md, t);
   const html = lerpC(fromPos.html, toPos.html, t);
-
-  // ── 持续微动：scale 呼吸 + figure-8 飘移（确保任意 3s 都有变化）──
-  const breath = 1 + Math.sin(time * 0.7) * 0.018;
-  const driftXm = Math.cos(time * 0.32) * 0.6;
-  const driftYm = Math.sin(time * 0.41) * 0.5;
-  const driftXh = Math.sin(time * 0.28) * 0.6;
-  const driftYh = Math.cos(time * 0.37) * 0.5;
-
-  const baseSize = 240; // 缩小 from 360
+  const breath = 1 + Math.sin(now * 0.7) * 0.018;
+  const driftXm = Math.cos(now * 0.32) * 0.6;
+  const driftYm = Math.sin(now * 0.41) * 0.5;
+  const driftXh = Math.sin(now * 0.28) * 0.6;
+  const driftYh = Math.cos(now * 0.37) * 0.5;
+  const baseSize = 240;
   const renderHero = (label, pos, color, dx, dy) => {
     const px = (pos.x + dx) * 19.2;
     const py = (pos.y + dy) * 10.8;
@@ -231,113 +735,16 @@ const HeroAnchor = () => {
   );
 };
 
-// ── BackgroundDrift ────────────────────────────────────────
 const BackgroundDrift = () => {
-  const { time } = useNarration();
-  const dx = Math.sin(time * 0.08) * 16;
-  const dy = Math.cos(time * 0.06) * 12;
+  const now = useWallClock();
+  const dx = Math.sin(now * 0.08) * 16;
+  const dy = Math.cos(now * 0.06) * 12;
   return (
     <div style={{
       position: 'absolute', inset: -40,
       background: `radial-gradient(ellipse 1400px 800px at ${50 + dx/4}% ${50 + dy/4}%, ${C.paperDeep} 0%, ${C.paper} 60%, ${C.paper} 100%)`,
       pointerEvents: 'none',
     }} />
-  );
-};
-
-// ── Subtitles: B 站风字幕（白字 + 黑描边，无背景，每行 ≤12 字不截断句子）──
-// 把每个 chunk 按标点切成短行，按字数比例分配 chunk 时间窗显示
-
-// 切分算法：先按强标点（。！？\n）切句，每句再按弱标点（，、；：）合并到 maxLen
-// 中英混合：英文字母按 0.5 字算（视觉宽度近似）
-function visualLen(s) {
-  let n = 0;
-  for (const ch of s) n += /[a-zA-Z0-9 .,'":;\-]/.test(ch) ? 0.5 : 1;
-  return n;
-}
-function splitChunkToLines(text, maxLen = 13) {
-  const lines = [];
-  // 1. 按强标点切句（保留标点）
-  const sentences = [];
-  let buf = '';
-  for (const ch of text) {
-    buf += ch;
-    if ('。！？\n'.includes(ch)) {
-      if (buf.trim()) sentences.push(buf.trim());
-      buf = '';
-    }
-  }
-  if (buf.trim()) sentences.push(buf.trim());
-
-  // 2. 每句按弱标点切并合并到 maxLen 以内（不跨句号边界）
-  for (const sent of sentences) {
-    if (visualLen(sent) <= maxLen) { lines.push(sent); continue; }
-    // 按弱标点切（保留标点跟前段）
-    const parts = [];
-    let pbuf = '';
-    for (const ch of sent) {
-      pbuf += ch;
-      if ('，、；：'.includes(ch)) { parts.push(pbuf); pbuf = ''; }
-    }
-    if (pbuf) parts.push(pbuf);
-    // 合并到 maxLen
-    let merged = '';
-    for (const p of parts) {
-      if (visualLen(merged) + visualLen(p) <= maxLen) merged += p;
-      else { if (merged) lines.push(merged); merged = p; }
-    }
-    if (merged) {
-      if (visualLen(merged) <= maxLen) lines.push(merged);
-      else {
-        // 兜底硬切（罕见：单个标点段超 maxLen）
-        let hbuf = '';
-        for (const ch of merged) {
-          hbuf += ch;
-          if (visualLen(hbuf) >= maxLen) { lines.push(hbuf); hbuf = ''; }
-        }
-        if (hbuf) lines.push(hbuf);
-      }
-    }
-  }
-  return lines.filter(l => l.trim());
-}
-
-const Subtitles = () => {
-  const { time, scene } = useNarration();
-  if (!scene || !scene.chunks) return null;
-  const active = scene.chunks.find(c => time >= c.absoluteStart && time < c.absoluteEnd);
-  if (!active) return null;
-  const lines = splitChunkToLines(active.text);
-  if (lines.length === 0) return null;
-  // 按字数比例把 chunk 时长分配给每行
-  const totalLen = lines.reduce((s, l) => s + visualLen(l), 0);
-  const chunkDur = active.absoluteEnd - active.absoluteStart;
-  let acc = active.absoluteStart;
-  let activeLine = lines[lines.length - 1];
-  let lineStart = active.absoluteStart;
-  for (const line of lines) {
-    const dur = (visualLen(line) / totalLen) * chunkDur;
-    if (time < acc + dur) { activeLine = line; lineStart = acc; break; }
-    acc += dur;
-  }
-  // 行内淡入 0.15s
-  const lineProg = Math.min(1, (time - lineStart) / 0.15);
-  return (
-    <div style={{
-      position: 'absolute', left: 0, right: 0, bottom: 90,
-      display: 'flex', justifyContent: 'center', pointerEvents: 'none', zIndex: 50,
-    }}>
-      <div key={lineStart} style={{
-        fontFamily: '"PingFang SC", "Noto Sans SC", -apple-system, sans-serif',
-        fontSize: 32, fontWeight: 600, color: C.ink,
-        letterSpacing: '0.04em', lineHeight: 1.2, textAlign: 'center',
-        // 浅纸白背景上：深墨字 + 极细白色光晕，让字在底上跳出来又不重
-        textShadow: '0 0 6px rgba(245,241,232,0.9), 0 0 12px rgba(245,241,232,0.7), 0 1px 2px rgba(255,255,255,0.5)',
-        opacity: lineProg, transform: `translateY(${(1 - lineProg) * 4}px)`,
-      }}>
-        {activeLine}
-      </div>
-    </div>
   );
 };
 
@@ -582,9 +989,8 @@ const ClosingAux = () => {
   );
 };
 
-// ── 主 App ─────────────────────────────────────────
 const App = () => (
-  <NarrationStage timeline={TIMELINE} audioSrc="_narration/voiceover.mp3" width={1920} height={1080} background={C.paper}>
+  <NarrationStage timeline={TIMELINE} mode="speaker" width={1920} height={1080} background={C.paper}>
     <BackgroundDrift />
     <HeroAnchor />
     <SceneLabel sceneId="opening" text="2026.05.07 · X" />
@@ -601,15 +1007,11 @@ const App = () => (
     <SplitAux />
     <ProofAux />
     <ClosingAux />
-    {/* 字幕条放最上层（z-index 自然在 DOM 顺序最后），盖住下方内容 */}
-    <Subtitles />
-    <div style={{ position: 'absolute', bottom: 24, right: 36, fontSize: 11, color: 'rgba(26,26,26,0.35)', letterSpacing: '0.2em', fontFamily: F.mono, pointerEvents: 'none' }}>
-      Created by Huashu-Design
-    </div>
   </NarrationStage>
 );
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
 </script>
 </body>
 </html>

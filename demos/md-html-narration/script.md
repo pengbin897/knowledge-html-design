@@ -23,7 +23,7 @@ GitHub 官方也讲过一句，文档不再是描述代码，[[cue:doc-is-code]]
 但 html 党也没说错。
 Thariq 那篇文章里几条论据我都同意。
 第一是空间信息。[[cue:spatial]]diff、调用图、架构图，本来就是有空间维度的，md 把它压成一行字，html 能左右对照，理解效率不是一个量级的。
-第二是动态体验。[[cue:dynamic]]做产品原型，按钮按下去什么颜色、什么 easing 曲线，文字描述再多没用，html 能让你直接看见。
+第二是动态体验。[[cue:dynamic]]做动画 Demo，一个元素按下去什么颜色、什么 easing 曲线，文字描述再多没用，html 能让你直接看见。
 第三是结构化阅读。[[cue:structured]]可折叠章节、tab 代码块、边栏术语表，跟同样的字线性堆一遍是两种东西。
 Anthropic 现在的 Live Artifacts，HTML 已经从静态产物升级成可以交互、能拉实时数据的 dashboard。
 

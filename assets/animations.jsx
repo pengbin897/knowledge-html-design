@@ -170,10 +170,7 @@
     const startTimeRef = useRef(performance.now());
     const canvasRef = useRef(null);
 
-    // Recording mode: render-video.js injects window.__recording = true before goto.
-    // When set, force loop=false so the export ends on the final frame instead of
-    // wrapping back to t=0 and capturing the start of the next cycle.
-    // (Browsers viewing manually still loop because __recording is undefined there.)
+    // 浏览器里默认 loop；不要为「导出视频」另做一套状态机。
     const effectiveLoop = (typeof window !== 'undefined' && window.__recording) ? false : loop;
 
     useEffect(() => {
@@ -196,11 +193,6 @@
       function tick(now) {
         if (cancelled) return;
         if (last === null) {
-          // First animation frame. Set last=now so delta starts at 0,
-          // AND announce readiness for video export.
-          // This pairing is critical: window.__ready must flip to true at
-          // the exact moment WebM captures frame 0 of the animation, so
-          // render-video.js's trim offset equals the pre-animation gap.
           last = now;
           if (typeof window !== 'undefined') window.__ready = true;
         }
@@ -209,9 +201,6 @@
         setTime(prev => {
           const next = prev + delta;
           if (next >= duration) {
-            // effectiveLoop honors window.__recording (forced non-loop during export).
-            // Stop just shy of duration so the final-frame state stays rendered
-            // (avoids exiting all Sprites that end exactly at `duration`).
             return effectiveLoop ? 0 : duration - 0.001;
           }
           return next;

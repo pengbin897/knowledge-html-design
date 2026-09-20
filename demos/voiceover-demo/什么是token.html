@@ -1,3 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>什么是 token</title>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;800&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: #07080A; }
+body { display: flex; align-items: center; justify-content: center; }
+#frame { width: 1920px; transform-origin: center center; }
+#root { width: 1920px; }
+
+</style>
+</head>
+<body>
+<div id="frame"><div id="root"></div></div>
+<script>
+(function fitFrame() {
+  const frame = document.getElementById('frame');
+  function fit() {
+    const h = Math.max(frame.offsetHeight, 1080);
+    const s = Math.min(window.innerWidth / 1920, window.innerHeight / h);
+    frame.style.transform = 'scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  setTimeout(fit, 50);
+})();
+</script>
+<script type="text/babel">
+/* assumptions: speaker 跟讲 · 无 TTS · 无整句字幕 · 无技能水印
+   hero: 两枚 glyph 从问号 morph 成 token，再劈成「人工 / 智能」 */
+const TIMELINE = {"title": "什么是 token", "pace": "speaker", "totalDuration": 14, "scenes": [{"id": "intro", "start": 0, "end": 3.2, "duration": 3.2, "text": "你有没有想过，当我们和 AI 对话的时候，AI 到底是怎么理解我们的话的呢。", "chunks": [{"text": "你有没有想过，", "start": 0, "end": 1.6, "absoluteStart": 0, "absoluteEnd": 1.6}, {"text": "当我们和 AI 对话的时候，AI 到底是怎么理解我们的话的呢。", "start": 1.6, "end": 3.2, "absoluteStart": 1.6, "absoluteEnd": 3.2}], "cues": [{"id": "question", "offset": 1.6, "absoluteTime": 1.6, "prompt": "当我们和 AI 对话的时候，AI 到底是怎么理解我们的话的呢。"}]}, {"id": "token-1", "start": 3.6, "end": 6.800000000000001, "duration": 3.2000000000000006, "text": "答案是它根本不理解汉字，它只认识 token。", "chunks": [{"text": "答案是它根本不理解汉字，", "start": 0, "end": 1.6, "absoluteStart": 3.6, "absoluteEnd": 5.2}, {"text": "它只认识 token。", "start": 1.6, "end": 3.2, "absoluteStart": 5.2, "absoluteEnd": 6.800000000000001}], "cues": [{"id": "reveal", "offset": 1.6, "absoluteTime": 5.2, "prompt": "它只认识 token。"}]}, {"id": "token-2", "start": 7.200000000000001, "end": 10.4, "duration": 3.1999999999999993, "text": "你可以把 token 理解成 AI 的最小信息单位。\n比如「人工智能」这四个字，在 AI 眼里可能是两个 token：人工，智能。", "chunks": [{"text": "你可以把 token 理解成 AI 的最小信息单位。\n比如「人工智能」这四个字，", "start": 0, "end": 1.6, "absoluteStart": 7.200000000000001, "absoluteEnd": 8.8}, {"text": "在 AI 眼里可能是两个 token：人工，智能。", "start": 1.5999999999999996, "end": 3.1999999999999997, "absoluteStart": 8.8, "absoluteEnd": 10.4}], "cues": [{"id": "split", "offset": 1.5999999999999996, "absoluteTime": 8.8, "prompt": "在 AI 眼里可能是两个 token：人工，智能。"}]}, {"id": "ending", "start": 10.8, "end": 14, "duration": 3.1999999999999993, "text": "所以下次看到「百万 token 上下文」这种说法，你就知道，它说的是 AI 一次能记住多少个这样的小块。", "chunks": [{"text": "所以下次看到「百万 token 上下文」这种说法，", "start": 0, "end": 1.6, "absoluteStart": 10.8, "absoluteEnd": 12.4}, {"text": "你就知道，它说的是 AI 一次能记住多少个这样的小块。", "start": 1.5999999999999996, "end": 3.1999999999999997, "absoluteStart": 12.4, "absoluteEnd": 14}], "cues": [{"id": "context", "offset": 1.5999999999999996, "absoluteTime": 12.4, "prompt": "你就知道，它说的是 AI 一次能记住多少个这样的小块。"}]}]};
+
 /**
  * narration_stage.jsx · 知识演讲舞台引擎
  *
@@ -602,3 +643,191 @@ const NarrationStageLib = (() => {
 if (typeof window !== 'undefined') {
   Object.assign(window, { NarrationStageLib });
 }
+
+
+const { NarrationStage, Cue, useNarration, useSceneFade } = NarrationStageLib;
+
+const C = {
+  void: '#0C0C0E',
+  ink: '#F4EFE4',
+  mute: 'rgba(244,239,228,0.45)',
+  gold: '#E6C15A',
+  dim: '#2A2A2E',
+};
+const F = {
+  display: '"Source Serif 4", "Noto Serif SC", Georgia, serif',
+  body: '"Noto Sans SC", "PingFang SC", sans-serif',
+  mono: '"JetBrains Mono", ui-monospace, monospace',
+};
+const expoOut = t => t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+const lerp = (a, b, t) => a + (b - a) * t;
+const lerpGlyph = (from, to, t) => ({
+  x: lerp(from.x, to.x, t),
+  y: lerp(from.y, to.y, t),
+  scale: lerp(from.scale, to.scale, t),
+  opacity: lerp(from.opacity, to.opacity, t),
+});
+
+// 两枚 glyph 贯穿全片：? → token → 人工/智能 → 角落 token
+const HERO_KEYS = {
+  intro:    { a: { x: 50, y: 44, scale: 1.55, opacity: 1, label: '?' },     b: { x: 50, y: 44, scale: 1.55, opacity: 0, label: '?' } },
+  'token-1':{ a: { x: 50, y: 44, scale: 1.05, opacity: 1, label: 'token' }, b: { x: 50, y: 44, scale: 1.05, opacity: 0, label: 'token' } },
+  'token-2':{ a: { x: 32, y: 48, scale: 1.0,  opacity: 1, label: '人工' },  b: { x: 68, y: 48, scale: 1.0,  opacity: 1, label: '智能' } },
+  ending:   { a: { x: 50, y: 78, scale: 0.28, opacity: 0.55, label: 'token' }, b: { x: 50, y: 78, scale: 0.28, opacity: 0, label: 'token' } },
+};
+const SCENE_ORDER = ['intro', 'token-1', 'token-2', 'ending'];
+
+const useWallClock = () => {
+  const [now, setNow] = React.useState(0);
+  React.useEffect(() => {
+    let raf;
+    const t0 = performance.now();
+    const tick = (t) => { setNow((t - t0) / 1000); raf = requestAnimationFrame(tick); };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  return now;
+};
+
+const HeroAnchor = () => {
+  const { scene, sceneMorph } = useNarration();
+  const now = useWallClock();
+  if (!scene) return null;
+  const idx = SCENE_ORDER.indexOf(scene.id);
+  const prevId = idx > 0 ? SCENE_ORDER[idx - 1] : scene.id;
+  const from = HERO_KEYS[prevId];
+  const to = HERO_KEYS[scene.id];
+  const t = expoOut(Math.min(1, Math.max(0, sceneMorph)));
+  const a = lerpGlyph(from.a, to.a, t);
+  const b = lerpGlyph(from.b, to.b, t);
+  const labelA = t < 0.45 ? from.a.label : to.a.label;
+  const labelB = t < 0.45 ? from.b.label : to.b.label;
+  const breath = 1 + Math.sin(now * 0.65) * 0.02;
+  const render = (key, pos, label, extraDx) => (
+    <div key={key} style={{
+      position: 'absolute',
+      left: (pos.x + extraDx) * 19.2,
+      top: (pos.y + Math.sin(now * 0.4 + extraDx) * 0.35) * 10.8,
+      transform: `translate(-50%, -50%) scale(${pos.scale * breath})`,
+      opacity: pos.opacity,
+      fontFamily: label === 'token' || label === '?' ? F.mono : F.display,
+      fontSize: 220,
+      fontWeight: 700,
+      color: C.gold,
+      letterSpacing: label === 'token' ? '0.04em' : '-0.03em',
+      lineHeight: 1,
+      pointerEvents: 'none',
+      willChange: 'transform, opacity',
+    }}>{label}</div>
+  );
+  return (
+    <div style={{ position: 'absolute', inset: 0 }}>
+      {render('a', a, labelA, Math.cos(now * 0.3) * 0.4)}
+      {render('b', b, labelB, Math.sin(now * 0.27) * 0.4)}
+    </div>
+  );
+};
+
+const BackgroundDrift = () => {
+  const now = useWallClock();
+  const x = 50 + Math.sin(now * 0.07) * 8;
+  const y = 42 + Math.cos(now * 0.05) * 6;
+  return (
+    <div style={{
+      position: 'absolute', inset: 0,
+      background: `radial-gradient(ellipse 900px 640px at ${x}% ${y}%, #16151A 0%, ${C.void} 62%)`,
+      pointerEvents: 'none',
+    }} />
+  );
+};
+
+const Caption = ({ sceneId, kicker, title, sub }) => {
+  const op = useSceneFade(sceneId, 0.45, 0.4);
+  return (
+    <div style={{
+      position: 'absolute', left: 0, right: 0, top: 88,
+      textAlign: 'center', opacity: op, pointerEvents: 'none',
+    }}>
+      {kicker && <div style={{ fontFamily: F.mono, fontSize: 14, letterSpacing: '0.28em', color: C.mute, marginBottom: 14 }}>{kicker}</div>}
+      {title && <div style={{ fontFamily: F.body, fontSize: 36, fontWeight: 400, color: C.ink, letterSpacing: '0.04em' }}>{title}</div>}
+      {sub && <div style={{ fontFamily: F.body, fontSize: 22, color: C.mute, marginTop: 10 }}>{sub}</div>}
+    </div>
+  );
+};
+
+const IntroAux = () => (
+  <>
+    <Caption sceneId="intro" kicker="KNOWLEDGE STAGE" title="AI 是怎么理解我们的话的" />
+    <Cue id="question">{(triggered, p) => (
+      <div style={{
+        position: 'absolute', bottom: 120, left: 0, right: 0, textAlign: 'center',
+        opacity: p, transform: `translateY(${(1 - p) * 12}px)`,
+        fontFamily: F.body, fontSize: 28, color: C.mute,
+      }}>{triggered ? '它看见的不是字，是切块。' : ''}</div>
+    )}</Cue>
+  </>
+);
+
+const Token1Aux = () => (
+  <>
+    <Caption sceneId="token-1" title="它不认识汉字" />
+    <Cue id="reveal">{(triggered, p) => triggered && (
+      <div style={{
+        position: 'absolute', bottom: 140, left: 0, right: 0, textAlign: 'center',
+        opacity: p, fontFamily: F.mono, fontSize: 18, letterSpacing: '0.22em', color: C.gold,
+      }}>MINIMAL UNIT</div>
+    )}</Cue>
+  </>
+);
+
+const Token2Aux = () => (
+  <>
+    <Caption sceneId="token-2" title="token = AI 的最小信息单位" sub="「人工智能」在模型眼里往往是两块" />
+    <Cue id="split">{(triggered, p) => triggered && (
+      <div style={{
+        position: 'absolute', top: 720, left: 0, right: 0,
+        display: 'flex', justifyContent: 'center', gap: 80,
+        opacity: p,
+      }}>
+        <div style={{ fontFamily: F.mono, fontSize: 16, letterSpacing: '0.2em', color: C.mute }}>TOKEN · 01</div>
+        <div style={{ fontFamily: F.mono, fontSize: 16, letterSpacing: '0.2em', color: C.mute }}>TOKEN · 02</div>
+      </div>
+    )}</Cue>
+  </>
+);
+
+const EndingAux = () => (
+  <>
+    <Caption sceneId="ending" kicker="CONTEXT WINDOW" />
+    <Cue id="context">{(triggered, p) => (
+      <div style={{
+        position: 'absolute', left: 0, right: 0, top: 280, textAlign: 'center',
+        opacity: p, transform: `translateY(${(1 - p) * 18}px)`,
+      }}>
+        <div style={{ fontFamily: F.display, fontSize: 140, fontWeight: 800, color: C.ink, letterSpacing: '-0.03em', lineHeight: 0.9 }}>
+          1,000,000
+        </div>
+        <div style={{ marginTop: 28, fontFamily: F.body, fontSize: 32, color: C.mute }}>
+          一次能记住多少个这样的小块
+        </div>
+      </div>
+    )}</Cue>
+  </>
+);
+
+const App = () => (
+  <NarrationStage timeline={TIMELINE} mode="speaker" width={1920} height={1080} background={C.void}>
+    <BackgroundDrift />
+    <HeroAnchor />
+    <IntroAux />
+    <Token1Aux />
+    <Token2Aux />
+    <EndingAux />
+  </NarrationStage>
+);
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+</script>
+</body>
+</html>

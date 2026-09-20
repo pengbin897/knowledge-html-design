@@ -110,31 +110,6 @@ POINT ▶ 触发 (overlay 浮上来)：22 秒 cinematic
 
 ---
 
-### Pattern E · BGM + SFX 双轨制
-
-**问题**：只有动画没有声音，观众潜意识感觉「这玩意像个穷酸 demo」。
-
-**解决**：BGM 长音 + 11 个 SFX cues。
-
-**通用 SFX cue 配方**（适用于工作流 demo）：
-
-| 时点 | SFX | 触发场景 |
-|---|---|---|
-| 0.10s | whoosh | 终端从下方升起 |
-| 3.0s | enter | typewriter 完成、按 enter |
-| 4.0s | slide-in | scene 2 元素入场 |
-| 5-9s × 5 次 | sparkle | 关键过程节点（每代 / 每个 token / 每个数据点）|
-| 14s | click | 切换到 output scene |
-| 17.8s | logo-reveal | hero reveal 时刻 |
-| typewriter | type | 每 2 字符触发一次（密度别太高）|
-
-**频段隔离**：BGM volume 0.32（低频底噪），SFX volume 0.55（中高频 punch），sparkle 0.7（要醒目），logo-reveal 0.85（最强 hero moment）。
-
-**用户控制**：
-- 必须有 ▶ 启动覆盖（浏览器 autoplay 限制）
-- 右上角小 mute 按钮（用户随时切静音）
-- 不要做成「翻到这页就强制响」
-
 ---
 
 ## 2 · 静态 Dashboard 设计要点
@@ -224,11 +199,11 @@ iframe.addEventListener('load', () => {
 
 本地 file:// 测好的 cinematic 部署后可能崩，因为：
 - file:// 下 iframe contentDocument 同源
-- https:// 下也同源（如果同 host），但 audio autoplay 限制更严格
+- https:// 下也同源（如果同 host），但自动播放限制更严格
 
 **修复**：
-- 部署前用 `python3 -m http.server` 起本地 HTTP 测试一遍
-- BGM 必须等用户点击 ▶ 后再 `bgm.play()`，不要 page-load 立刻播
+- 交付前双击 HTML 测一遍；若有 iframe 再用 `python3 -m http.server` 对照
+- 不要依赖 page-load 立刻播音频
 
 ---
 
@@ -240,7 +215,6 @@ iframe.addEventListener('load', () => {
 | 4 个 step 横排同屏 fade in | 5 个 scene 全屏切换，每场只 focus 一件事 |
 | 复用模板换文案做不同 demo | 每个 demo 独立视觉语言（盖文案能区分） |
 | emoji / SVG 手画当素材 | gpt-image-2 大图 + extract_grid 抠图 |
-| 无 BGM 无 SFX | BGM + 11 SFX cues 双轨制 |
 | 用 setTimeout 链 schedule | requestAnimationFrame + 全局时间轴 T 对象 |
 | linear 动画 | Expo / cubic-bezier easing |
 | 没有 dev 工具 | `?seek=N` + `?autoplay=1` + REPLAY 按钮 |
@@ -257,8 +231,7 @@ iframe.addEventListener('load', () => {
 | 设计 5-scene narrative + 视觉语言 | 30 分钟（要慎重，决定独立性）|
 | Dashboard 静态布局 + 内容 | 1 小时 |
 | Cinematic 5 scenes 实现 | 1.5 小时 |
-| Audio cues 调时序 + replay 按钮 | 30 分钟 |
 | Playwright 截图验证 5 个关键时刻 | 15 分钟 |
-| **单个 demo 总计** | **3-4 小时** |
+| **单个 demo 总计** | **约 3 小时** |
 
 第二个 demo 复用框架但**视觉语言必须独立**，时间约 2-3 小时。

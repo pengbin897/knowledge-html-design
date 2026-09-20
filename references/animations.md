@@ -224,19 +224,12 @@ function Scene() {
 **多个动画互相影响**
 → 用CSS的`will-change: transform`提前告诉浏览器这个元素会动，减少reflow。
 
-**录制成视频**
-→ 用 skill 自带工具链（一条命令出三种格式）：见 `video-export.md`
-- `scripts/render-video.js` — HTML → 25fps MP4（Playwright + ffmpeg）
-- `scripts/convert-formats.sh` — 25fps MP4 → 60fps MP4 + 优化 GIF
-- 想要更精确的帧渲染？让 render(t) 成为 pure function，见 `animation-pitfalls.md` 第 5 条
+**动画状态回不去**
+→ `render(t)` 做成纯函数，暴露 `window.__seek(t)`。不要用 `setTimeout` 链。
 
-## 和视频工具的配合
+## 和最终交付的关系
 
-这个skill做的是**HTML动画**（在浏览器里跑的）。如果最终产出要作为视频素材：
-
-- **短动画/concept demo**：用这里的方法做HTML动画 → 屏幕录制
-- **长视频/叙事**：本 skill 专注 HTML 动画，长视频用 AI 视频生成类 skill 或专业视频软件
-- **motion graphics**：专业的After Effects/Motion Canvas更合适
+这个 skill 做的是**HTML 动画**（在浏览器里跑）。终态就是 HTML，可加 `script.md` 描述镜头意图。用户要「视频」时，让他们浏览器全屏播放，不要在本技能里录 MP4。
 
 ## 关于Popmotion等库
 

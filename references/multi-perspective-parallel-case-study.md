@@ -112,7 +112,7 @@ use case 分配（按平台和受众）：
 - 公众号 / X / B 站 / 朋友圈 / Dribbble / 客户演示 / 私域 / ...
 ```
 
-详见 `assets/director-notes-samples/launch-film-30s-sample.md` 的同目录 REVIEW.md。
+审校维度与打分方式见下文「实验产出」；样本本体是 `assets/director-notes-samples/launch-film-30s-sample.md`。
 
 ---
 
@@ -258,8 +258,6 @@ subagent 完成需要 12-15 分钟。这段时间主线程绝不该空闲：
 
 - 完整方法论：`references/launch-film-director-notes.md`
 - 单视角样本：`assets/director-notes-samples/launch-film-30s-sample.md`（v5 基线）
-- 实战项目位置：`~/.claude/skills/huashu-md-html/demos/`（含 6 + 1 视角全套文件）
-- 审校 review：`~/.claude/skills/huashu-md-html/demos/REVIEW.md`
 
 ---
 

@@ -101,7 +101,7 @@
 | 时间轴卡片递进 | 展示「长期关系」「演进」 |
 | 知识图谱 / 连接节点图 | 展示「协作」「流动」 |
 | Before/After 对比卡 + 中间箭头 | 展示「改变」「差异」 |
-| 产品 UI 截图 + 描边设备框 | 具体功能展示 |
+| 产品 UI 截图 + 描边窗框 | 具体功能展示 |
 | 大引号 big-quote（半页大字） | 情绪页 / 问题页 / 引文页 |
 | 真人头像 + 引言卡（2×2 或 1×4） | 用户见证 / 使用场景 |
 | 大字封底 + URL 椭圆按钮 | CTA / 结尾 |
@@ -128,46 +128,35 @@ moxt philosophy 页第一版用 2×2 = 4 段 + 底部 3 信条 = 7 块内容，�
 
 ---
 
-## 🛑 先定架构：单文件 还是 多文件？
+## 幻灯片架构：统一采用多文件
 
-**这个选择是做幻灯片的第一步，错了会反复踩坑。先读完这一节再动手。**
+本项目面向知识讲座、课程、教程等连续的知识内容，幻灯片统一采用：
 
-### 两种架构对比
+> **每页一个独立 HTML + `deck_index.html` 聚合播放。**
 
-| 维度 | 单文件 + `deck_stage.js` | **多文件 + `deck_index.html` 拼接器** |
-|------|--------------------------|--------------------------------------|
-| 代码结构 | 一个 HTML，所有 slide 是 `<section>` | 每页独立 HTML，`index.html` 用 iframe 拼接 |
-| CSS 作用域 | ❌ 全局，一页的样式可能影响所有页 | ✅ 天然隔离，iframe 各自一片天 |
-| 验证粒度 | ❌ 要 JS goTo 才能切到某页 | ✅ 单页文件双击就能在浏览器看 |
-| 并行开发 | ❌ 一个文件，多 agent 改会冲突 | ✅ 多 agent 可并行做不同页，零冲突 merge |
-| 调试难度 | ❌ 一处 CSS 出错，全 deck 翻车 | ✅ 一页出错只影响自己 |
-| 内嵌交互 | ✅ 跨页共享状态很简单 | 🟡 iframe 间需 postMessage |
-| 键盘导航 | ✅ 内置 | ✅ 拼接器内置 |
+不再根据页数在单文件和多文件之间做选择，也不再保留产品 pitch deck 的单文件路径。
 
-### 选哪个？（决策树）
+### 为什么统一采用多文件
 
-```
-│ 问：deck 预计有多少页？
-├── ≤10 页、需要 in-deck 动画或跨页交互、pitch deck → 单文件
-└── ≥10 页、学术讲座、课件、长 deck、多 agent 并行 → 多文件（推荐）
-```
+多文件架构提供：
 
-**默认走多文件路径**。它不是「备选」，是**长 deck 和团队协作的主路径**。原因：单文件架构的每一个优势（键盘导航、scale）多文件都有，而多文件的作用域隔离和可验证性是单文件补不回来的。
+- 每页可以直接双击打开验证；
+- 每页拥有独立 CSS / JavaScript 作用域；
+- 某页出错不会拖垮整个 deck；
+- 多个 agent 可以并行制作不同页面；
+- `index.html` 统一提供键盘导航、缩放、页码和播放位置记忆。
 
-### 为什么这条规则这么硬？（真实事故记录）
+### 为什么这条规则这么硬
 
-单文件架构曾经在 AI心理学讲座 deck 制作中连踩四坑：
+多页知识内容最需要的是可拆分、可验证和可协作：
 
-1. **CSS 特异性覆盖**：`.emotion-slide { display: grid }` (特异性 10) 干翻 `deck-stage > section { display: none }` (特异性 2)，导致所有页同时渲染叠加。
-2. **Shadow DOM slot 规则被外层 CSS 压制**：`::slotted(section) { display: none }` 挡不住 outer rule 的覆盖，sections 不肯隐藏。
-3. **localStorage + hash 导航竞态**：刷新后不是跳到 hash 位置，而是停在 localStorage 记录的旧位置。
-4. **验证成本高**：必须 `page.evaluate(d => d.goTo(n))` 才能截某页，比直接 `goto(file://.../slides/05-X.html)` 慢一倍，还常报错。
-
-全部根因是**单一全局命名空间**——多文件架构从物理层面把这些问题消除了。
+- 页面越多，单文件越难独立调试；
+- 全局 CSS 和结构错误会造成跨页污染；
+- 多文件让单页验证和并行制作成为默认路径。
 
 ---
 
-## 路径 A（默认）：多文件架构
+## 多文件架构
 
 ### 目录结构
 
@@ -256,131 +245,30 @@ Playwright 截图也是直接 `goto(file://.../slides/05-personas.html)`，不�
 
 ---
 
-## 路径 B（小 deck）：单文件 + `deck_stage.js`
+### 架构约束
 
-适用于 ≤10 页、需要跨页共享状态（比如一个 React tweaks 面板要操控所有页）、或者做 pitch deck demo 这种要求极度紧凑的场景。
+所有 deck 都必须使用每页独立 HTML 的结构。每个页面直接以 1920×1080 画布交付，统一由 `index.html` 通过 iframe 聚合播放。
 
-### 基本用法
+### 每页布局规则
 
-1. 从 `assets/deck_stage.js` 读取内容，嵌入 HTML 的 `<script>`（或 `<script src="deck_stage.js">`）
-2. 在 body 里用 `<deck-stage>` 包 slide
-3. 🛑 **script 标签必须放在 `</deck-stage>` 之后**（见下方硬约束）
-
-```html
-<body>
-
-  <deck-stage>
-    <section>
-      <h1>Slide 1</h1>
-    </section>
-    <section>
-      <h1>Slide 2</h1>
-    </section>
-  </deck-stage>
-
-  <!-- ✅ 正确：script 在 deck-stage 之后 -->
-  <script src="deck_stage.js"></script>
-
-</body>
-```
-
-### 🛑 Script 位置硬约束（2026-04-20 真实踩坑）
-
-**不能把 `<script src="deck_stage.js">` 放在 `<head>` 里。** 即使它在 `<head>` 里能定义 `customElements`，parser 在解析到 `<deck-stage>` 开始标签时就会触发 `connectedCallback`——此时子 `<section>` 还没被 parse，`_collectSlides()` 拿到空数组，counter 显示 `1 / 0`，所有页同时叠加渲染。
-
-**三条合规写法**（任选其一）：
-
-```html
-<!-- ✅ 最推荐：script 在 </deck-stage> 之后 -->
-</deck-stage>
-<script src="deck_stage.js"></script>
-
-<!-- ✅ 也可：script 在 head 但加 defer -->
-<head><script src="deck_stage.js" defer></script></head>
-
-<!-- ✅ 也可：module 脚本天然 defer -->
-<head><script src="deck_stage.js" type="module"></script></head>
-```
-
-`deck_stage.js` 本身已内置 `DOMContentLoaded` 延迟收集防御，即使 script 放 head 也不会彻底炸掉——但 `defer` 或放 body 底部仍然是更干净的做法，避免依赖防御分支。
-
-### ⚠️ 单文件架构的 CSS 陷阱（务必阅读）
-
-单文件架构最常见的坑——**`display` 属性被单页样式偷走**。
-
-常见错误姿势 1（直接写 display: flex 到 section）：
-
-```css
-/* ❌ 外部 CSS 特异性 2，覆盖了 shadow DOM 的 ::slotted(section){display:none}（也是 2）*/
-deck-stage > section {
-  display: flex;            /* 所有页会同时叠加渲染！ */
-  flex-direction: column;
-  padding: 80px;
-  ...
-}
-```
-
-常见错误姿势 2（section 有特异性更高的 class）：
-
-```css
-.emotion-slide { display: grid; }   /* 特异性: 10，更糟 */
-```
-
-两种都会让 **所有 slide 同时叠加渲染**——counter 可能显示 `1 / 10` 假装正常，但视觉上第一页盖着第二页盖着第三页。
-
-### ✅ Starter CSS（开工直接 copy，不踩坑）
-
-**section 自身**只管「可见/不可见」；**layout（flex/grid 等）写到 `.active` 上**：
-
-```css
-/* section 只定义非 display 的通用样式 */
-deck-stage > section {
-  background: var(--paper);
-  padding: 80px 120px;
-  overflow: hidden;
-  position: relative;
-  /* ⚠️ 不要在这里写 display! */
-}
-
-/* 锁死「非激活即隐藏」——特异性+权重双保险 */
-deck-stage > section:not(.active) {
-  display: none !important;
-}
-
-/* 激活页才写需要的 display + layout */
-deck-stage > section.active {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-```
-
-替代方案：**把单页的 flex/grid 写到内部 wrapper `<div>` 上**，section 本身永远只是 `display: block/none` 的切换器。这是最干净的做法：
-
-```html
-<deck-stage>
-  <section>
-    <div class="slide-content flex-layout">...</div>
-  </section>
-</deck-stage>
-```
+每一页都是独立 HTML，不存在跨页 `display` 切换。页面内部可以自由使用 flex、grid 或其他布局方式；只需保证画布尺寸和自身的资源路径正确。
 
 ### 自定义尺寸
 
-```html
-<deck-stage width="1080" height="1920">
-  <!-- 9:16 竖版 -->
-</deck-stage>
+`deck_index.html` 默认使用 1920×1080，也可以在聚合器顶部配置：
+
+```js
+window.DECK_WIDTH = 1080;
+window.DECK_HEIGHT = 1920;
 ```
 
 ---
 
 ## Slide Labels
 
-Deck_stage 和 deck_index 都会给每页打标签（计数器显示）。给它们**更有意义**的 label：
+`deck_index` 会给每页打标签（计数器显示）。给它们**更有意义**的 label：
 
 **多文件**：在 `MANIFEST` 里写 `{ file, label: "04 问题陈述" }`
-**单文件**：在 section 上加 `<section data-screen-label="04 Problem Statement">`
 
 **关键：Slide 编号从 1 开始，不要从 0**。
 
@@ -407,8 +295,6 @@ Deck_stage 和 deck_index 都会给每页打标签（计数器显示）。给它
 ]
 </script>
 ```
-
-**单文件**：同上位置。
 
 ### Notes 写作要点
 
@@ -489,26 +375,20 @@ Deck 需要 **intentional variety**：
 **多文件：某页样式和别页冲突**
 → 不可能（iframe 隔离）。如果感觉冲突，那是缓存——Cmd+Shift+R 强刷。
 
-**单文件：多 slide 同时渲染叠加**
-→ CSS 特异性问题。看上面「单文件架构的 CSS 陷阱」一节。
+**多文件：想跳到特定 slide**
+→ URL 使用 `index.html#5` 跳到第 5 张。
 
-**单文件：缩放看起来不对**
-→ 检查是否所有 slide 直接挂在 `<deck-stage>` 下作为 `<section>`。中间不能包 `<div>`。
-
-**单文件：想跳到特定 slide**
-→ URL 加 hash：`index.html#slide-5` 跳到第 5 张。
-
-**两种架构都适用：字在不同屏幕下位置不一致**
+**多文件：字在不同屏幕下位置不一致**
 → 用固定尺寸（1920×1080）和 `px` 单位，不要用 `vw`/`vh` 或 `%`。缩放统一处理。
 
 ---
 
-## 验证检查清单（做完 deck 必过）
+## 验证检查清单（用户明确要求时执行）
 
 1. [ ] 浏览器直接打开 `index.html`（或主 HTML），检查首页无破图、字体已加载
 2. [ ] 按 → 键翻到每一页，没有空白页、没有布局错位
 3. [ ] 全屏（F11 / Cmd+Ctrl+F）走一遍，确认 scale + letterbox 在目标投影分辨率下正常
 4. [ ] 随机选 3 页 Cmd+Shift+R 强刷，localStorage 记忆正常工作
-5. [ ] Playwright 批量截图（单页架构：遍历 `slides/*.html`；单文件架构：用 goTo 切换），人工肉眼过一遍
+5. [ ] （按需）Playwright 批量截图：遍历 `slides/*.html`，人工肉眼过一遍
 6. [ ] 搜一下 `TODO` / `placeholder` 残留，确认都清理了
 7. [ ] 确认视觉表达完整：渐变、web component、复杂 SVG 装饰按设计意图落地

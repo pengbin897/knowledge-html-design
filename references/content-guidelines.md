@@ -101,10 +101,7 @@ oklch能保证调整亮度时色相不漂移，比hsl好用。
 ### Layout陷阱
 
 **❌ Bento grid 过度泛滥**
-每个AI生成的landing page都想搞bento。除非你的信息structure确实适合bento，否则用其他layout。
-
-**❌ 大hero + 3-column features + testimonials + CTA**
-这个landing page模板被用烂了。想创新就真创新。
+每个AI生成的页面都想搞bento。除非你的信息structure确实适合bento，否则用其他layout。
 
 **❌ Card grid里每个card长一样**
 Asymmetric、不同大小的cards、有的带image有的只有文字、有的跨列——这才像真设计师做的。
@@ -157,19 +154,6 @@ Asymmetric、不同大小的cards、有的带image有的只有文字、有的跨
 - Section title 80-160px
 - Hero headline 可以用 180-240px 的大字
 - 永远不要用 <24px 的字放幻灯片
-
-### 印刷文档
-
-- 正文最小 **10pt**（≈13.3px），理想 11-12pt
-- 标题 18-36pt
-- Caption 8-9pt
-
-### Web和移动端
-
-- 正文最小 **14px**（老年人友好用16px）
-- 移动端正文 **16px**（避免iOS自动缩放）
-- Hit target（可点击元素）最小 **44×44px**
-- 行高 1.5-1.7（中文1.7-1.8）
 
 ### 对比度
 

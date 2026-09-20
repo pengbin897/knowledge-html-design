@@ -1,16 +1,16 @@
-# Voiceover Pipeline · 解说驱动动画
+# 执行脚本 → HTML 舞台
 
-> 把动画从「无声画面 + 后期配音」升级为「**先有解说词，再按音频实测时长驱动画面**」的工作流。
-> 适用：5-20 分钟概念解说视频、教程视频、长篇知识科普。
+> 旁白 / 讲稿是源代码。先写成 `script.md`（scene + cue），再做连续运动 HTML。
+> **产物只有 HTML + 执行脚本**，不导出 MP4，不跑 TTS。
 >
-> 配套 `references/animation-best-practices.md` 使用——本文件管 **怎么把解说和画面对上**，
-> animation-best-practices 管 **每一帧画面怎么动**。
+> 配套 `references/animation-best-practices.md`：本文件管 **词和画面怎么对齐**，
+> 那份管 **每一帧怎么动**。
 
 ---
 
 ## 🛑 铁律 · 在写一行代码之前必读
 
-> **强调多少遍都不够：解说动画的失败模式 #1 是做成了带配音的 PowerPoint。**
+> **强调多少遍都不够：解说动画的失败模式 #1 是做成了带旁白的 PowerPoint。**
 
 ### 第一条 · 整片是一个连续的运动叙事，不是一组独立场景
 
@@ -97,7 +97,7 @@ const HeroAnchor = () => {
 
 // ── Step 4: 主组件 —— hero 在 NarrationStage 子级，scene 内辅助元素另外管 ──
 const App = () => (
-  <NarrationStage timeline={TIMELINE} audioSrc="_narration/voiceover.mp3" width={1920} height={1080}>
+  <NarrationStage timeline={TIMELINE} mode="speaker" width={1920} height={1080} background={C.paper}>
     <HeroAnchor />  {/* ← 跨 scene 持续存在，整片视觉骨架 */}
     {/* scene 内辅助元素用 useSceneFade 控制软淡入淡出，不要硬切 */}
     <MdSideAux />
@@ -125,7 +125,7 @@ const App = () => (
 
 ### 第三条 · 每一帧画面都必须有运动
 
-**自检方法**：在录制中**任意截一帧**（不是 cue 触发那一秒）。
+**自检方法**：在浏览器里**任意暂停一帧**（不是 cue 触发那一秒）。
 - 如果画面看起来「**完全静止**」→ 错。回去加底层运动（background drift / hero subtle scale / camera pan / parallax）
 - 永远有一个**底层运动**在跑（即使不是焦点）：
   - hero element 的 `scale: 1 ↔ 1.02` 5 秒呼吸循环
@@ -161,43 +161,36 @@ const App = () => (
 ## 工作流（高层）
 
 ```
-                ┌──────────────────────────┐
-                │  解说稿 .md（## scene + │
-                │  [[cue:xx]] 标关键句）   │
-                └──────────────┬───────────┘
-                               │
-                  narrate-pipeline.mjs
-                               │
-                               ▼
-            ┌──────────────────────────────┐
-            │ voiceover.mp3 (拼接的整段)  │
-            │ timeline.json (实测时长)    │
-            └──────────────┬───────────────┘
-                           │
-              ┌────────────┴────────────┐
-              ▼                         ▼
-    ┌─────────────────┐      ┌──────────────────┐
-    │ HTML 动画       │      │ 录制 MP4 + 混音  │
-    │ (NarrationStage)│      │ render-narration │
-    │ 实播带 audio 同步│      │ → 最终发布 MP4   │
-    └─────────────────┘      └──────────────────┘
-       交付形态 1                交付形态 2
+  讲稿 / 旁白
+       │
+       ▼
+  script.md          ← 执行脚本（## scene-id + [[cue:xx]]）
+       │
+       ▼
+  script-to-timeline.mjs --pace speaker
+       │
+       ▼
+  timeline.json      ← 拍点时间轴（可内联进 HTML）
+       │
+       ▼
+  舞台 HTML          ← NarrationStage mode="speaker"
+                       空格推进，浏览器全屏即终态
 ```
 
-## 解说稿格式
+**交付**：`script.md` + 可双击打开的 HTML。不要 TTS，不要录 MP4。
 
-放在项目目录下任意位置，文件名建议 `script.md`：
+## 执行脚本格式（script.md）
+
+放在项目目录，文件名建议 `script.md`：
 
 ```markdown
 ---
 title: 什么是 LLM
-voice: S_JSdgdWk22   # 可选，覆盖 .env 默认音色
-speed: 1.0           # 可选，0.5-2.0
-gap: 0.4             # 段间静音秒数，默认 0.3
+gap: 0.4
 ---
 
 ## intro
-大家好，今天我们 5 分钟讲清楚 LLM 是什么。
+大家好，今天我们把 LLM 讲清楚。
 
 ## what-is
 LLM 全称 Large Language Model，[[cue:bigmodel]]它是一个有几千亿参数的神经网络。
@@ -209,111 +202,75 @@ LLM 全称 Large Language Model，[[cue:bigmodel]]它是一个有几千亿参数
 ```
 
 **规则**：
-- 段标题 `## scene-id` 是英文/数字 + 连字符（如 `## what-is`、`## scene-1`）
-- `[[cue:xx]]` 标在**关键句中间**——脚本运行时会在该位置切割文本，cue 之后那一刻就是画面的触发点
-- cue id 在动画 HTML 里用 `<Cue id="xx">` 监听
-- 写解说时**关注节奏 + 短句**，长句 TTS 出来会平淡
+- 段标题 `## scene-id` 只用英文/数字 + 连字符
+- `[[cue:xx]]` 标在**关键句前面或中间**——这是画面触发点，不是装饰
+- cue id 在 HTML 里用 `<Cue id="xx">` 监听
+- 一段 2–5 个 cue；一句一 cue 会碎，一段零 cue 会呆
+- 写短句。现场再口语化，剧本也要能出拍点
+
+现场路径时间轴 **≠** 讲话时长：每个 cue 只占约 1.6s 动画拍点，讲者按空格到达后画面 **hold**。不要按字数把一段拉成 40 秒。
 
 ## timeline.json schema
+
+由 `scripts/script-to-timeline.mjs` 生成：
 
 ```ts
 {
   title: string,
-  voice: string | null,
-  speed: number,
-  gap: number,
-  totalDuration: number,        // 整段 voiceover.mp3 的实测秒数
-  voiceover: 'voiceover.mp3',   // 相对 timeline.json 的路径
+  pace: 'speaker' | 'speech',
+  totalDuration: number,        // 拍点总时长（speaker 模式下是动画窗，不是口播秒数）
   scenes: [
     {
       id: string,
-      start: number,            // 该段在整段音频里的开始时间
+      start: number,
       end: number,
       duration: number,
-      audio: 'audio/<id>.mp3',  // 该段单独音频（合并前的子段已 concat）
-      text: string,             // 已剥离 [[cue:xx]] 标记的整段文本
-      // chunks 是字幕显示的源——每个 chunk 是被 cue 切开的子段，含 TTS 实测时间窗
-      chunks: [
-        {
-          text: string,            // 子段文本
-          start: number,           // 段内相对时间
-          end: number,
-          absoluteStart: number,   // 整轨绝对时间（对齐 voiceover.mp3）
-          absoluteEnd: number,
-        }
-      ],
-      cues: [
-        {
-          id: string,
-          offset: number,       // 段内相对时间
-          absoluteTime: number, // 整段时间轴上的绝对时间
-        }
-      ]
+      text: string,             // 已剥离 [[cue:xx]] 的整段
+      chunks: [{
+        text: string,
+        start: number,
+        end: number,
+        absoluteStart: number,
+        absoluteEnd: number,
+      }],
+      cues: [{
+        id: string,
+        offset: number,
+        absoluteTime: number,
+        prompt: string,         // 这一拍要讲的那一句
+      }]
     }
   ]
 }
 ```
 
-`absoluteTime` 和 `absoluteStart/End` 都是**真实测出来的**——pipeline 把段内文本按 cue 切成子段分别 TTS，时间 = 累加前面子段的实测时长。**不是按字符数线性估算的近似值**。
-
-## 字幕（Subtitles）
-
-> **字幕是默认带的**——长解说视频没字幕，留存率会显著下降。NarrationStage 提供 `<Subtitles />` 开箱即用。
-
-### 用法（一行）
-
-```jsx
-const { NarrationStage, Subtitles } = NarrationStageLib;
-<NarrationStage timeline={TIMELINE} audioSrc="...">
-  {/* 你的 hero / scene 内容 */}
-  <Subtitles />  {/* ← 自动从 timeline.scenes[].chunks 取活动文本 */}
-</NarrationStage>
+```bash
+node scripts/script-to-timeline.mjs --script script.md --out timeline.json --pace speaker
 ```
 
-### 视觉规则（B 站风 · 反 PowerPoint）
+`--pace speaker`（默认）：每个 cue 间隔约 1.6s，段间 0.4s。  
+`--pace speech`：按中文字符估算（约 3.8 字/秒），只在用户要「按播放键自己跑」时用。视觉铁律不变。
 
-| 项 | 规则 | 反例 |
-|---|---|---|
-| 背景 | **无背景**（不要黑色横条不要 backdrop-blur）| 半透明黑底 + blur = 字幕条压住画面 = PPT 感 |
-| 字色 | **浅底用深墨 `#1a1a1a` + 白光晕**；深底用白字 + 黑光晕 | 浅底白字+黑描边 = 字糊 |
-| 字号 | 32px（1080p 视频）| <24px 看不清，>40px 抢主视觉 |
-| 字体 | `PingFang SC` / `Noto Sans SC`（无衬线，B 站标准）| 衬线字体 = 像电影字幕 |
-| 位置 | bottom: 90px（不贴边）| 贴底边显得廉价 |
-| 单行长度 | **≤ 12-13 字**（中英混合时英文按 0.5 字算）| >15 字一行手机端读不完 |
-| 切句规则 | **绝不跨句号截断**：先按 `。！？` 切句，每句再按 `，、；：` 合并到 ≤maxLen | 按字数硬切，把「这是好的」切成「这是好」+「的」 |
+## 字幕
 
-`<Subtitles />` 默认按以上规则跑，不需要传 props。深底场景：`<Subtitles color="#fff" haloColor="rgba(0,0,0,0.85)" />`。
+现场默认 **不要** 叠整句字幕，会和讲者抢词。画面上最多放关键词。
 
-### 切句算法（已在 narration_stage.jsx 内置）
-
-```js
-splitChunkToLines(text, maxLen = 13)
-// 1. 强标点切句（。！？\n）
-// 2. 每句 ≤ maxLen 直接保留
-// 3. 否则按弱标点（，、；：）切片，合并到 ≤ maxLen
-// 4. 兜底硬切（罕见）
-// 中英混合：英文/数字按 0.5 字算视觉宽度
-```
-
-如果 chunk 切完后某行明显太长或太短，**改解说稿里 cue 位置**（cue 把段切得更细），不要在前端调切句逻辑。
+若用户坚持 HTML 自动播放、自己不讲，才用 `<Subtitles />`（从 `timeline.scenes[].chunks` 取词）。
 
 ## NarrationStage API
 
+把 `assets/narration_stage.jsx` **全文内联**进 HTML，禁止 `src="….jsx"`（`file://` 会 CORS 黑屏）。
+
 ```jsx
-import 'assets/narration_stage.jsx';
-const { NarrationStage, Scene, Cue, useNarration } = NarrationStageLib;
+const { NarrationStage, Scene, Cue, useNarration, useSceneFade } = NarrationStageLib;
 
 <NarrationStage
-  timeline={TIMELINE}                  // timeline.json 内容
-  audioSrc="_narration/voiceover.mp3"  // 相对当前 HTML 的路径
+  timeline={TIMELINE}
+  mode="speaker"
   width={1920} height={1080}
   background="#f5f1e8"
-  controls={true}                      // 实播时显示底部播放条
 >
-  {/* hero element：跨 scene 持续存在 —— 直接放在 NarrationStage 子级 */}
   <HeroAnchor />
-
-  {/* scene 内辅助元素：只在该段出现 */}
   <Scene id="intro">
     <Cue id="bigmodel">{(triggered, progress) => (
       <SomeElement style={{ opacity: progress }} />
@@ -322,76 +279,39 @@ const { NarrationStage, Scene, Cue, useNarration } = NarrationStageLib;
 </NarrationStage>
 ```
 
-**Hooks**：
-- `useNarration()` 返回 `{ time, scene, sceneTime, isCueTriggered, cueProgress }`
-- 在自定义组件里直接读，不需要传 props
+键盘（speaker）：空格 / → 下一拍，← 回退，N 提词，F 全屏。
 
-**Scene 组件**：
-- 默认只在 `scene.id === id` 时挂载
-- 加 `keepMounted` 持续挂载（跨 scene 动画连续时用）
+**Hooks**：`useNarration()` 返回 `{ time, scene, sceneTime, sceneMorph, isCueTriggered, cueProgress }`。
 
-**Cue 组件**：
-- children 必须是 `(triggered, progress) => ReactNode`
-- progress 是 cue 触发后 0→1 的渐进值（默认 0.6s ramp）
+**Scene**：默认只在对应 id 激活时挂载；`keepMounted` 给需要跨段留在 DOM 的辅助层。hero 不要放进 Scene。
 
-## 时间源（双轨）
+**Cue**：children 必须是 `(triggered, progress) => ReactNode`。
 
-NarrationStage 自动检测 `window.__recording`：
-- **实播模式**（默认）：跟随 audio 元素的 currentTime，用户暂停/拖动 seek 都能同步
-- **录视频模式**（render-video.js 设置 `window.__recording = true`）：rAF wall-clock 自驱动从 0 开始，暴露 `window.__seek(t)` 给 render-video.js 复位
+## 标准工作流
 
-## 三个脚本
-
-| 脚本 | 输入 | 输出 |
-|---|---|---|
-| `scripts/tts-doubao.mjs` | 单段文本 | 单个 mp3 + 实测时长 |
-| `scripts/narrate-pipeline.mjs` | 解说稿 .md | voiceover.mp3 + timeline.json |
-| `scripts/mix-voiceover.sh` | 视频 + voiceover.mp3 [+ BGM] | 带音频的 MP4 |
-| `scripts/render-narration.sh` | 解说 HTML + timeline.json | 最终 MP4（录制 + 混音一条龙）|
-
-## .env 配置
-
-skill 根目录下 `.env`（已 gitignore）：
-
-```
-DOUBAO_TTS_API_KEY=<your_key>
-DOUBAO_TTS_VOICE_ID=<your_clone_voice_id>
-DOUBAO_TTS_CLUSTER=volcano_icl
-DOUBAO_TTS_ENDPOINT=https://openspeech.bytedance.com/api/v1/tts
-```
-
-参考 `.env.example` 模板。豆包语音克隆音色 ID 在火山引擎控制台获取。
-
-## 标准工作流（10 步）
-
-1. **写解说稿**：解说稿是源代码。先把整段口播写完整，标段标题 `## scene-id`，关键句前加 `[[cue:xx]]`
-2. **跑 narrate-pipeline**：`node scripts/narrate-pipeline.mjs --script script.md --out-dir _narration`
-3. **听整段 voiceover.mp3**：节奏不对回去改稿。**这一步决定整片质量上限**
-4. **🛑 设计前先回答铁律**：hero element 是什么？它在每段是什么状态？跨场景怎么 morph？答不上不要写代码
-5. **写动画 HTML**：用 NarrationStage + 一个或几个 hero element 跨 scene 演戏
-6. **实播预览**：浏览器打开 HTML，点 ▶ Play，听画面+解说同步
-7. **第一观众自检**：用上面「自检 · 第一观众反应」表打分。失败回到 Step 4 重做
-8. **录视频**：`bash scripts/render-narration.sh demo.html --timeline=_narration/timeline.json`（自动录无声 MP4 + 混入 voiceover）
-9. **可选 BGM**：在 render-narration 加 `--bgm-mood=educational`（或 tech / tutorial 等）
-10. **交付**：浏览器 HTML（实时演示用）+ 最终 MP4（发布用）
+1. **写执行脚本**：把口播写完整，标 `## scene-id` 和 `[[cue:xx]]`
+2. **编时间轴**：`node scripts/script-to-timeline.mjs --script script.md --out timeline.json --pace speaker`
+3. **🛑 设计前先回答铁律**：hero 是什么？每段什么状态？怎么 morph？答不上不要写代码
+4. **Junior pass**：灰块 + 段名 + hero 占位，show 用户
+5. **写舞台 HTML**：NarrationStage + 1–2 个 hero 跨 scene 演戏
+6. **浏览器跟讲**：双击 HTML，空格走一遍；随机暂停一帧不能完全死
+7. **交付**：`script.md` + HTML（timeline 内联或旁路 `timeline.json`）
 
 ## 异常处理
 
 | 问题 | 解决 |
 |---|---|
-| TTS API 报错 | 检查 .env 里 `DOUBAO_TTS_API_KEY` 是否正确 |
-| 某段音频明显比脚本长/短 | 该段文本里有奇怪标点或 emoji，TTS 解析异常 → 改稿 |
-| cue absoluteTime 不准 | 段内子段拼接时 ffmpeg 有问题 → 检查 mp3 编码一致性 |
-| 录视频结果有黑屏 | render-video.js 没拿到 `window.__ready` 信号 → 检查 NarrationStage 是否正常挂载 |
-| 录视频画面卡顿 | 动画里有重 layout（大量 box-shadow / blur）→ 简化或预合成 |
-| 实播音画不同步 | audio 元素加载延迟 → 加 `preload="auto"` 或本地预加载 |
+| 空格一按画面瞬间跳到终态 | 时间轴用了 speech 时长；改回 `--pace speaker` |
+| 第一拍被跳过 | 起幅 beatIndex 从 -1 开始，不要默认落在第一拍 hold |
+| 整页切黑再出下一页 | hero 进了 `<Scene>` → 提到 NarrationStage 子级 |
+| 任意一帧完全静止 | 加呼吸 / 背景漂移 |
+| 双击黑屏 | 引擎没内联，`file://` CORS |
 
-## 何时不用这套 pipeline
+## 何时不用这套
 
-- **<60s 短动画**：直接做无声动画 + 后期配音（add-music.sh + 一段单独 TTS）即可，不需要 timeline 驱动
-- **纯 BGM 视频**：用 `add-music.sh` 加预设 BGM
-- **真人录音替换 TTS**：把 `voiceover.mp3` 替换成真人录音，timeline 自己手写或用 ffprobe 测段时长 + 工具脚本生成 → 流程其余部分通用
+- **翻页幻灯片**：走 `slide-decks.md` + `deck_index.html`。仍交 HTML；讲稿可写成 `script.md` 当 speaker notes。
+- **无旁白的短 motion**：用 `animations.jsx` 的 Stage + Sprite。仍交 HTML；可用简短 `script.md` 写镜头意图。
 
 ---
 
-**最后一次提醒**：写代码前回到铁律。**别做带配音的 PowerPoint**。
+**最后一次提醒**：写代码前回到铁律。**别做带旁白的 PowerPoint**。

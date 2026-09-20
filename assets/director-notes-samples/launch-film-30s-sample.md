@@ -1,11 +1,12 @@
 # v5 · "Markdown is the new typewriter."
 
 > Director's Notes for the **huashu-md-html v2.0** launch film
-> 30 seconds · 1920×1080 · 25 fps · no voiceover
+> 30 seconds · 1920×1080 · 浏览器全屏 HTML（不导出成片）
 > Director: huashu-design (acting as Apple-tier launch film director)
-> Composer: TBD (target: Max Richter / Ólafur Arnalds / Jóhann Jóhannsson minimal-cinematic register)
 > Color base: ivory white #FAFAF6 · ink #1A1A1A · terracotta #C2410C
 > Type: Newsreader (display + body) · JetBrains Mono (interface) · Noto Serif SC (中文)
+>
+> 样本里个别镜头仍写了 BGM/SFX 作为**节奏想象**。实施时忽略音频制作，只交 HTML + 执行脚本。
 
 ---
 
@@ -317,68 +318,13 @@ scene 之间过渡            300ms 重叠    cross-dissolve + scale
 
 - SVG 噪点 + 极慢的 0.3% scale 呼吸
 - opacity ≤ 0.04
-- 录像时几乎看不见，但能让画面有「呼吸」
+- 几乎看不见，但能让画面有「呼吸」
 
-## 2.6 音频系统
+## 2.6 节奏（用画面表达，不混音）
 
-### BGM 走向（30 秒分段曲线）
+本技能不制作 BGM / SFX / MP4。30 秒的情绪曲线仍要有：入场安静 → 中段加压 → 22–26s climax → decay。把这条曲线写进运动（easing、hold、scale），不要导出成片。
 
-```
-强度
- │                            ╱╲
-1│                          ╱╱  ╲╲
- │                       ╱╱      ╲╲
- │                    ╱╱             ╲
- │                ╱╱                   ╲
- │            ╱╱                          ╲
- │       ╱╱                                  ╲
- │   ╱╱                                          ╲
-0└──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴
-   0  2  4  6  8 10 12 14 16 18 20 22 24 26 28 30s
-   │  │     │              │           │  │
-   入场│   弦乐进 │      节奏律动加入  │ 顶峰 │  decay
-      piano                              swell
-```
-
-**层级（每层 30 秒持续，强度变化由 envelope 控制）**：
-
-- **L0 · Room tone**（00-30s）：极弱 background noise，给画面「不死寂」的呼吸感
-- **L1 · Piano single note**（00-08s）：单一钢琴音持续敲击，每 1.2 秒一次，慢慢累积
-- **L2 · Piano arpeggio**（03-22s）：钢琴琶音入场，给「拾起节奏」的感觉
-- **L3 · Cello drone**（08-22s）：低频弦乐铺底，给「重量」
-- **L4 · Pulse**（15-22s）：极弱 sub-kick，4/4 节奏（不是 dance beat，是 cinematic pulse）
-- **L5 · String swell**（22-26s）：整组弦乐 swell up 到 climax
-- **L6 · Decay + reverb tail**（26-30s）：所有层级 decay，留下钢琴 + reverb
-
-**风格目标**：Max Richter 的 *On the Nature of Daylight* + Ólafur Arnalds 的 *Re:member* + Jóhann Jóhannsson 的 *Orphée*
-
-### SFX 字典
-
-```
-Cue                          时间        类型               音量
-────────────────────────────────────────────────────────────────────
-keyboard click               00.5-02.0   keypress × 12     -18dB（每次 30ms）
-cursor blink                 02.0-02.8   subtle tick        -28dB
-md morph swell               02.8-03.2   soft whoosh + bloom -16dB
-file card whoosh × 6         05.5-08.0   short whoosh       -20dB（每次 200ms）
-absorb / ink drop             08.0-08.4   "absorb" splash    -16dB
-paper rustle                 08.5-09.0   paper turn         -22dB
-chime: capability 02 →        09.0       single chime tone  -18dB
-chime: capability 03 →        12.0       single chime tone  -18dB
-chime: capability 04 →        15.0       single chime tone  -18dB
-chime: NEW (05)               18.0       double chime + glow -14dB
-chime: NEW (06)               21.0       double chime + glow -14dB
-build sweep                  22.0-22.6   ascending sweep    -10dB
-impact (slogan ONE)          22.6        deep impact         -8dB
-impact (slogan SIX)          23.4        deep impact         -8dB
-pen flourish                 24.0-24.4   pen on paper        -22dB
-final stamp / sign-off       29.0-29.5   ink stamp           -14dB
-```
-
-**SFX 频段隔离**（防止互相打架）：
-- BGM 占低频 (40Hz-2kHz)
-- SFX whooshes / chimes 占中高频 (2kHz-8kHz)
-- SFX impacts 占低频 sub (40Hz-120Hz) — 与 BGM cello 重叠但 BGM 同时 duck -3dB
+分镜里若出现 `[AUDIO]` 字样，只当作**拍点提示**，不要去找音效库或 ffmpeg。
 
 ## 2.7 反 AI slop 自检表（per-shot）
 
@@ -1542,157 +1488,50 @@ md 是源代码，万物是产物。
 }
 ```
 
-## 5.3 BGM 来源选择标准
+## 5.3 交付物清单
 
-**首选**：自己用 Suno v6.0 / Udio v1.5 生成 30 秒 cinematic minimal piece，prompt 关键词：
-
-```
-minimal cinematic piano, slow tempo 60bpm, single piano notes,
-sparse arpeggio, low cello drone, subtle sub-kick percussion,
-swelling strings at climax, decay to silence,
-in the style of Max Richter on the nature of daylight,
-no vocals, 30 seconds duration, ivory paper mood
-```
-
-**备选**：搜索免版权库
-- artlist.io: "minimal cinematic"
-- bensound.com: "cinematic"
-- musicbed.com: "Jóhann Jóhannsson style"
-
-**最低标准**：BGM 30 秒长度，44.1kHz 采样率，aim for -16 LUFS integrated loudness。
-
-## 5.4 SFX 来源
-
-**首选**：用 huashu-design skill 的 `assets/sfx/<category>/*.mp3` 37 个预制资源：
+本技能不导出 MP4 / GIF，不混 BGM / SFX。实施完成后交付：
 
 ```
-事件                          推荐 SFX 文件
-─────────────────────────────────────────────────────
-keyboard clicks            sfx/ui/keyboard-click-*.mp3
-cursor blink               sfx/ui/tick-soft.mp3
-md morph swell             sfx/cinematic/whoosh-bloom.mp3
-file card whoosh           sfx/cinematic/whoosh-short-*.mp3
-absorb / ink drop          sfx/foley/ink-drop.mp3
-paper rustle               sfx/foley/paper-turn.mp3
-chime capability           sfx/melodic/chime-single-*.mp3
-chime NEW (double)         sfx/melodic/chime-double-warm.mp3
-build sweep                sfx/cinematic/ascending-sweep.mp3
-impact (slogan)            sfx/cinematic/deep-impact-*.mp3
-pen flourish               sfx/foley/pen-stroke.mp3
-final stamp                sfx/foley/ink-stamp.mp3
+v5-director-notes.md      本文档（导演笔记 / 执行依据）
+script.md                 执行脚本（scene + cue，可从分镜压缩）
+v5-six-forms.html         源文件（HTML 动画，浏览器全屏即终态）
+v5-poster.png             海报帧（截 t=28.5s，可选）
 ```
 
-## 5.5 截图验证计划
+## 5.4 截图验证计划
 
-实施 HTML 后必须验证以下关键帧（用 Playwright + `?t=NN` URL 参数）：
-
-```
-t=0.5    ← SHOT 01 mid: blank ivory page (检验 paper texture 不抢戏)
-t=2.5    ← SHOT 02 mid: typing in progress (检验 cursor blink + JetBrains Mono)
-t=3.8    ← SHOT 03 mid: md morphing (检验 ghost residual + scale curve)
-t=5.0    ← SHOT 03 end: hero md settled (检验 480px + Terracotta dot)
-t=7.0    ← SHOT 04 mid: cards in flight (检验抛物线 + card 内容真实可读)
-t=8.4    ← SHOT 04 tagline (检验「万物 → md」中文 italic)
-t=10.5   ← SHOT 05 mid: html card complete (检验 essay 内容可读)
-t=13.5   ← SHOT 06 mid: md source visible (检验 syntax highlighting)
-t=16.5   ← SHOT 07 mid: docx page complete (检验 chapter title + page number)
-t=19.0   ← SHOT 08 mid: PDFs fanned out (检验 crop marks 可见)
-t=21.5   ← SHOT 09 mid: EPUB frame complete (检验 Apple Books chrome)
-t=23.4   ← SHOT 10 mid: 6 capability orbit (检验完整 capability 全景)
-t=25.0   ← SHOT 11 mid: ONE SOURCE. complete (检验字距 + Terracotta period)
-t=27.5   ← SHOT 12 mid: SIX FORMS. + pills (检验完整 slogan 双行)
-t=28.5   ← SHOT 12 marketing frame (检验整体 marketing-ready 一帧)
-t=29.9   ← SHOT 13 final hold (检验 md 印章 + accent rule)
-```
-
-每帧必须满足：
-- 没有元素溢出 1920×1080 canvas
-- 字距、行高 visually correct
-- 反 AI slop checklist 通过
-- 关键 typography 细节（如 Terracotta dot, page number em-dash, chapter title small caps）可识别
-
-## 5.6 录制参数
-
-```bash
-node scripts/render-video.js \
-  --file file:///path/to/v5-six-forms.html \
-  --duration 30 \
-  --fps 25 \
-  --width 1920 \
-  --height 1080 \
-  --out v5-final-silent.mp4
-```
-
-**关键 codec 参数**：
-- video codec: libx264
-- pixel format: yuv420p (兼容性)
-- bitrate: 12 Mbps (high quality, 30s 文件约 45MB)
-- profile: high
-- preset: slow (quality > speed)
-
-**后续插帧**（可选，60fps 流畅版）：
-
-```bash
-bash scripts/convert-formats.sh v5-final-silent.mp4 --fps 60
-```
-
-## 5.7 音频混合
-
-```bash
-# Step 1: 加 BGM
-bash scripts/add-music.sh v5-final-silent.mp4 \
-  --bgm assets/bgm/cinematic-minimal-30s.mp3 \
-  --bgm-volume -18dB \
-  --out v5-with-bgm.mp4
-
-# Step 2: 加 SFX cues (按 Part II.6 SFX 字典逐 cue 加)
-# 用 ffmpeg 的 -filter_complex amix 多路混合
-ffmpeg -i v5-with-bgm.mp4 \
-  -i assets/sfx/ui/keyboard-click-1.mp3 \
-  -i assets/sfx/ui/keyboard-click-2.mp3 \
-  ... \
-  -filter_complex "[1]adelay=500|500[s1];[2]adelay=550|550[s2];...;[0][s1][s2]...amix=inputs=N:duration=longest:dropout_transition=0[out]" \
-  -map 0:v -map "[out]" \
-  -c:v copy -c:a aac -b:a 192k \
-  v5-final.mp4
-
-# Step 3: 验证 audio stream
-ffprobe -i v5-final.mp4 -show_streams -select_streams a 2>&1 | grep -E "(codec_type|sample_rate|channels|duration)"
-```
-
-**期望输出**：
-- audio codec: aac
-- sample rate: 44100Hz or 48000Hz
-- channels: 2 (stereo)
-- duration: 30.0s
-
-## 5.8 交付物清单
+实施 HTML 后必须验证以下关键帧（浏览器暂停或 Playwright）：
 
 ```
-v5-final.mp4              主交付（30s, 1920×1080, 25fps, with audio, ~50MB）
-v5-final-60fps.mp4        高帧率版（60fps 插帧, ~80MB, 用于 X / YouTube）
-v5-final.gif              社交媒体版（30s, palette 优化, < 8MB, 用于公众号嵌入）
-v5-final-silent.mp4       静音版（备份，方便后续重新配音/换 BGM）
-v5-poster.png             海报版（截 t=28.5s 这一帧, 用于 X 卡片 / 公众号封面）
-v5-director-notes.md      本文档（导演笔记）
-v5-six-forms.html         源文件（HTML 动画）
-v5-shot-list.csv          shot 时间码 + 关键参数对照表（pause 验证用）
+t=0.5    ← SHOT 01 mid: blank ivory page
+t=2.5    ← SHOT 02 mid: typing in progress
+t=3.8    ← SHOT 03 mid: md morphing
+t=5.0    ← SHOT 03 end: hero md settled
+t=7.0    ← SHOT 04 mid: cards in flight
+t=8.4    ← SHOT 04 tagline
+t=10.5   ← SHOT 05 mid: html card complete
+t=13.5   ← SHOT 06 mid: md source visible
+t=16.5   ← SHOT 07 mid: docx page complete
+t=19.0   ← SHOT 08 mid: PDFs fanned out
+t=21.5   ← SHOT 09 mid: EPUB frame complete
+t=23.4   ← SHOT 10 mid: 6 capability orbit
+t=25.0   ← SHOT 11 mid: ONE SOURCE. complete
+t=27.5   ← SHOT 12 mid: SIX FORMS. + pills
+t=28.5   ← SHOT 12 marketing frame
+t=29.9   ← SHOT 13 final hold
 ```
 
-## 5.9 全链路时间估算
+每帧必须满足：没有元素溢出 1920×1080；字距行高 visually correct；反 AI slop checklist 通过。
+
+## 5.5 全链路时间估算
 
 | 步骤 | 预计耗时 |
 |-----|----------|
 | Director's notes 撰写 | 已完成 |
 | HTML 动画实施 | 4-6 小时 |
 | 关键帧截图 + 视觉校验 | 1 小时 |
-| 录制无声 MP4 | 5-10 分钟（含 Playwright 启动） |
-| BGM 生成 / 选择 | 30 分钟 |
-| SFX 配 cue + 混音 | 2-3 小时 |
-| GIF 派生 | 5 分钟 |
-| 海报截图 + 命名 | 10 分钟 |
-| 最终交付 + git 提交 | 10 分钟 |
-| **合计** | **8-11 小时** |
+| **合计** | **5-7 小时** |
 
 ---
 
