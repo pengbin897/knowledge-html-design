@@ -1,394 +1,150 @@
-# Slide Decks：HTML幻灯片制作规范
+# Slide Decks：陈述 deck 制作规范
 
-做幻灯片是设计工作的高频场景。这份文档说明怎么做好 HTML 幻灯片——从架构选型到单页设计。
+**完成标准**：`index.html` 在浏览器里能全屏演讲、键盘翻页。每页是独立的 1920×1080 HTML。
 
-**交付形态**：每页独立 HTML + `assets/deck_index.html` 聚合，浏览器里键盘翻页、全屏演讲。
+口播稿是内容的源代码。页面是论述的视觉翻译。不要做成带 fade 的网页，也不要做成连续运动舞台。
 
-> **为什么 HTML 优先**：
-> - 演讲/演示现场最好用（投影仪 / 共享屏幕直接全屏，键盘翻页）
-> - 开发过程中每页可单独双击打开验证，不必等构建流程
-> - 一份内容只有一种呈现，不存在多份产物之间的同步债
-> - 视觉表达不受格式约束——渐变、web component、复杂 SVG 都是可选项
->
-> 2026-04-22 moxt brochure 实测：13 页 HTML + `index.html` 聚合后，浏览器直接全屏演讲即是终态交付。
-
----
-
-## 🛑 开工前先定义「完成」的标准（最硬的 checkpoint）
-
-**幻灯片的完成标准只有一个：`index.html` 在浏览器里能全屏演讲、键盘翻页，且每一页都肉眼验过。**
-
-### 写法完全自由
-
-`<div>` 承载文字、CSS 渐变、web component、复杂 SVG 装饰——全部允许，且鼓励。所有设计取舍直接作用于最终演示效果。
-
-### 用户提出其他格式需求
-
-把 deck 本身做好是首要任务。一句话说明交付形态，然后继续：
-
-> 本 skill 交付的是浏览器里的 HTML deck，其他格式需要配合相应的转换工具。
-
-**不要**为附加需求回头降级已完成的视觉设计。
-
----
-
-## 🛑 批量制作前：先做 2 页 showcase 定 grammar
-
-**只要 deck ≥ 5 页，绝对不能从第 1 页直接写到最后一页。** 2026-04-22 moxt brochure 实战验证的正确顺序：
-
-1. 选 **2 个视觉差异最大的页面类型**先做 showcase（如「封面」+「情绪/引用页」，或「封面」+「产品展示页」）
-2. 截图让用户确认 grammar（masthead / 字体 / 色 / 间距 / 结构 / 中英双语比例）
-3. 方向通过了再批量推剩下 N-2 页，每页复用已建立的 grammar
-4. 全部完成后合成 `index.html` 聚合版，从头到尾双击验证一遍演讲流程
-
-**为什么**：直接写 13 页到底 → 用户说「方向不对」= 返工 13 次。先做 2 页 showcase → 方向错 = 返工 2 次。视觉 grammar 一旦确立，后续 N 页的决策空间大幅收窄，只剩「内容怎么放进去」。
-
-**showcase 页选择原则**：选视觉结构最不一样的两页。这两页过了 = 其他中间态都能过。
-
-| Deck 类型 | 推荐 showcase 页组合 |
-|-----------|---------------------|
-| B2B brochure / 产品宣发 | 封面 + 内容页（理念/情感页） |
-| 品牌发布 | 封面 + 产品特色页 |
-| 数据报告 | 数据大图页 + 分析结论页 |
-| 教程课件 | 章节封页 + 具体知识点页 |
-
----
-
-## 📐 出版物 grammar 模板（moxt 实测可复用）
-
-适合 B2B brochure / 产品宣发 / 长报告类 deck。每页复用这套结构 = 13 页视觉完全一致、0 返工。
-
-### 每页骨架
+## 多文件架构（统一）
 
 ```
-┌─ masthead（顶部 strip + 横线）────────────┐
-│  [logo 22-28px] · A Product Brochure                Issue · Date · URL │
-├──────────────────────────────────────────┤
-│                                          │
-│  ── kicker（绿色短横 + uppercase 标签）   │
-│  CHAPTER XX · SECTION NAME                 │
-│                                          │
-│  H1（中文 Noto Serif SC 900）             │
-│  重点词单独上品牌主色                      │
-│                                          │
-│  English subtitle (Lora italic，副标题)   │
-│  ─────────── 分隔线 ──────────            │
-│                                          │
-│  [具体内容：双栏 60/40 / 2x2 grid / 列表] │
-│                                          │
-├──────────────────────────────────────────┤
-│ section name                     XX / total │
-└──────────────────────────────────────────┘
-```
-
-### 样式约定（直接抄走）
-
-- **H1**：中文 Noto Serif SC 900，字号 80-140px 看信息量，重点词单独上品牌主色（不要全文堆色）
-- **英文副**：Lora italic 26-46px，品牌签名词（如 "AI team"）粗体 + 主色斜体
-- **正文**：Noto Serif SC 17-21px，line-height 1.75-1.85
-- **accent 高亮**：正文里用主色加粗标注关键词，每页不超过 3 处（过多就失去锚点作用）
-- **背景**：暖米底 #FAFAFA + 极淡 radial-gradient noise（`rgba(33,33,33,0.015)`）增加纸感
-
-### 视觉主角必须差异化
-
-13 页如果全是「文字 + 一张截图」就太单调。**每页的视觉主角类型轮换**：
-
-| 视觉类型 | 适合的 section |
-|---------|---------------|
-| 封面排版（大字 + masthead + pillar） | 首页 / 篇章封 |
-| 单角色 portrait（超大单只 momo 等） | 介绍单个概念/角色 |
-| 多角色合影 / 头像卡并排 | 团队 / 用户案例 |
-| 时间轴卡片递进 | 展示「长期关系」「演进」 |
-| 知识图谱 / 连接节点图 | 展示「协作」「流动」 |
-| Before/After 对比卡 + 中间箭头 | 展示「改变」「差异」 |
-| 产品 UI 截图 + 描边窗框 | 具体功能展示 |
-| 大引号 big-quote（半页大字） | 情绪页 / 问题页 / 引文页 |
-| 真人头像 + 引言卡（2×2 或 1×4） | 用户见证 / 使用场景 |
-| 大字封底 + URL 椭圆按钮 | CTA / 结尾 |
-
----
-
-## ⚠️ 常见踩坑（moxt 实战总结）
-
-### 1. Emoji 在 Chromium / Playwright 截图时不渲染
-
-Chromium 默认不带彩色 emoji 字体，`page.screenshot()` 时 emoji 显示为空方框。
-
-**对策**：用 Unicode 文字符号（`✦` `✓` `✕` `→` `·` `—`）替代，或直接改纯文字（「Email · 23」而不是「📧 23 emails」）。
-
-### 2. Google Fonts 没加载完就截图 → 中文显示为系统默认黑体
-
-Playwright 截图前至少 `wait-for-timeout=3500` 让 webfont 下载并 paint。或者把字体 self-host 到 `shared/fonts/` 减少网络依赖。
-
-### 3. 信息密度失衡：内容页塞太多
-
-moxt philosophy 页第一版用 2×2 = 4 段 + 底部 3 信条 = 7 块内容，挤压且重复。改成 1×3 = 3 段后呼吸感立刻回来。
-
-**对策**：每页控制在「1 个核心信息 + 3-4 个辅助点 + 1 个视觉主角」，超过就拆到新页。**少即是多**——观众一页看 10 秒，给他 1 个记忆点比 4 个记忆点更容易记住。
-
----
-
-## 幻灯片架构：统一采用多文件
-
-本项目面向知识讲座、课程、教程等连续的知识内容，幻灯片统一采用：
-
-> **每页一个独立 HTML + `deck_index.html` 聚合播放。**
-
-不再根据页数在单文件和多文件之间做选择，也不再保留产品 pitch deck 的单文件路径。
-
-### 为什么统一采用多文件
-
-多文件架构提供：
-
-- 每页可以直接双击打开验证；
-- 每页拥有独立 CSS / JavaScript 作用域；
-- 某页出错不会拖垮整个 deck；
-- 多个 agent 可以并行制作不同页面；
-- `index.html` 统一提供键盘导航、缩放、页码和播放位置记忆。
-
-### 为什么这条规则这么硬
-
-多页知识内容最需要的是可拆分、可验证和可协作：
-
-- 页面越多，单文件越难独立调试；
-- 全局 CSS 和结构错误会造成跨页污染；
-- 多文件让单页验证和并行制作成为默认路径。
-
----
-
-## 多文件架构
-
-### 目录结构
-
-```
-我的Deck/
-├── index.html              # 从 assets/deck_index.html 复制来，改 MANIFEST
-├── shared/
-│   ├── tokens.css          # 共享设计 token（色板/字号/常用 chrome）
-│   └── fonts.html          # <link> 引入 Google Fonts（每页 include）
+<talk-name>/
+├── script.md
+├── index.html              # 从 assets/deck_index.html 复制，改 MANIFEST
+├── shared/tokens.css
 └── slides/
-    ├── 01-cover.html       # 每个文件都是完整 1920×1080 HTML
-    ├── 02-agenda.html
-    ├── 03-problem.html
+    ├── 01-cover.html
+    ├── 02-question.html
     └── ...
 ```
 
-### 每张 slide 的模板骨架
+每页独立 CSS/JS 作用域，可单独双击打开验证。`index.html` 负责键盘、缩放、页码、localStorage 记忆。
+
+### 每页骨架
 
 ```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>P05 · Chapter Title</title>
-<link href="https://fonts.googleapis.com/css2?family=..." rel="stylesheet">
+<title>P03 · 只认识 token</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400&family=Noto+Serif+SC:wght@400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../shared/tokens.css">
 <style>
-  /* 这一页独有的样式。用任何 class 名都不会污染别的页。*/
-  body { padding: 120px; }
-  .my-thing { ... }
+  /* 仅本页布局。不要把单页 class 塞进 tokens.css */
 </style>
 </head>
 <body>
-  <!-- 1920×1080 的内容（由 body 的 width/height 在 tokens.css 里锁定）-->
   <div class="page-header">...</div>
-  <div>...</div>
-  <div class="page-footer">...</div>
+  <!-- 1920×1080 画布上的主张 -->
+  <div class="page-footer"><span>什么是 token</span><span>03 / 05</span></div>
 </body>
 </html>
 ```
 
-**关键约束**：
-- `<body>` 就是画布，直接在上面布局。不要包 `<section>` 或其他 wrapper。
-- `width: 1920px; height: 1080px` 由 `shared/tokens.css` 里的 `body` 规则锁定。
-- 引 `shared/tokens.css` 共享设计 token（色板、字号、page-header/footer 等）。
-- 字体 `<link>` 每页自己写（fonts 单独 import 不贵，且保证每页独立可打开）。
+**约束**：
+- `<body>` 就是画布，不要再包一层全屏 wrapper。
+- `width/height: 1920×1080` 由 `tokens.css` 锁定。
+- 字体 `<link>` 每页自己写，保证单页可打开。
+- 用 `px`，不用 `vw`/`vh`。缩放交给拼接器。
 
-### 拼接器：`deck_index.html`
+### `shared/tokens.css` 只放跨页共用
 
-**直接从 `assets/deck_index.html` 复制**。你只需要改一处——`window.DECK_MANIFEST` 数组，按顺序列出所有 slide 文件名和人类可读标签：
+- CSS 变量（色板、字号阶、间距）
+- `body` 画布锁定
+- `.page-header` / `.page-footer` 这种每页一样的 chrome
+
+不要把某页的英雄排版 class 放进来。
+
+### 拼接器
+
+复制 `assets/deck_index.html`。只改 `DECK_MANIFEST`：
 
 ```js
 window.DECK_MANIFEST = [
   { file: "slides/01-cover.html",    label: "封面" },
-  { file: "slides/02-agenda.html",   label: "目录" },
-  { file: "slides/03-problem.html",  label: "问题陈述" },
-  // ...
+  { file: "slides/02-question.html", label: "问题" },
+  { file: "slides/03-reveal.html",   label: "只认识 token" },
 ];
 ```
 
-拼接器已内置：键盘导航（←/→/Home/End/数字键）、scale + letterbox、右下计数器、localStorage 记忆、hash 跳页。
+键盘：← / → / Space / PgUp / PgDown / Home / End / 1-9。`index.html#5` 跳到第 5 张。编号从 1 开始。
 
-### 单页验证（这是多文件架构的杀手级优势）
+iframe 白屏 → 检查 `file` 是否相对 `index.html`。样式「冲突」→ iframe 隔离了，多半是缓存，强刷。
 
-每张 slide 都是独立 HTML。**做完一张就在浏览器双击打开看**：
+## 先做 2 页 showcase
 
-```bash
-open slides/05-personas.html
+≥ 5 页时：封面 + 结构差最大的内容页 → 用户点头 → 再批量。详见 `references/workflow.md`。
+
+知识陈述 deck 推荐组合：
+
+| 稿的形态 | showcase 两页 |
+|----------|----------------|
+| 概念解释 | 封面 + 定义/对比拆解 |
+| 论证/观点 | 封面 + 一句主张大字 |
+| 步骤/方法 | 封面 + 流程轴 |
+
+## 默认 tokens（与 SKILL.md 一致）
+
+```css
+:root {
+  --bg: #FAF7F2;
+  --ink: #1C1917;
+  --muted: #78716C;
+  --accent: #C04A1A;
+  --rule: rgba(28, 25, 23, 0.12);
+  --display: "Newsreader", "Noto Serif SC", serif;
+  --body: -apple-system, "PingFang SC", sans-serif;
+}
+body {
+  margin: 0;
+  width: 1920px;
+  height: 1080px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  overflow: hidden;
+}
 ```
 
-Playwright 截图也是直接 `goto(file://.../slides/05-personas.html)`，不需要 JS 跳页，也不会被别的页的 CSS 干扰。这让「改一点验一点」的工作流成本接近零。
+开工前口头说这套系统，不要另推 3 个流派。
 
-### 并行开发
+## Layout（一个 deck 用 4–5 种）
 
-把每张 slide 的任务拆给不同 agent，同时跑——HTML 文件彼此独立，merge 时没有冲突。长 deck 用这种并行方式能把制作时间压到 1/N。
+没有照片、没有品牌 logo。用这些页型轮换节奏：
 
-### `shared/tokens.css` 该放什么
+- **封面**：衬线大标题 + 一行来自稿的副题
+- **章节封**：色块或满底 + 章节名（长稿才需要）
+- **问题 / 金句**：近乎一句话铺满，留白要多到略不安
+- **主张**：一句话 + 最多 3 个支撑点（来自稿）
+- **拆解**：A vs B、流程 3 步、定义二分——几何，不画实物
+- **数据**：仅当稿里有真数字；数字当主角，caption ≤ 3 行
+- **收束**：把含义落成听众能带走的一句
 
-只放**真正跨页共用**的东西：
+**不要**：full-bleed 照片页、产品 UI 截图框、头像见证、logo masthead。
 
-- CSS 变量（色板、字号阶、间距阶）
-- `body { width: 1920px; height: 1080px; }` 这样的 canvas 锁定
-- `.page-header` / `.page-footer` 这种每页都用一模一样的 chrome
+视觉主角要轮换（大字 / 二分 / 流程轴 / 数字），但色板和页脚不变。
 
-**不要**把单页的布局 class 塞进来——那会退化回单文件架构的全局污染问题。
+## 字号（10m 投屏）
 
----
+- 正文最小 24px，理想 28–36px
+- 标题 60–120px
+- 封面 / 金句 160–220px
+- 页脚 16–18px 可以，那不是要读的正文
 
-### 架构约束
+## 空间
 
-所有 deck 都必须使用每页独立 HTML 的结构。每个页面直接以 1920×1080 画布交付，统一由 `index.html` 通过 iframe 聚合播放。
+每页：1 个核心信息 + 至多 3–4 个辅助点 + 1 个视觉主角。超过就拆页。
 
-### 每页布局规则
+列表不要同样大小铺满。今天要讲的放大，其余缩小当背景 hint。
 
-每一页都是独立 HTML，不存在跨页 `display` 切换。页面内部可以自由使用 flex、grid 或其他布局方式；只需保证画布尺寸和自身的资源路径正确。
+## Speaker notes
 
-### 自定义尺寸
+**默认不加。** 要讲的话在 `script.md`。仅当用户明确要求屏幕外讲稿时，才在 `index.html` 放 `#speaker-notes` JSON，数组第 N 项对应第 N 张。
 
-`deck_index.html` 默认使用 1920×1080，也可以在聚合器顶部配置：
+## 验证（用户明确要求时）
 
-```js
-window.DECK_WIDTH = 1080;
-window.DECK_HEIGHT = 1920;
-```
-
----
-
-## Slide Labels
-
-`deck_index` 会给每页打标签（计数器显示）。给它们**更有意义**的 label：
-
-**多文件**：在 `MANIFEST` 里写 `{ file, label: "04 问题陈述" }`
-
-**关键：Slide 编号从 1 开始，不要从 0**。
-
-用户说"slide 5"时，他指的是第 5 张，永远不是数组位置 `[4]`。人类不说 0-indexed。
-
----
-
-## Speaker Notes
-
-**默认不加**，只在用户明确要求时才加。
-
-加了 speaker notes 你就可以把 slide 上的文字减少到最小，focus on impactful visuals——notes 承载完整 script。
-
-### 格式
-
-**多文件**：在 `index.html` 的 `<head>` 里写：
-
-```html
-<script type="application/json" id="speaker-notes">
-[
-  "第1张的 script...",
-  "第2张的 script...",
-  "..."
-]
-</script>
-```
-
-### Notes 写作要点
-
-- **完整**：不是提纲，是真要讲的话
-- **对话式**：像平时说话，不是书面语
-- **对应**：数组第 N 个对应第 N 张 slide
-- **长度**：200-400 字最佳
-- **情绪线**：标注重音、停顿、强调点
-
----
-
-## Slide 设计模式
-
-### 1. 建立一个系统（必做）
-
-探索完 design context 后，**先口头说你要用的系统**：
-
-```markdown
-Deck系统：
-- 背景色：最多2种（90% 白 + 10% 深色 section divider）
-- 字型：display 用 Instrument Serif，body 用 Geist Sans
-- 节奏：section divider 用 full-bleed 彩色 + 白字，普通 slide 白底
-- 图像：hero slide 用 full-bleed 照片，data slide 用 chart
-
-我按这个系统做，有问题告诉我。
-```
-
-用户确认后再往下做。
-
-### 2. 常用 slide layouts
-
-- **Title slide**：纯色背景 + 巨大标题 + 副标题 + 作者/日期
-- **Section divider**：彩色背景 + 章节号 + 章节标题
-- **Content slide**：白底 + 标题 + 1-3 bullet points
-- **Data slide**：标题 + 大图表/数字 + 简短说明
-- **Image slide**：full-bleed 照片 + 底部小 caption
-- **Quote slide**：留白 + 巨大 quote + attribution
-- **Two-column**：左右对比（vs / before-after / problem-solution）
-
-一个 deck 里最多用 4-5 种 layout。
-
-### 3. Scale（再次强调）
-
-- 正文最小 **24px**，理想 28-36px
-- 标题 **60-120px**
-- Hero 字 **180-240px**
-- 幻灯片是给 10 米外看的，字要够大
-
-### 4. 视觉节奏
-
-Deck 需要 **intentional variety**：
-
-- 颜色节奏：大部分白底 + 偶尔彩色 section divider + 偶尔 dark 片段
-- 密度节奏：几张 text-heavy 的 + 几张 image-heavy 的 + 几张 quote 留白
-- 字号节奏：正常标题 + 偶尔巨型 hero 文字
-
-**不要每张 slide 长一样**——那是 PPT 模板，不是设计。
-
-### 5. 空间呼吸（数据密集页必读）
-
-**新手最容易踩的坑**：把所有能放的信息都塞进一页。
-
-信息密度 ≠ 有效信息传达。学术/演讲类 deck 尤其要克制：
-
-- 列表/矩阵页：不要把 N 个元素都画成同一大小。用 **主次分层**——今天要聊的 5 个放大做主角，剩下 16 个缩小做背景 hint。
-- 大数字页：数字本身是视觉主角。周围的 caption 不要超过 3 行，否则观众眼球来回跳。
-- 引用页：引语和 attribution 之间要有留白隔开，不要贴在一起。
-
-对照「数据是不是主角」「文字有没有挤在一起」两条自我审查，改到留白让你有点不安为止。
-
----
-
-## 常见问题
-
-**多文件：iframe 里的页打不开 / 白屏**
-→ 检查 `MANIFEST` 的 `file` 路径是否相对 `index.html` 正确。用浏览器 DevTools 看 iframe 的 src 能否直接访问。
-
-**多文件：某页样式和别页冲突**
-→ 不可能（iframe 隔离）。如果感觉冲突，那是缓存——Cmd+Shift+R 强刷。
-
-**多文件：想跳到特定 slide**
-→ URL 使用 `index.html#5` 跳到第 5 张。
-
-**多文件：字在不同屏幕下位置不一致**
-→ 用固定尺寸（1920×1080）和 `px` 单位，不要用 `vw`/`vh` 或 `%`。缩放统一处理。
-
----
-
-## 验证检查清单（用户明确要求时执行）
-
-1. [ ] 浏览器直接打开 `index.html`（或主 HTML），检查首页无破图、字体已加载
-2. [ ] 按 → 键翻到每一页，没有空白页、没有布局错位
-3. [ ] 全屏（F11 / Cmd+Ctrl+F）走一遍，确认 scale + letterbox 在目标投影分辨率下正常
-4. [ ] 随机选 3 页 Cmd+Shift+R 强刷，localStorage 记忆正常工作
-5. [ ] （按需）Playwright 批量截图：遍历 `slides/*.html`，人工肉眼过一遍
-6. [ ] 搜一下 `TODO` / `placeholder` 残留，确认都清理了
-7. [ ] 确认视觉表达完整：渐变、web component、复杂 SVG 装饰按设计意图落地
+1. 打开 `index.html`，字体已加载、首页不是白屏
+2. → 键翻完全部页，无空白、无溢出
+3. 全屏确认 letterbox
+4. 单页 `open slides/0N-xxx.html` 也能看
+5. 搜 `TODO` / 「示意图位」——该留的留，不该留的清

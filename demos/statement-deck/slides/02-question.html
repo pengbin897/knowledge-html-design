@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>P02 · 它怎么理解我们的话</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400&family=Noto+Serif+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/tokens.css">
+<style>
+  /* 问题页：一句话铺满。辅助信息压到页眉，避免和主张抢字号 */
+  .page-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .index {
+    font-size: 18px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 32px;
+  }
+  h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 72px;
+    line-height: 1.28;
+    margin: 0;
+    max-width: 1520px;
+    text-wrap: balance;
+  }
+</style>
+</head>
+<body>
+<div class="page-rule"></div>
+<div class="page-header">钩子</div>
+<div class="page-main">
+  <div class="index">01</div>
+  <h1>当我们和 AI 对话的时候，<br>它到底是怎么理解我们的话的呢？</h1>
+</div>
+<div class="page-footer"><span>什么是 token</span><span>02 / 05</span></div>
+</body>
+</html>

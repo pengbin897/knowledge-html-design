@@ -2,40 +2,19 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>Deck · Multi-file Slide Index</title>
-<!--
-  deck_index.html — 陈述 deck 拼接器（本技能唯一起手件）
-
-  口播稿拆成每页一个独立 HTML，用本文件聚合播放：
-  · 每页独立 CSS/JS，一页出错不影响其它页
-  · 单页可双击打开验证
-  · 适合讲座 / 课件 / 知识陈述
-
-  用法：
-    1. 复制到项目根，改名为 index.html
-    2. 同级建 slides/ 与 shared/tokens.css
-    3. 改下方 DECK_MANIFEST（label 从 1 起，人类可读）
-    4. 每页 1920×1080，自带字体与背景，不要依赖本文件的 CSS
-
-  键盘：← / → / Space / PgUp / PgDown / Home / End / 1-9
--->
-
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- EDIT THIS — deck 所有页按顺序列出                        -->
-<!-- ═══════════════════════════════════════════════════════ -->
+<title>什么是 token</title>
+<!-- 正例：从 assets/deck_index.html 复制后只改 MANIFEST 与 title -->
 <script>
   window.DECK_MANIFEST = [
     { file: "slides/01-cover.html",    label: "封面" },
     { file: "slides/02-question.html", label: "问题" },
-    { file: "slides/03-reveal.html",   label: "主张" },
-    // file 相对本文件；label 显示在右下角，编号从 1 起
+    { file: "slides/03-reveal.html",   label: "只认识 token" },
+    { file: "slides/04-split.html",    label: "最小单位" },
+    { file: "slides/05-context.html",  label: "百万上下文" }
   ];
-
-  // 固定 canvas 尺寸。每页 HTML 都应该按这个尺寸设计。
   window.DECK_WIDTH = 1920;
   window.DECK_HEIGHT = 1080;
 </script>
-
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -51,7 +30,6 @@
     will-change: transform;
     background: #fff;
     box-shadow: 0 10px 60px rgba(0,0,0,0.4);
-    /* size set by JS from DECK_WIDTH/HEIGHT */
   }
   iframe {
     width: 100%;
@@ -74,9 +52,7 @@
     z-index: 100;
     user-select: none;
     opacity: 0.7;
-    transition: opacity 0.2s;
   }
-  .counter:hover { opacity: 1; }
   .counter .label { color: rgba(255,255,255,0.7); margin-left: 8px; }
   .nav-zone {
     position: fixed;
@@ -107,15 +83,12 @@
 </style>
 </head>
 <body>
-
 <div id="stage">
   <iframe id="frame" src="about:blank"></iframe>
 </div>
-
 <div class="nav-zone left"  id="navL"><div class="nav-hint">‹</div></div>
 <div class="nav-zone right" id="navR"><div class="nav-hint">›</div></div>
 <div class="counter" id="counter">1 / 1</div>
-
 <script>
 (function () {
   const W = window.DECK_WIDTH || 1920;
@@ -130,6 +103,7 @@
   stage.style.width  = W + 'px';
   stage.style.height = H + 'px';
 
+  // 按窗口 letterbox 缩放，页内始终按 1920×1080 px 排，避免 vw 把投屏字号打乱
   function fit() {
     const s = Math.min(window.innerWidth / W, window.innerHeight / H);
     const x = (window.innerWidth  - W * s) / 2;
@@ -153,7 +127,6 @@
   function next() { show(Math.min(current + 1, deck.length - 1)); }
   function prev() { show(Math.max(current - 1, 0)); }
 
-  // Keyboard
   document.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     switch (e.key) {
@@ -177,7 +150,6 @@
     if (m) show(parseInt(m[1], 10) - 1);
   });
 
-  // Initial: hash > localStorage > 0
   const hashMatch = location.hash.match(/^#(\d+)$/);
   if (hashMatch) current = Math.min(parseInt(hashMatch[1], 10) - 1, deck.length - 1);
   else try {
@@ -188,6 +160,5 @@
   show(current);
 })();
 </script>
-
 </body>
 </html>

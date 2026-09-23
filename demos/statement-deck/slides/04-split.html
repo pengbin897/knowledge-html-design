@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>P04 · 最小信息单位</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400&family=Noto+Serif+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/tokens.css">
+<style>
+  /*
+    拆解页：用几何二分翻译「四个字 → 两个 token」。
+    竖线是结构，不是插画；不要画芯片/机器人。
+  */
+  .page-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .lead {
+    font-size: 28px;
+    color: var(--muted);
+    margin: 0 0 48px;
+  }
+  .word {
+    font-family: var(--display);
+    font-size: 96px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    margin: 0 0 56px;
+  }
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 3px 1fr;
+    align-items: stretch;
+    min-height: 280px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .split .cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px 64px;
+  }
+  .split .gutter {
+    background: var(--accent);
+  }
+  .label {
+    font-size: 18px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .token {
+    font-family: var(--display);
+    font-size: 72px;
+    font-weight: 700;
+    margin: 0;
+  }
+  .note {
+    margin-top: 40px;
+    font-size: 28px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="page-rule"></div>
+<div class="page-header">拆解</div>
+<div class="page-main">
+  <p class="lead">token 是 AI 的最小信息单位。</p>
+  <p class="word">人工智能</p>
+  <div class="split">
+    <div class="cell">
+      <div class="label">token 1</div>
+      <p class="token">人工</p>
+    </div>
+    <div class="gutter" aria-hidden="true"></div>
+    <div class="cell">
+      <div class="label">token 2</div>
+      <p class="token">智能</p>
+    </div>
+  </div>
+  <p class="note">四个字，在它眼里可能是两块。</p>
+</div>
+<div class="page-footer"><span>什么是 token</span><span>04 / 05</span></div>
+</body>
+</html>

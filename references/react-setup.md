@@ -1,6 +1,8 @@
 # React + Babel 项目规范
 
-用 HTML+React+Babel 做幻灯片 / 动画时必须遵守的技术规范。不遵守会炸。
+**陈述 deck 默认用纯 HTML+CSS 写每一页。** 只有某一页确实需要组件态（交互示意、本地状态）才读本文。不要为了「更现代」把整份 deck 改成 React。
+
+用到 React 时必须遵守下面的规范，不遵守会炸。
 
 ## Pinned Script Tags（必须用这些版本）
 
