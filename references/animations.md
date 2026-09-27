@@ -82,7 +82,7 @@
 - 优先用 `data-anim="..."`，少用 `class="anim-..."`，这样运行时会在幻灯片变为当前页时重新触发动画。
 - 单页最多用 1–2 种不同动画。混 5 种会显得杂乱。
 - 列表错开入场 + 一个主视觉入场 = 干净的节奏。
-- `counter-up` 搭配 `stat-highlight.html` 或 `kpi-grid.html`。
+- `counter-up` 用在需要强调单个数字的页面上。
 
 ## 特效（canvas）
 

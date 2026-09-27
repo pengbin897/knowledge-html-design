@@ -76,7 +76,7 @@ description: HTML PPT Studio — 用模板驱动，编写多种风格、版式�
 ## 相关资源库
 
 - **10 套精选 themes** 说明见 `references/themes.md`，样例见 `templates/theme-showcase.html`
-- **31 种版式** 说明见 `references/layouts.md`，样例见 `templates/single-page/*.html`
+- **3 种版式** 说明见 `references/layouts.md`，样例见 `templates/single-page/*.html`
 - **27 种 CSS 动画** 说明见 `references/animations.md`，样例见 `assets/animations/animations.css`
 - **特效运行时**（`assets/animations/fx-runtime.js`）— 进入幻灯片时自动初始化 `[data-fx]`，离开时清理
 
@@ -86,6 +86,6 @@ description: HTML PPT Studio — 用模板驱动，编写多种风格、版式�
 `scripts/render.sh` 封装了位于 `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` 的无头 Chrome。多页截图时，runtime.js 提供 `#/N` 深链接，render.sh 按 1..N 逐页遍历。
 
 ```bash
-./scripts/render.sh templates/single-page/kpi-grid.html        # 单页
+./scripts/render.sh templates/single-page/cover.html           # 单页
 ./scripts/render.sh examples/demo-deck/index.html 8 out-dir    # 8 页，自定义输出目录
 ```
