@@ -1,0 +1,53 @@
+/* theme: editorial-serif — 杂志编辑风：衬线斜体大标题、纸感暖白、发丝线分栏 */
+:root{
+  --bg:#f7f3ec;--bg-soft:#efe9df;--surface:#fbf8f3;--surface-2:#efe9df;
+  --border:rgba(30,24,18,.16);--border-strong:#1e1812;
+  --text-1:#1e1812;--text-2:#4f463d;--text-3:#8c8176;
+  --accent:#7a2e1f;--accent-2:#a8845a;--accent-3:#1e1812;
+  --good:#4a6b45;--warn:#a8845a;--bad:#7a2e1f;
+  --grad:linear-gradient(135deg,#1e1812,#7a2e1f);
+  --grad-soft:linear-gradient(135deg,#f7f3ec,#efe9df);
+  --radius:0;--radius-sm:0;--radius-lg:2px;
+  --shadow:none;
+  --shadow-lg:0 18px 40px rgba(30,24,18,.12);
+  /* 正文用 Newsreader（文本衬线），标题用 Playfair（展示衬线），中文统一 Noto Serif SC */
+  --font-sans:'Newsreader','Noto Serif SC',Georgia,serif;
+  --font-display:'Playfair Display','Noto Serif SC',Georgia,serif;
+  --font-serif:'Playfair Display','Noto Serif SC',Georgia,serif;
+  --letter-tight:-.02em;
+  --letter-normal:0;
+}
+body{line-height:1.7}
+
+/* 刊头：顶部粗细双线，底部单发丝线，模拟杂志页眉/页脚 */
+.slide::before{content:"";position:absolute;left:40px;right:40px;top:54px;height:4px;
+  border-top:2px solid var(--border-strong);border-bottom:1px solid var(--border-strong);z-index:1}
+.slide::after{content:"";position:absolute;left:40px;right:40px;bottom:54px;height:1px;background:var(--border);z-index:1}
+
+/* 标题：斜体衬线、中等字重，行高收紧（参考 “Good Life in Small Things”） */
+h1.title,.h1{font-style:italic;font-weight:500;line-height:1.02;letter-spacing:-.025em}
+h2.title,.h2{font-style:italic;font-weight:500}
+h3,.h3,h4,.h4{font-family:var(--font-display);font-weight:600}
+.lede{font-weight:400;color:var(--text-2);font-size:21px}
+
+/* 栏目标签：小号大写字距 + 前导短横 */
+.kicker{color:var(--text-2);font-family:var(--font-sans);font-weight:500;font-size:13px;letter-spacing:.22em}
+.kicker::before{content:"";display:inline-block;width:28px;height:1px;background:currentColor;margin-right:12px;vertical-align:middle}
+.eyebrow{font-family:var(--font-sans);font-style:italic;text-transform:none;letter-spacing:.02em;font-size:15px}
+
+/* 卡片：去容器，只保留顶部发丝线，像杂志中的栏目条目 */
+.card{background:transparent;border:0;border-top:1px solid var(--border-strong);box-shadow:none;padding:18px 2px 4px}
+.card h4{font-size:24px}
+.card-soft{background:var(--surface-2);border-top:0;padding:24px 26px}
+.card-accent{border-top:3px double var(--border-strong)}
+.card-outline{border:1px solid var(--border-strong);padding:24px 26px}
+
+/* 胶囊改为 “阅读更多 →” 式下划线文字链接 */
+.pill{background:transparent;border:0;border-bottom:1px solid currentColor;border-radius:0;padding:2px 0;
+  color:var(--text-1);font-size:13px;letter-spacing:.06em}
+.pill-accent{color:var(--accent);border-color:var(--accent);background:transparent}
+
+.divider{background:var(--border-strong)}
+.divider-accent{height:1px;width:96px;background:var(--text-1);border-radius:0}
+.gradient-text{font-style:italic}
+.deck-header,.deck-footer{font-family:var(--font-sans);letter-spacing:.18em;color:var(--text-2)}

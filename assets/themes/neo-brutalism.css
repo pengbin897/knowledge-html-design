@@ -1,0 +1,48 @@
+/* theme: neo-brutalism — 新粗野主义：粗黑描边、硬投影、高饱和色块、荧光高亮 */
+:root{
+  --bg:#fffdf6;--bg-soft:#fff4c2;--surface:#ffffff;--surface-2:#fff4c2;
+  --border:#000000;--border-strong:#000000;
+  --text-1:#000000;--text-2:#1f1f1f;--text-3:#555555;
+  --accent:#ff5fa2;--accent-2:#ffe12b;--accent-3:#3f7bff;
+  --good:#2fd26b;--warn:#ffe12b;--bad:#ff4d4d;
+  --grad:linear-gradient(90deg,#ff5fa2,#ffe12b 50%,#3f7bff);
+  --grad-soft:linear-gradient(135deg,#fff4c2,#ffe0ef);
+  --radius:6px;--radius-sm:4px;--radius-lg:10px;
+  --shadow:6px 6px 0 #000;--shadow-lg:10px 10px 0 #000;
+  --font-sans:'Space Grotesk','Inter','Noto Sans SC',sans-serif;
+  --font-display:'Archivo Black','Noto Sans SC',sans-serif;
+  --letter-tight:-.02em;
+}
+
+/* 背景：极淡方格纸，保留大面积留白 */
+.slide{background-image:
+  linear-gradient(rgba(0,0,0,.045) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(0,0,0,.045) 1px,transparent 1px);
+  background-size:40px 40px}
+
+h1.title,.h1,h2.title,.h2{font-weight:900;line-height:1.08}
+h3,.h3,h4,.h4{font-weight:700}
+.lede{font-weight:500;color:var(--text-2)}
+
+/* gradient-text 在本主题中改为 “荧光笔色块” 高亮：黄底黑字（参考 “好的创意” 的黄色底块） */
+.gradient-text{background:var(--accent-2);-webkit-background-clip:border-box;background-clip:border-box;
+  -webkit-text-fill-color:#000;color:#000;padding:0 .14em;width:fit-content;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone}
+
+/* 标签：黑底黄字贴纸；fit-content 防止在 flex 列布局中被拉满整行 */
+.kicker{display:inline-block;width:fit-content;background:#000;color:var(--accent-2);padding:5px 12px;letter-spacing:.12em;font-weight:700}
+
+/* 卡片：3px 黑描边 + 硬投影；变体用不同高饱和色块填充 */
+.card{border:3px solid #000;box-shadow:var(--shadow)}
+.card-soft{background:#d9f7e4;border:3px solid #000}
+.card-accent{background:var(--accent-2);border:3px solid #000}
+.card-outline{border:3px solid #000;box-shadow:none;background:#fff}
+.card-hover:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 #000}
+
+/* 胶囊：直角描边按钮 + 小硬投影；主按钮粉色填充 */
+.pill{border-radius:4px;border:2px solid #000;background:#fff;color:#000;font-weight:700;box-shadow:3px 3px 0 #000}
+.pill-accent{background:var(--accent);color:#000;border-color:#000}
+
+.divider{height:3px;background:#000}
+.divider-accent{height:12px;width:120px;background:var(--accent);border:3px solid #000;border-radius:0}
+.deck-header,.deck-footer{color:#000;font-weight:700}

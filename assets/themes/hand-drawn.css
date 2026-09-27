@@ -1,0 +1,63 @@
+/* theme: hand-drawn — 手绘插画风：奶油纸底、手写字体、歪扭描边、马克笔高亮 */
+:root{
+  --bg:#fdf8ec;--bg-soft:#f7efd9;--surface:#fffdf7;--surface-2:#f4ecd6;
+  --border:#3b2f24;--border-strong:#3b2f24;
+  --text-1:#3b2f24;--text-2:#5e4d3d;--text-3:#94826e;
+  --accent:#5b9a5b;--accent-2:#f2b732;--accent-3:#ec8a5f;
+  --good:#5b9a5b;--warn:#f2b732;--bad:#e0604f;
+  --grad:linear-gradient(135deg,#5b9a5b,#f2b732 60%,#ec8a5f);
+  --grad-soft:linear-gradient(135deg,#fdf8ec,#f4ecd6);
+  --radius:14px;--radius-sm:10px;--radius-lg:22px;
+  --shadow:3px 4px 0 rgba(59,47,36,.85);
+  --shadow-lg:5px 7px 0 rgba(59,47,36,.85);
+  /* 拉丁字母优先落到手写体，中文回落到站酷快乐体 / 思源黑体 */
+  --font-sans:'Patrick Hand','Noto Sans SC',sans-serif;
+  --font-display:'Caveat','ZCOOL KuaiLe','Noto Sans SC',cursive;
+  --letter-tight:0;
+  --letter-normal:.01em;
+  /* 不规则椭圆圆角，四角半径互不相同，产生“手画框”的歪扭感 */
+  --wobble:255px 18px 225px 18px/18px 225px 18px 255px;
+  --wobble-sm:120px 12px 110px 14px/14px 110px 12px 120px;
+}
+body{font-size:18px}
+
+/* 纸张颗粒：两层错位细点 */
+.slide{background-image:
+  radial-gradient(rgba(59,47,36,.07) 1px,transparent 1.4px),
+  radial-gradient(rgba(59,47,36,.05) 1px,transparent 1.4px);
+  background-size:26px 26px,38px 38px;background-position:0 0,13px 19px}
+/* 右上角涂鸦太阳，作为全局重复的插画符号 */
+.slide::after{content:"";position:absolute;top:48px;right:56px;width:76px;height:76px;opacity:.9;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23f2b732' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M41 25c9-1 15 7 14 15s-7 15-16 15-15-8-14-16 7-13 16-14z'/%3E%3Cpath d='M40 6v9M41 66v8M6 41h9M66 39h8M16 16l6 6M58 58l6 6M64 15l-6 6M22 58l-6 7'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/contain}
+
+/* 标题：手写体本身笔画偏细，放大字号并加粗 */
+h1.title,.h1{font-size:84px;font-weight:700;line-height:1.05}
+h2.title,.h2{font-size:60px;font-weight:700}
+h3,.h3,h4,.h4{font-family:var(--font-display);font-weight:700}
+h4,.h4{font-size:28px}
+.lede{font-weight:400;font-size:24px;color:var(--text-2)}
+
+/* gradient-text：马克笔高亮，只涂文字下半部 */
+.gradient-text{background:linear-gradient(transparent 56%,rgba(242,183,50,.75) 56% 90%,transparent 90%);
+  -webkit-background-clip:border-box;background-clip:border-box;-webkit-text-fill-color:currentColor;color:var(--text-1);width:fit-content;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone}
+
+/* 标签：手写体 + 波浪下划线，像随手的批注 */
+.kicker{font-family:var(--font-display);font-size:26px;font-weight:700;text-transform:none;letter-spacing:0;color:var(--accent);
+  text-decoration:underline wavy var(--accent-2);text-underline-offset:6px;text-decoration-thickness:2px}
+.eyebrow{font-family:var(--font-display);font-size:20px;text-transform:none;letter-spacing:.02em}
+
+/* 卡片：歪扭描边 + 墨色偏移投影 */
+.card{border:2.5px solid var(--border);border-radius:var(--wobble);box-shadow:var(--shadow)}
+.card-soft{background:#eaf3e2;border:2.5px solid var(--border)}
+.card-accent{background:#fff3cf;border:2.5px solid var(--border)}
+.card-outline{border:2.5px dashed var(--border);border-radius:var(--wobble)}
+
+/* 胶囊：歪扭圆角按钮；主按钮为绿色填充（参考 “开始探索 →”） */
+.pill{border-radius:var(--wobble-sm);border:2px solid var(--border);background:var(--surface);color:var(--text-1);font-size:15px;padding:4px 14px}
+.pill-accent{background:var(--accent);color:#fff;border-color:var(--border)}
+
+/* 分隔线：SVG 手绘波浪线 */
+.divider{height:2px;background:var(--border);border-radius:2px;opacity:.6}
+.divider-accent{height:14px;width:120px;border-radius:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14'%3E%3Cpath d='M2 8C12 1 22 13 32 7s20-6 30 0 20 6 30 0 20-6 26-1' fill='none' stroke='%235b9a5b' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/100% 100%}
+.deck-header,.deck-footer{font-family:var(--font-display);font-size:18px;letter-spacing:.04em;text-transform:none}

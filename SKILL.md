@@ -1,177 +1,91 @@
 ---
 name: knowledge-html-design
-description: 把「明确主题 + 完整口播稿/讲稿」做成 1920×1080 HTML 陈述 deck（每页独立 HTML + deck_index 键盘翻页）。适用于用户已有论述文字、要做演讲 PPT/课件/知识讲解幻灯片、且没有品牌/图片素材的场景。不要用于需求模糊的品牌定位、风格三选一、连续运动舞台、Launch Film、App 原型、TTS 或导出视频。
+description: HTML PPT Studio — 用模板驱动，编写多种风格、版式与动画的专业静态 HTML 演示文稿。当用户需要演示文稿、PPT、幻灯片、keynote、deck、slideshow、「幻灯片」、「演讲稿」、「做一份 PPT」、「做一份 slides」、reveal 风格的 HTML 演示、小红书图文，或任何需要美观且支持键盘翻页的多页路演/报告/分享文档时使用。触发词包括 "presentation"、"ppt"、"slides"、"deck"、"keynote"、"reveal"、"slideshow"、"幻灯片"、"演讲稿"、"分享稿"、"小红书图文"、"talk slides"、"pitch deck"、"tech sharing"、"technical presentation"。
 ---
 
-# Knowledge HTML Design
+# 任务
 
-你是用 HTML 工作的设计师。用户给**主题 + 口播稿**，你产出能投屏演讲的 **1920×1080 陈述 deck**。
+根据完整的口播稿 / 演讲稿 / 视频制作脚本，编写专业 HTML 形式的演示文稿。内容定位偏向于：知识讲解 / 技术分享 / 产品介绍 / 行业分析 / 市场研究 / 观点解析
 
-画面从论述里长出来：字号层级、对比、流程、定义拆解。不向外搜 logo、产品图、Unsplash，不做风格三选一。
+## 制作流程
 
-## 适用 / 不适用
+1. 理解这份演示
 
-**才开工（缺一不可）**：
-- 有明确主题
-- 有比较完整的口播稿 / 讲稿 / 论述文字
+- **主题是什么**
+- **大概多少时长**
+- **给谁演示的**
 
-**缺讲稿时**：只回一句——请给主题和口播稿。不要补问受众/哲学/品牌，不要编讲稿当设计顾问。
+2. 选择一个合适的 theme
 
-**不要用本技能**：
-- 无讲稿的发散定位、品牌分析、VI、「推荐 3 个风格」
-- App / 落地页 / 信息图 / Launch Film / 连续运动舞台
-- 可编辑 PPTX、TTS 成片、导出 MP4 / GIF
+参考 `references/themes.md`。拿不准时：
 
-用户说「PPT / deck / 幻灯片」→ 就是本技能正轨，做成 HTML 翻页 deck。
+- **工程师** → `terminal-green`。
+- **设计师 / 产品** → `editorial-serif` / `aurora` / `soft-pastel` / `neo-brutalism`。
+- **高管 / 商业汇报** → `swiss-grid` / `editorial-serif`。
+- **消费者 / 生活方式** → `xiaohongshu-white` / `soft-pastel` / `japanese-minimal` / `editorial-serif`。
+- **赛博 / CLI / 极客** → `terminal-green` / `pixel`。
+- **路演 / 强视觉** → `swiss-grid` / `neo-brutalism`。
+- **发布会 / 产品揭晓** → `aurora` / `swiss-grid`。
+- **教育科普 / 轻松趣味** → `hand-drawn` / `pixel`。
 
-用户要 PPTX / 视频 / 配音时：仍交付可全屏演讲的 HTML，一句话说明其他格式需另转。
-
-## 产物（不要再往外长）
-
-```
-<talk-name>/
-├── script.md              # 口播稿按页拆开（每页一句主张 + 要讲的话）
-├── index.html             # 从 assets/deck_index.html 复制，改 MANIFEST
-├── shared/tokens.css      # 默认视觉语法
-└── slides/
-    ├── 01-cover.html
-    └── ...
+3. 新建一个空白演示文稿
+```bash
+./scripts/new-deck.sh <talk-name>
 ```
 
-1. **HTML deck**：浏览器打开 `index.html`，键盘翻页、全屏投屏
-2. **`script.md`**：口播稿的分页源代码，和 slides 一一对应
+这会把 `templates/deck.html` 复制到 `output/<talk-name>/index.html`，并改写路径。按大纲增删 `<section class="slide">` 块。
 
-## 默认视觉语法（写死，不开工前选流派）
+4. 参照**演示大纲 / 脚本**逐页撰写
 
-没有品牌、没有参考图时，**一律用这套**，先口头说一遍再动手。用户嫌气质不对，交付后再改 `tokens.css`。
+针对每一页的内容，先从资源库中挑选（从样例库文件中复制 `<section class="slide">...</section>` 块到演示页中）一个与当前页内容最契合的版式；若没有合适的版式，也可以另外创建一个。再将内容按照版式的格式填充进当前页中。
 
-| 维度 | 取值 |
-|------|------|
-| 画布 | 1920×1080，`px` 单位，不要 `vw`/`vh` |
-| 字体 | Display：Newsreader + Noto Serif SC；正文：`-apple-system, "PingFang SC"` |
-| 色彩 | 暖底 `#FAF7F2` + 墨色 `#1C1917` + **单个** accent `#C04A1A` |
-| 字号 | 正文 ≥ 28px（最小 24px）；标题 60–120px；金句/封面可到 160–220px |
-| 密度 | 默认克制：每页 1 个核心信息。主题本身是「智能 / 数据 / 上下文」时，内容页至少 3 处有意义的差异信息（不是装饰 icon） |
-| 签名 | 全场只留一处值得截图的细节（极淡纸纹 / 衬线斜体金句 / 一条 rust 竖线），不要处处用力 |
 
-CSS 变量落在 `shared/tokens.css`。深浅变化用同色相 `oklch` 插值，不要另起一套色。
+## 高阶制作技巧
 
-## 没有图时画面怎么来
+### 设计原则
 
-- **不搜、不配装饰图、不用 SVG 画人画物。**
-- 口播稿里的结构关系，用排版和图解表达：定义拆开、A vs B、流程三步、层级、一句金句铺满。
-- 几何 SVG / CSS 图解可以：对比条、步骤轴、二分、层级。那是论述的视觉翻译，不是插画。
-- 稿里出现的真数据才上数字；没有数字就不要 metric card。
-- 需要实物/界面时：灰块 + 文字标签（「示意图位」），等用户以后补。
+演示稿整体设计需遵循以下原则：
+1. 对比（Contrast）
+若元素不同则使其 “非常不同”，通过明暗 / 冷暖色彩、大小、粗细、形状等强烈反差制造视觉张力（如冷暗背景与暖色帆船对比），既吸引注意力又建立信息层级，避免 “微弱对比”（如字体 / 颜色仅细微差异），需大胆区分以突出主体。
 
-## 核心原则
+2. 重复（Repetition）
+重复颜色、字体、图形等视觉元素，强化页面统一性（如统一风格图标），让观众感知内容关联性，避免杂乱；
 
-### 0. 事实验证（只核稿内断言）
+3. 对齐（Alignment）
+元素不能随意摆放，需与其他元素建立视觉关联（如左对齐、右对齐、居中或基线对齐），用 “看不见的线” 串联页面，避免杂乱。
+作用：带来秩序感和专业度（如统一左对齐文本 / 图片，比零散摆放更整洁）；
 
-口播稿里出现具体产品 / 技术 / 版本 / 数据时，先 `WebSearch` 核对**这句话**，不要凭训练语料改稿。搜不到就按原稿排版，并在交付时标注「未核验」。
+4. 亲密性（Proximity）
+相关元素就近分组，无关元素留白分隔，用空间传递逻辑关系。
+作用：降低理解成本（如 PPT 中标题 + 正文、图片 + 说明文字成组，观众一眼懂关联）；
 
-稿子里出现公司名 **不等于** 要去采 logo。只当论述对象，用文字和结构表达。
+### 视觉元素
 
-### 1. Junior Designer：先展示假设，再执行
+- 能用数据展示的，就不要用图示；能用图示的，就不要用文字；一页只有文字的，让核心关键词醒目呈现
+- 充分利用动效让内容呈现形式更生动，纯静态文字的展示很容易让观众失去兴致，但又不能太生硬，动效要与表达内容相匹配
 
-不要闷头做完全部页。HTML 头部写 assumptions；先做 2 页定 grammar，show 用户，再批量。理解错了早改比晚改便宜。
+### 动效纪律
 
-### 2. Placeholder > 烂实现
+- 发生顺序 ＝ 阅读顺序 ＝ 内容因果顺序：先因后果，先定义后引用。同一时刻主线上只有一个元素在运动。
+- 位移量 ≤ 画幅宽的 0.8%（1448 宽画布上约 12 px），方向与该元素的语义方向一致：上涨向上、推进向右、汇聚向内、扩张向外。
+- 动效只改变四项：位置、尺寸、描边进度、数值。颜色、线宽、圆角、底色在整段动效中恒定。
+- 缓动：画线与量值生长用 ease-out（快起慢收，模拟收笔）；位移用 ease-in-out；匀速循环用 linear。
+- 错峰间隔 ＝ 前序元素时长的 40%–60%。
 
-没图就灰块+标签。没数据就空着或拆掉该页。不要编造看起来像数据的假数字、假引用。
 
-### 3. 反 AI slop（为论述清晰，不为品牌识别）
+## 相关资源库
 
-避免：紫渐变、emoji 当图标、圆角卡片+左彩色 border、Inter/Roboto 做标题、每条都配装饰 icon、编造 stats。完整清单 → `references/content-guidelines.md`。
+- **10 套精选 themes** 说明见 `references/themes.md`，样例见 `templates/theme-showcase.html`
+- **31 种版式** 说明见 `references/layouts.md`，样例见 `templates/single-page/*.html`
+- **27 种 CSS 动画** 说明见 `references/animations.md`，样例见 `assets/animations/animations.css`
+- **特效运行时**（`assets/animations/fx-runtime.js`）— 进入幻灯片时自动初始化 `[data-fx]`，离开时清理
 
-## 工作流程
 
-复制此清单跟踪。碰到 🛑 **说完「做了 X，下一步 Y，你确认吗？」然后真的等**。
+## 导出为 PNG（可选）
 
-1. **门禁**
-   - 没有主题或没有比较完整的口播稿 → 停，只要这两样。
-   - 用户要风格探索 / 品牌定位 / 「做个好看的」但没有讲稿 → 超出范围，不要进入顾问模式。
-   - 口播稿里有事实性断言 → 先核稿，再拆页。
+`scripts/render.sh` 封装了位于 `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` 的无头 Chrome。多页截图时，runtime.js 提供 `#/N` 深链接，render.sh 按 1..N 逐页遍历。
 
-2. **拆论述 → 页大纲**
-   - 读口播稿，抽出主张链：钩子 → 分论点 / 例证 → 收束。
-   - 一页一意。一句金句、一个对比、一个定义、一个流程，各占一页。
-   - 写成 `script.md`：`## 01-cover` 这种与文件名对应的节，节下是这一页要讲的原话（可略压缩，不编新论点）。
-   - 可选问一句：投屏距离？（默认 10m）。不要问品牌规范、logo、参考图。
-
-3. **🛑 检查点：页大纲 + 默认视觉语法**
-   - 列出每页标题 / 页类型（封面、问题、主张、拆解、收束）+ 上面那套 tokens。
-   - 等用户点头再写页面。方向错了晚改贵。
-
-4. **Junior：2 页定 grammar**（deck ≥ 5 页时必做）
-   - 先做封面 + 一张结构差异最大的内容页（例如大字问题页，或对比拆解页）。
-   - 复制 `assets/deck_index.html` 为 `index.html`，建 `shared/tokens.css`。
-   - 🛑 把这两页给用户看，等反馈再批量。
-
-5. **批量其余页**
-   - 复用同一套 tokens 和页眉页脚，换 layout 不换系统。
-   - 一个 deck 里 4–5 种 layout 足够：封面 / 章节封 / 主张大字 / 对比或流程 / 收束。
-   - 不要每页都长得像同一张 PPT 模板，也不要每页都换一套色。
-
-6. **聚合交付**
-   - 填好 `DECK_MANIFEST`（label 从 1 起，人类可读）。
-   - 每页可单独双击打开；`index.html` 全屏可翻页即完成。
-   - 不要导出视频，不要 TTS。
-
-7. **验证（可选）**：仅当用户明确要求时，用浏览器走一遍或 `python scripts/verify.py`。默认直接交付。
-
-8. **总结**：极简，只说 caveats 和 next steps（哪页是 placeholder、哪句事实未核验）。
-
-**检查点原则**：碰到 🛑 就停下，明确告诉用户「我做了 X，下一步打算 Y，你确认吗？」然后真的等。
-
-## 异常处理
-
-| 场景 | 动作 |
-|------|------|
-| 只有一句主题、没有讲稿 | 停，只要口播稿。不编稿、不推风格 |
-| 用户要推荐风格 / 品牌定位 | 超出范围，说明本技能只做「稿 → 陈述 deck」 |
-| 用户说「不要问了，直接做」 | 用默认语法 + 你拆的页大纲做，交付时标注 assumption |
-| 稿与常识/检索冲突 | 指出具体句子，按检索结果改画面上的事实；不改用户没让改的论点结构 |
-| 时间紧 | 跳过 2 页 showcase，直接批量，交付时标明未经 early validation |
-| 用户坚持要运动舞台 / 成片 | 说明本技能只交 HTML deck；不要回去做 NarrationStage / ffmpeg |
-
-## 技术约定
-
-- **默认每页纯 HTML + CSS。** 只有单页确实需要组件态才用 React，并遵守 `references/react-setup.md`（pinned 版本、styles 唯一命名、禁止 `scrollIntoView`）。
-- 画布锁在 `shared/tokens.css` 的 `body { width: 1920px; height: 1080px; }`。缩放由 `index.html` 做 letterbox。
-- 禁止 `src="….jsx"` 外链未内联的 Babel 文件导致 `file://` CORS 黑屏。
-- 单页 >1000 行再拆；陈述页通常远小于此。
-
-## Starter
-
-| 文件 | 何时用 |
-|------|--------|
-| `assets/deck_index.html` | **唯一起手件**。复制为项目 `index.html`，改 `DECK_MANIFEST` |
-
-正例：`demos/statement-deck/`（口播稿 → 5 页陈述 deck）。
-
-## References
-
-| 任务 | 读 |
-|------|-----|
-| 拆页、2 页 showcase、Junior 检查点 | `references/workflow.md` |
-| 多文件架构、layout、字号、MANIFEST | `references/slide-decks.md` |
-| 反 slop、禁止编数据、投屏字号 | `references/content-guidelines.md` |
-| 某页必须用 React 时 | `references/react-setup.md` |
-| 用户明确要求验证时 | `references/verification.md` + `scripts/verify.py` |
-
-## 产出要求
-
-- 描述性目录名，如 `什么是 token/`
-- 大改版时 copy 旧版：`slides/03-reveal.html` → `slides/03-reveal-v2.html` 或整目录 `v2/`
-- HTML 放项目目录，不要散落到 `~/Downloads`
-- 默认不加技能水印
-- 播放位置由 `deck_index` 写入 localStorage，刷新不丢
-
-## 核心提醒
-
-- 没有讲稿就不开工。
-- 不搜品牌、不推荐 20 种哲学、不劝去做连续运动舞台。
-- 一页一意；几何图解可以，装饰图不行。
-- 先 2 页 grammar，再批量。
-- 每个渐变 / emoji / 圆角左 border 之前先问：这页的主张需要它吗？
+```bash
+./scripts/render.sh templates/single-page/kpi-grid.html        # 单页
+./scripts/render.sh examples/demo-deck/index.html 8 out-dir    # 8 页，自定义输出目录
+```
