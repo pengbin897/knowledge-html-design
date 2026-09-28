@@ -71,7 +71,7 @@ description: HTML PPT Studio — 按「主题 / 版式 / 部件 / 动效」四�
 | 阶段 | 做什么 | 产物 | 通过条件 |
 |---|---|---|---|
 | **S0 理解** | 明确主题、受众、时长、交付形态、画布、主张 | `storyboard.md` 的 Brief | 6 项齐全，主张只有一句话 |
-| **S1 定调** | 选择或派生主题，确定语义色用途，找整套参照 | Brief 中的 Theme / 语义色 / 整套参照 | 主题满足 token 契约 |
+| **S1 定调** | 选择或派生主题，确定语义色用途 | Brief 中的 Theme / 语义色 | 主题满足 token 契约 |
 | **S2 拆稿** | 把文案切成 beat，标注 intent，提取数据，切页 | `script.md` | 每个 beat 有 intent 和归属页 |
 | **S3 分镜** | 逐页决定 layout / components / animation / 时长 / 参照 | `storyboard.md` 分镜表 | 每页一个 claim；每行有参照或标 author |
 | **S4 实现** | 按分镜逐页写 HTML | `index.html` | 能完整翻页，控制台无报错 |
@@ -101,7 +101,7 @@ description: HTML PPT Studio — 按「主题 / 版式 / 部件 / 动效」四�
 | `video` 录屏视频 | 16:9 / 9:16 | 4~12 s | ≤ 30 字 |
 | `post` 图文轮播 | 3:4 | — | ≤ 80 字 |
 
-**Theme**（S1）：先看 `references/full-decks.md` 有没有场景吻合的整套参照；没有再按受众选——工程师 → `terminal-green`；高管 → `swiss-grid`；设计 / 产品 → `editorial-serif`；消费者 → `xiaohongshu-white`；发布会 → `aurora`；科普 → `hand-drawn`。
+**Theme**（S1）：按受众选——工程师 → `terminal-green`；高管 → `swiss-grid`；设计 / 产品 → `editorial-serif`；消费者 → `xiaohongshu-white`；发布会 → `aurora`；科普 → `hand-drawn`。
 
 **Layout**（S3）：按页面 intent 选骨架——
 
@@ -144,7 +144,6 @@ description: HTML PPT Studio — 按「主题 / 版式 / 部件 / 动效」四�
 | 主题 | `assets/themes/*.css` · `templates/theme-showcase.html` | 10 套基础主题 |
 | 单页示例 | `templates/single-page/*.html` · `templates/layout-showcase.html` | 封面、时间线、清单 |
 | 起点模板 | `templates/deck.html` | 6 页最小 deck：封面、卡片网格、大数字、双栏、CTA、致谢 |
-| 整套参照 | `templates/full-decks/*/` · `references/full-decks.md` · `templates/full-decks-index.html` | 15 套四维合一的完整 deck |
 | 通用部件 | `assets/base.css` | token、文字、卡片、胶囊、网格、页面 chrome |
 | CSS 动效 | `assets/animations/animations.css` · `templates/animation-showcase.html` | 27 种 |
 | canvas FX | `assets/animations/fx/*.js` · `assets/animations/fx-runtime.js` | 20 种，需在页面中引入 fx-runtime |

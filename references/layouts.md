@@ -23,8 +23,8 @@ Layout 只管「空间怎么分」，**不管**每块放什么部件（component
 | 画布 | 设计尺寸 | 用于 | 安全区（内边距） | 实现方式 |
 |---|---|---|---|---|
 | **16:9** | 1920×1080 | `talk`；横版 `video` | 上下 72 / 左右 96 | `assets/base.css` 默认（`.slide` 撑满视口）；**以 1920×1080 窗口验收** |
-| **9:16** | 1080×1920 | 竖版 `video` | 上 160 / 左右 72 / **底部 30% 不放主体内容** | 参照 `xhs-post` 的固定画布写法：给 `.deck` 与 `.slide` 设定固定宽高 |
-| **3:4** | 810×1080 | `post` 图文 | 上下 70 / 左右 64 | 直接以 `templates/full-decks/xhs-post/` 为起点 |
+| **9:16** | 1080×1920 | 竖版 `video` | 上 160 / 左右 72 / **底部 30% 不放主体内容** | 给 `.deck` 与 `.slide` 设定固定宽高 1080×1920 |
+| **3:4** | 810×1080 | `post` 图文 | 上下 70 / 左右 64 | 给 `.deck` 与 `.slide` 设定固定宽高 810×1080 |
 
 - 全 deck 只用一种画布。
 - 9:16 的底部 30% 会被平台界面与字幕遮挡，只允许放注释、来源、页脚。
@@ -202,38 +202,21 @@ Layout 只管「空间怎么分」，**不管**每块放什么部件（component
 
 ## §4 示例（MAY · 参照）
 
-记法见 `references/pipeline.md` S3：`sp:` = `templates/single-page/`；`deck#N` = `templates/deck.html` 第 N 页；`<名称>#N` = `templates/full-decks/<名称>/index.html` 第 N 页（浏览器中加 `#/N` 直达）。
+记法见 `references/pipeline.md` S3：`sp:` = `templates/single-page/`；`deck#N` = `templates/deck.html` 第 N 页。
 
 | 骨架 | 示例 | 它示范了什么 |
 |---|---|---|
 | `statement` | `sp:cover` | 眉题 + 超大标题 + 导语 + 胶囊行的标准封面 |
 | | `deck#5`、`deck#6` | 居中 CTA；单词巨字致谢 |
-| | `dir-key-nav-minimal`（全套） | 一页一个想法，极大留白 |
-| | `graphify-dark-graph#2` | 章节分隔页 |
 | `focus` | `deck#3` | 220px 大数字 + 一行说明 |
-| | `pitch-deck#7` | 标题给结论，一张柱状图做焦点，底部一行补充数据 |
-| | `weekly-report#4` | 带标题栏的整宽图表 |
-| | `xhs-post#2` | 竖向画布上的大 emoji 焦点 |
-| `hero-detail` | `pitch-deck#9` | 一个主诉求框 + 用途分解 |
-| | `course-module#3` | 常驻边栏 + 主概念框 |
 | `grid` | `deck#2` | 3 张卡片的议程 |
-| | `pitch-deck#2` | 3 张问题卡，每张一个数字 |
-| | `weekly-report#2` | 4 列 KPI，带语义色 |
-| | `product-launch#7` | 3 档定价，中间档突出 |
 | `split` | `deck#4` | 最简双栏 |
-| | `obsidian-claude-gradient#3` | 对比卡片 |
 | `stack` | `sp:todo-checklist` | 带状态的纵向清单 |
-| | `tech-sharing#2` | 编号议程行 |
-| | `weekly-report#3` | 已交付事项列表 |
-| | `product-launch#6` | 编号步骤 + 说明 |
 | `flow` | `sp:timeline` | 横向时间线，节点 + 年份 + 说明 |
-| | `knowledge-arch-blueprint#5` | SVG 反馈闭环 |
-| | `graphify-dark-graph#6` | 管线 |
-| | `obsidian-claude-gradient#4` | 步骤流 |
-| `media` | `tech-sharing#6` | 终端代码块为主体 |
-| | `product-launch#1` | 产品主视觉图 |
 
-浏览全部单页：`templates/layout-showcase.html`；浏览全部整套：`templates/full-decks-index.html`。
+`hero-detail` 与 `media` 按 §2 的骨架定义实现。
+
+浏览全部单页：`templates/layout-showcase.html`。
 
 ---
 

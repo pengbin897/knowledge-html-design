@@ -44,7 +44,7 @@ Theme **不决定**任何页面的结构、部件的构成或动效——那是�
 
 - 页面与部件中的颜色、圆角、阴影、字体**一律写 `var(--token)`**，不写 `#xxxxxx` / `rgb()`。
 - 需要半透明时用 `color-mix(in srgb, var(--accent) 20%, transparent)`，不另写色值。
-- **例外**：主题文件本身；`templates/full-decks/*/style.css`（它们用 `.tpl-<name>` 作用域自带一套 token）。
+- **例外**：主题文件本身。
 
 ### 2.3 语义色是信息编码
 
@@ -71,13 +71,9 @@ Theme **不决定**任何页面的结构、部件的构成或动效——那是�
 
 ## §3 决策（SHOULD）
 
-按顺序问三个问题，得到候选主题。
+按顺序问两个问题，得到候选主题。
 
-### 3.1 有没有整套参照？
-
-先看 `references/full-decks.md`。如果某套完整 deck 的场景与本 deck 高度吻合（例如周报 → `weekly-report`，融资路演 → `pitch-deck`），**直接以它为整套参照**，它的 `style.css` 就是本 deck 的主题。否则继续往下。
-
-### 3.2 受众与调性
+### 3.1 受众与调性
 
 | 受众 / 调性 | 首选 | 备选 |
 |---|---|---|
@@ -90,23 +86,21 @@ Theme **不决定**任何页面的结构、部件的构成或动效——那是�
 | 发布会 / 产品揭晓 | `aurora` | `swiss-grid` |
 | 教育科普 / 轻松趣味 | `hand-drawn` | `pixel` |
 
-### 3.3 内容与交付形态修正
+### 3.2 内容与交付形态修正
 
 | 情况 | 倾向 |
 |---|---|
 | 数据、数字密集 | 高对比：深色主题或 `swiss-grid`；避免 `hand-drawn` / `pixel` |
 | 长文字、叙事为主 | `editorial-serif` / `japanese-minimal` |
 | `video` 形态（录屏成视频） | 深色主题更抗压缩、焦点更突出 |
-| `post` 形态（3:4 图文） | `xiaohongshu-white`，或以 `xhs-post` / `xhs-white-editorial` / `xhs-pastel-card` 为整套参照 |
+| `post` 形态（3:4 图文） | `xiaohongshu-white` |
 | 用户给了品牌色 / 参考图 | 走 §5 派生 |
 
 ---
 
 ## §4 示例（MAY · 参照）
 
-浏览全部主题：`templates/theme-showcase.html`；任意 deck 中按 **T** 循环切换。
-
-### 4.1 基础主题 · `assets/themes/*.css`
+浏览全部主题：`templates/theme-showcase.html`；任意 deck 中按 **T** 循环切换。主题文件在 `assets/themes/*.css`。
 
 | 名称 | 气质 | 适用 |
 |---|---|---|
@@ -120,10 +114,6 @@ Theme **不决定**任何页面的结构、部件的构成或动效——那是�
 | `pixel` | 像素游戏风：色阶天空、像素云、Press Start 2P 标题、缺角像素边框 | 游戏、复古话题、趣味技术分享 |
 | `terminal-green` | 绿屏终端、等宽字、发光文字、4px 小圆角 | CLI / 开发者分享、极客主题 |
 | `aurora` | 极光渐变 + blur + saturate | 发布会、揭晓、强氛围 |
-
-### 4.2 整套参照中的主题 · `templates/full-decks/*/style.css`
-
-15 套完整 deck 各自带一套作用域主题，是**「主题 + 版式 + 部件」合一**的最具象参照，详见 `references/full-decks.md`。挑选主题时可以把它们当作 10 套基础主题之外的扩展选项。
 
 ---
 

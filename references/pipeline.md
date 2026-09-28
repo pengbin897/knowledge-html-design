@@ -49,9 +49,8 @@ S0 理解 ─→ S1 定调 ─→ S2 拆稿 ─→ S3 分镜 ─→ S4 实现 �
 
 **动作**：按 `references/themes.md` 的决策表选 theme，或按其「派生」规则新建。同时确定语义色的用途。
 
-**产物**：Brief 表中的 `Theme`、`语义色`、`整套参照` 三行。
+**产物**：Brief 表中的 `Theme`、`语义色` 两行。
 
-- **整套参照**：若 `templates/full-decks/` 中某套与本 deck 场景高度吻合，记下它。它将成为后续每一页的首选参照。
 - **语义色**：`--good` / `--warn` / `--bad` 在本 deck 中分别代表什么。例：`--good` = 收入 / 优势；`--bad` = 成本 / 风险。**全 deck 不得改用途。**
 
 **通过条件**：theme 满足 token 契约（见 `themes.md` §2）；语义色用途已写明。
@@ -126,7 +125,6 @@ S0 理解 ─→ S1 定调 ─→ S2 拆稿 ─→ S3 分镜 ─→ S4 实现 �
 ### 参照记法
 
 ```
-weekly-report#2        = templates/full-decks/weekly-report/index.html 第 2 页（浏览器打开时加 #/2）
 sp:timeline            = templates/single-page/timeline.html
 deck#3                 = templates/deck.html 第 3 页
 base:.card-accent      = assets/base.css 中的现成部件

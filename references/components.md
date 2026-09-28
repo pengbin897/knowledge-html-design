@@ -71,36 +71,36 @@ Component = 表达**一种信息形态**的最小视觉单元。一个大数字�
 | kicker 眉题 | 章节 / 分类 | 短文本（≤12 字） | `.kicker` `.eyebrow` |
 | headline 标题 | 本页 claim | 主句 + 可选强调片段 | `.h1` `.h2` |
 | lede 导语 | 补充说明 | 1~2 句 | `.lede` |
-| keyword 关键词 | 句中重点 | 行内片段 | `.gradient-text`；`xhs-white-editorial` 的 `.xw-focus` |
-| quote 引文 | 引用 / 金句 | 引文 + 出处 | `xhs-pastel-card#4` |
-| strike 否定 | 推翻旧观点 | 被否定文字（删除线）+ 替代文字 | `testing-safety-alert#1` 标题中的 `.strike`；`sp:todo-checklist` 已完成项 |
+| keyword 关键词 | 句中重点 | 行内片段 | `.gradient-text` |
+| quote 引文 | 引用 / 金句 | 引文 + 出处 | — |
+| strike 否定 | 推翻旧观点 | 被否定文字（删除线）+ 替代文字 | `sp:todo-checklist` 已完成项 |
 | caption 注释 | 来源 / 补充 | 短文本 | `.dim2` |
 
 #### B 数值
 
 | 部件 | 表达 | 构成 | 示例 |
 |---|---|---|---|
-| stat 大数字 | 一个关键数 | 数值 + 单位 + 标签（+ 变化量 / 来源） | `deck#3`；`pitch-deck` 的 `.mega`；`xhs-white-editorial` 的 `.xw-big-stat` |
-| kpi 指标卡 | 并列指标之一 | 标签 + 数值 + 变化量（带色调） | `weekly-report#2` 的 `.kpi.good/.warn/.bad`；`pitch-deck` 的 `.metric` |
-| delta 变化量 | 涨跌 / 倍数 | 方向符号 + 数值 + 对比基准 | `weekly-report#2` 卡内的 `.delta.up/.flat` |
+| stat 大数字 | 一个关键数 | 数值 + 单位 + 标签（+ 变化量 / 来源） | `deck#3` |
+| kpi 指标卡 | 并列指标之一 | 标签 + 数值 + 变化量（带色调） | — |
+| delta 变化量 | 涨跌 / 倍数 | 方向符号 + 数值 + 对比基准 | — |
 | counter 滚动数 | 数值动效载体 | `<span class="counter" data-to="…" data-dur="…">` | `assets/runtime.js` |
 
 #### C 量比
 
 | 部件 | 表达 | 构成 | 示例 |
 |---|---|---|---|
-| bar 条形 | 一项量值 | 标签 + 轨道 + 填充（长度 = 值）+ 数值 | `pitch-deck#7` 的 `.traction-bar`；`weekly-report#4` 的 `.chart-bars` |
+| bar 条形 | 一项量值 | 标签 + 轨道 + 填充（长度 = 值）+ 数值 | — |
 | progress 进度 | 完成度 / 占比 | 轨道 + 填充 + 百分比 | — |
-| ring 环形 | 单一占比 | 底环 + 弧（`stroke-dashoffset` = 值）+ 中心数值 | `xhs-pastel-card#6` SVG 环形图 |
-| chart 图表 | 趋势 / 分布 | 坐标 + 系列 + 标签 | `xhs-white-editorial#6`（SVG 柱）；`testing-safety-alert#5`（堆叠柱） |
+| ring 环形 | 单一占比 | 底环 + 弧（`stroke-dashoffset` = 值）+ 中心数值 | — |
+| chart 图表 | 趋势 / 分布 | 坐标 + 系列 + 标签 | — |
 
 #### D 条目
 
 | 部件 | 表达 | 构成 | 示例 |
 |---|---|---|---|
 | list-item 清单项 | 带状态的一条 | 状态标记 + 文本（+ 标签） | `sp:todo-checklist` 的 `.todo li.done` |
-| agenda-row 议程行 | 有序一项 | 编号 + 标题（+ 说明 / 时长） | `tech-sharing#2` 的 `.agenda-row` |
-| record-row 事项行 | 完成事项 | 标记 + 事项 + 负责人 / 标签 | `weekly-report#3` 的 `.ship-item` |
+| agenda-row 议程行 | 有序一项 | 编号 + 标题（+ 说明 / 时长） | — |
+| record-row 事项行 | 完成事项 | 标记 + 事项 + 负责人 / 标签 | — |
 | table 表格 | 多维精确数据 | 表头 + 行 + 对齐的数值列 | — |
 
 #### E 容器
@@ -109,17 +109,17 @@ Component = 表达**一种信息形态**的最小视觉单元。一个大数字�
 |---|---|---|---|
 | card 卡片 | 一个要点 | 标题 + 正文（+ 图标 / 数字） | `.card` `.card-soft` `.card-outline` `.card-accent` |
 | pill 胶囊 | 标签 / 属性 | 短文本 | `.pill` `.pill-accent` |
-| callout 提示 | 洞察 / 补充 | 标签或图标 + 一句话 | `course-module` 的 `.callout`；`knowledge-arch-blueprint` 的 `.kb-insight` |
-| alert 警示框 | 风险 / 前提 | 警示图标 + 标题 + 编号项（带色调） | `testing-safety-alert` 的 `.ts-alert-box` |
-| price-card 定价卡 | 方案 / 档位 | 档名 + 价格 + 权益 + 突出档 | `product-launch#7` 的 `.price-card.pro` |
-| sticker 贴纸 | 俏皮强调 | 短文本 + 旋转 + 描边 | `xhs-post` 的 `.sticker` |
+| callout 提示 | 洞察 / 补充 | 标签或图标 + 一句话 | — |
+| alert 警示框 | 风险 / 前提 | 警示图标 + 标题 + 编号项（带色调） | — |
+| price-card 定价卡 | 方案 / 档位 | 档名 + 价格 + 权益 + 突出档 | — |
+| sticker 贴纸 | 俏皮强调 | 短文本 + 旋转 + 描边 | — |
 
 #### F 关系
 
 | 部件 | 表达 | 构成 | 示例 |
 |---|---|---|---|
-| node 节点 | 流程中的一步 | 编号 + 标题（+ 说明） | `knowledge-arch-blueprint` 的 `.kb-step`（`.hero` 突出）；`product-launch#6` 的 `.step` |
-| connector 连接 | 先后 / 因果 | 线或箭头（SVG） | `knowledge-arch-blueprint#5` 的虚线回路 |
+| node 节点 | 流程中的一步 | 编号 + 标题（+ 说明） | — |
+| connector 连接 | 先后 / 因果 | 线或箭头（SVG） | — |
 | timeline-dot 时间点 | 时间节点 | 圆点 + 时间 + 事件 | `sp:timeline` 的 `.tl .dot` |
 | vs 对比轴 | 两方对立 | 左部件 + 中轴标记 + 右部件 | — |
 | formula 算式 | 一步计算 | 项 + 运算符 + 项 + `=` + 结果（结果带色调） | — |
@@ -129,10 +129,10 @@ Component = 表达**一种信息形态**的最小视觉单元。一个大数字�
 
 | 部件 | 表达 | 构成 | 示例 |
 |---|---|---|---|
-| window 模拟窗口 | 界面 / 产品截面 | 标题栏（红绿灯）+ 内容 | `hermes-cyber-terminal` 的 `.hc-chrome` |
-| code 代码块 | 代码 / 命令 | 标题栏 + 等宽代码 + 语法色 | `tech-sharing#6` 的 `.terminal` |
-| image 图片框 | 实物 / 截图 | 图 + 圆角（+ 标注） | `product-launch#1` 的 `.hero-shot` |
-| icon 图标 | 概念符号 | emoji 或 SVG | `xhs-post` 的 `.big-emoji` |
+| window 模拟窗口 | 界面 / 产品截面 | 标题栏（红绿灯）+ 内容 | — |
+| code 代码块 | 代码 / 命令 | 标题栏 + 等宽代码 + 语法色 | — |
+| image 图片框 | 实物 / 截图 | 图 + 圆角（+ 标注） | — |
+| icon 图标 | 概念符号 | emoji 或 SVG | — |
 
 ---
 
@@ -175,15 +175,6 @@ Component = 表达**一种信息形态**的最小视觉单元。一个大数字�
 | `assets/base.css` | 文字族全部、`.card` 四种变体、`.pill`、`.divider`、`.counter`、页面 chrome |
 | `templates/deck.html` | 封面标题、卡片网格、超大数字、双栏卡片 |
 | `templates/single-page/` | 封面组合（cover）、时间点（timeline）、带状态清单（todo-checklist） |
-| `weekly-report` | 带色调的 kpi、柱状图、事项行 |
-| `pitch-deck` | 超大数字 `.mega`、指标 `.metric`、增长柱 `.traction-bar` |
-| `product-launch` | 定价卡、功能卡、编号步骤、主视觉图 |
-| `knowledge-arch-blueprint` | 流水线节点（含突出态）、洞察提示、SVG 回路 |
-| `testing-safety-alert` | 警示框（三种色调）、删除线标题、状态清单、堆叠柱 |
-| `tech-sharing` / `presenter-mode-reveal` | 议程行、终端代码块 |
-| `hermes-cyber-terminal` | 模拟窗口标题栏、描边柱状图 |
-| `xhs-post` / `xhs-pastel-card` / `xhs-white-editorial` | 贴纸、编号圆点、环形图、关键词胶囊、大数字 |
-| `course-module` | 提示框、选择题 `.mcq` |
 
 ---
 

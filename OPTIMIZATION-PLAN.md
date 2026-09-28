@@ -149,7 +149,7 @@ assets/runtime.js:243-248   仅在"进入 slide"时整页重放入场动画
 
 目标产物 = **「9:16 竖版、每秒一个视觉增量、跟口播时间轴自演的动态图文」**。
 
-差的不是素材（10 theme / 31 版式 / 27 动画 / 20 FX / 15 套 full-deck 已足够厚），
+差的不是素材（10 theme / 31 版式 / 27 动画 / 20 FX 已足够厚），
 而是六个缺失系统：**竖版画幅、分步、时间轴、字幕、glow 底座、录制**。
 
 ---
@@ -375,8 +375,7 @@ assets/animations/animations.css:57-66   nth-child(1..8) 硬编码 delay
 横竖切换只换画布常量。
 
 现状风险：固定 px 字号 + `100vw/100vh` 容器，非 1080p 视口下比例失控；
-全库无 `clamp()`、无设计画布 scale。竖版支持目前仅 `templates/full-decks/xhs-post/style.css:14-16`
-一处硬覆盖成 810×1080。
+全库无 `clamp()`、无设计画布 scale，也没有竖版画布实现。
 
 ### 9.2 竖版安全区（实测强约束）
 
@@ -455,8 +454,6 @@ assets/animations/animations.css:57-66   nth-child(1..8) 硬编码 delay
 | 问题 | 证据 |
 |---|---|
 | 新建 deck 输出目录三处不一致 | `new-deck.sh:18` → `examples/`；`SKILL.md:36` → `output/`；`.gitignore:4` 忽略 `output/` |
-| 15 套 full-deck 对 Agent 不可见 | `SKILL.md:76-81` 资源库清单**完全没提** `templates/full-decks/` 与 `references/full-decks.md` |
-| 死链 | `references/full-decks.md:89` 指向不存在的 `references/presenter-mode.md` |
 | 空壳冒充范例 | `examples/ai-empowerment/index.html` 与 `templates/deck.html` 逐字相同 |
 
 ### 12.2 补「原始稿 → 成品」配对样本（P0，对 Agent 提升最大）
@@ -511,7 +508,7 @@ npm run video    mp4 导出（竖版 720×1280 @30fps）
 6. **`check.mjs`** 溢出 / 安全区 / 密度 / 节奏校验（§10）
 7. **`render.mjs`** 跨平台 + 修页数 bug + 竖版视口（§11）
 8. **2 个标杆配对样本**（§12.2）
-9. SKILL.md 流程重写 + 暴露 full-decks（§12.4 / §12.1）
+9. SKILL.md 流程重写（§12.4 / §12.1）
 
 ### P1 — 决定成品像不像参考视频
 
