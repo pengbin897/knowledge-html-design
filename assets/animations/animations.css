@@ -70,7 +70,7 @@
 
 /* ---------- SVG PATH DRAW ---------- */
 .anim-path-draw path,.anim-path-draw line,.anim-path-draw polyline,.anim-path-draw circle,.anim-path-draw rect{
-  stroke-dasharray:1000;stroke-dashoffset:1000;animation:kf-draw 2s var(--anim-ease) forwards}
+  stroke-dasharray:1000;stroke-dashoffset:1000;animation:kf-draw 2s var(--anim-ease) forwards;animation-delay:inherit}
 @keyframes kf-draw{to{stroke-dashoffset:0}}
 
 /* ---------- PARALLAX TILT (hover) ---------- */
@@ -132,7 +132,39 @@
   100%{clip-path:circle(160% at 20% 80%);opacity:1}}
 .anim-ripple-reveal{animation:kf-ripple 1.2s var(--anim-ease) both}
 
+/* ================= EXPLAIN · 讲解型动效 ================= */
+/* 以下 4 种都可以用 data-anim 触发，并且都会继承元素上的 animation-delay。 */
+
+/* ---------- GROW-X · 条形 / 进度条从左向右生长（change，grow 档 ease-out） ---------- */
+@keyframes kf-grow-x{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.anim-grow-x{transform-origin:left center;animation:kf-grow-x 1.2s cubic-bezier(.2,.8,.2,1) both}
+
+/* ---------- RING · 环形弧线生长（change）
+ * 加在 SVG <circle> 上；弧线的终点由元素自身的 stroke-dashoffset 决定，动画从 --c（周长）开始。
+ * 推荐给 circle 写 pathLength="100"，这样 --c 取 100、dashoffset = 100 − 百分比。 */
+@keyframes kf-ring{from{stroke-dashoffset:var(--c,100)}}
+.anim-ring{animation:kf-ring 1.2s cubic-bezier(.2,.8,.2,1) both}
+
+/* ---------- GLOW-IN · 入场时发光由强到弱，只播一次（emphasize）
+ * 元素淡入；伪元素的内发光与描边从 1 渐隐到 0，只改变透明度。
+ * 目标需为定位元素（.card 已满足）；不要与 shimmer-sweep / confetti-burst 叠在同一元素上。 */
+@keyframes kf-glow-in-el{from{opacity:0}to{opacity:1}}
+@keyframes kf-glow-in-fx{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+.anim-glow-in{position:relative;animation:kf-glow-in-el .4s var(--anim-ease) both}
+.anim-glow-in::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  box-shadow:inset 0 0 0 1.5px var(--tone,var(--accent)),
+             inset 0 0 36px color-mix(in srgb,var(--tone,var(--accent)) 38%,transparent);
+  opacity:0;animation:kf-glow-in-fx 1.6s var(--anim-ease) both;animation-delay:inherit}
+
+/* ---------- STRIKE-DRAW · 删除线从左向右划过（change，用于否定 / 推翻）
+ * 加在被否定的文字上（行内元素或块元素均可，单行）。 */
+@keyframes kf-strike-draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.anim-strike-draw{position:relative}
+.anim-strike-draw::after{content:"";position:absolute;left:-.08em;right:-.08em;top:52%;height:max(2px,.08em);
+  background:currentColor;border-radius:1px;transform-origin:left center;pointer-events:none;
+  animation:kf-strike-draw .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:inherit}
+
 /* reduced motion */
 @media (prefers-reduced-motion: reduce){
-  [class*="anim-"]{animation:none!important;transition:none!important}
+  [class*="anim-"],[class*="anim-"]::before,[class*="anim-"]::after{animation:none!important;transition:none!important}
 }

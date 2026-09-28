@@ -101,7 +101,7 @@ description: HTML PPT Studio — 按「主题 / 版式 / 部件 / 动效」四�
 | `video` 录屏视频 | 16:9 / 9:16 | 4~12 s | ≤ 30 字 |
 | `post` 图文轮播 | 3:4 | — | ≤ 80 字 |
 
-**Theme**（S1）：按受众选——工程师 → `terminal-green`；高管 → `swiss-grid`；设计 / 产品 → `editorial-serif`；消费者 → `xiaohongshu-white`；发布会 → `aurora`；科普 → `hand-drawn`。
+**Theme**（S1）：按受众选——工程师 → `terminal-green`；高管 → `swiss-grid`；设计 / 产品 → `editorial-serif`；消费者 → `xiaohongshu-white`；发布会 → `aurora`；科普 → `hand-drawn`；行业分析 / 成本测算 / 口播短视频 → `ops-cyan`。
 
 **Layout**（S3）：按页面 intent 选骨架——
 
@@ -116,9 +116,9 @@ description: HTML PPT Studio — 按「主题 / 版式 / 部件 / 动效」四�
 | `define` `caveat` | `hero-detail` |
 | 代码、截图、产品图 | `media` |
 
-**Component**（S3）：能用数据表达就不用图示，能用图示就不用文字。一个数 → stat；几个同级数 → kpi；占比 → ring / progress；量值比较 → bar；趋势 → chart；两方 → card×2 + vs；步骤 → node + connector；风险 / 前提 → alert；计算 → formula / ladder。
+**Component**（S3）：能用数据表达就不用图示，能用图示就不用文字。一个数 → stat；几个同级数 → kpi；占比 → ring / progress；量值比较 → bar；趋势 → chart；两方 → card×2 + vs；步骤 → node + connector；风险 / 前提 → alert；计算 → formula / sum / ladder；闭环 → cycle。全部部件在 `assets/components.css` 中有实现，参照 `templates/component-showcase.html`。
 
-**Animation**（S3）：眉题 `fade-down` → 标题 `rise-in` → 主体 `fade-up` / `stagger-list` → 数字 `counter` → 线条 `path-draw`。单页入场动效 ≤ 2 种；canvas FX 只用于封面、章节、结尾。
+**Animation**（S3）：眉题 `fade-down` → 标题 `rise-in` → 主体 `fade-up` / `stagger-list` → 数字 `counter` → 线条 `path-draw` / 条形 `grow-x` / 环形 `ring`。单页入场动效 ≤ 2 种；canvas FX 只用于封面、章节、结尾。
 
 ---
 
@@ -141,11 +141,12 @@ description: HTML PPT Studio — 按「主题 / 版式 / 部件 / 动效」四�
 |---|---|---|
 | 流水线 | `references/pipeline.md` | 各阶段动作、产物、通过条件、自检清单 |
 | 流水线模板 | `templates/pipeline/` | `script.md`、`storyboard.md` |
-| 主题 | `assets/themes/*.css` · `templates/theme-showcase.html` | 10 套基础主题 |
+| 主题 | `assets/themes/*.css` · `templates/theme-showcase.html` | 11 套基础主题（含数据测算 `ops-cyan`） |
+| 部件库 | `assets/components.css` · `templates/component-showcase.html` | 7 族 38 个部件，一页一个参照实现（`cs#N`） |
 | 单页示例 | `templates/single-page/*.html` · `templates/layout-showcase.html` | 封面、时间线、清单 |
 | 起点模板 | `templates/deck.html` | 6 页最小 deck：封面、卡片网格、大数字、双栏、CTA、致谢 |
 | 通用部件 | `assets/base.css` | token、文字、卡片、胶囊、网格、页面 chrome |
-| CSS 动效 | `assets/animations/animations.css` · `templates/animation-showcase.html` | 27 种 |
+| CSS 动效 | `assets/animations/animations.css` · `templates/animation-showcase.html` | 31 种（含讲解型 `grow-x` `ring` `glow-in` `strike-draw`） |
 | canvas FX | `assets/animations/fx/*.js` · `assets/animations/fx-runtime.js` | 20 种，需在页面中引入 fx-runtime |
 | 运行时 | `assets/runtime.js` | 键盘翻页、`#/N` 深链接、进入页重播动效、数字滚动、T 换主题、O 总览、S 演讲者视图 |
 

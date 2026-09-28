@@ -40,6 +40,22 @@ Theme **不决定**任何页面的结构、部件的构成或动效——那是�
 | 字距 | `--letter-tight` `--letter-normal` | 标题；正文 |
 | 缓动 | `--ease` | 全局默认缓动 |
 
+**可选质感 token**（不强制；未定义时部件自动回退为「无发光」）：
+
+| token | 角色 | 例（`ops-cyan`） |
+|---|---|---|
+| `--glow-blur` | 发光半径 | `28px` |
+| `--glow-mix` | 发光浓度（色调在发光中的占比） | `32%` |
+
+发光的颜色不由主题决定，而是跟随部件的色调：文字发光取 `currentColor`，容器发光取 `--tone`。所以 `bad` 色调的大数字会发红光，`good` 色调的结论胶囊会发绿光。部件里的写法固定为：
+
+```css
+text-shadow: 0 0 var(--glow-blur,0px) color-mix(in srgb, currentColor var(--glow-mix,0%), transparent);
+box-shadow:  var(--shadow), 0 0 var(--glow-blur,0px) color-mix(in srgb, var(--tone) var(--glow-mix,0%), transparent);
+```
+
+`assets/components.css` 中的部件已经按这种写法实现。
+
 ### 2.2 只引用 token
 
 - 页面与部件中的颜色、圆角、阴影、字体**一律写 `var(--token)`**，不写 `#xxxxxx` / `rgb()`。
@@ -67,6 +83,8 @@ Theme **不决定**任何页面的结构、部件的构成或动效——那是�
 
 `swiss-grid`、`editorial-serif`、`hand-drawn`、`pixel` 会占用 `.slide::before` / `.slide::after` 画页面装饰。版式和部件**不要再使用这两个伪元素**。
 
+`ops-cyan` 的网格底纹与径向光晕画在 `.deck` / `body.single` 的背景层上，不占用伪元素。
+
 ---
 
 ## §3 决策（SHOULD）
@@ -85,6 +103,8 @@ Theme **不决定**任何页面的结构、部件的构成或动效——那是�
 | 路演 / 强视觉 | `swiss-grid` | `neo-brutalism` |
 | 发布会 / 产品揭晓 | `aurora` | `swiss-grid` |
 | 教育科普 / 轻松趣味 | `hand-drawn` | `pixel` |
+| 行业分析 / 成本测算 / 数据解读 | `ops-cyan` | `swiss-grid` |
+| 科技观点 / 评论 / 口播短视频 | `ops-cyan` | `terminal-green` |
 
 ### 3.2 内容与交付形态修正
 
@@ -92,7 +112,7 @@ Theme **不决定**任何页面的结构、部件的构成或动效——那是�
 |---|---|
 | 数据、数字密集 | 高对比：深色主题或 `swiss-grid`；避免 `hand-drawn` / `pixel` |
 | 长文字、叙事为主 | `editorial-serif` / `japanese-minimal` |
-| `video` 形态（录屏成视频） | 深色主题更抗压缩、焦点更突出 |
+| `video` 形态（录屏成视频） | 深色主题更抗压缩、焦点更突出；首选 `ops-cyan` |
 | `post` 形态（3:4 图文） | `xiaohongshu-white` |
 | 用户给了品牌色 / 参考图 | 走 §5 派生 |
 
@@ -114,6 +134,7 @@ Theme **不决定**任何页面的结构、部件的构成或动效——那是�
 | `pixel` | 像素游戏风：色阶天空、像素云、Press Start 2P 标题、缺角像素边框 | 游戏、复古话题、趣味技术分享 |
 | `terminal-green` | 绿屏终端、等宽字、发光文字、4px 小圆角 | CLI / 开发者分享、极客主题 |
 | `aurora` | 极光渐变 + blur + saturate | 发布会、揭晓、强氛围 |
+| `ops-cyan` | 深蓝黑底、青色强调、翠绿正向 / 玫红负向、40px 细网格、顶部青色光晕、色调发光 | 行业分析、成本 / 回本测算、数据密集的口播视频 |
 
 ---
 
@@ -132,4 +153,5 @@ Theme **不决定**任何页面的结构、部件的构成或动效——那是�
 约束：
 
 - 主题文件以 token 覆盖为主，**少写选择器**，控制在约 200 行内；
-- 需要额外质感 token（如暗色主题的发光）时可以新增，例如 `--glow`，但部件引用时必须带回退：`var(--glow, var(--shadow))`，保证换回其他主题时不失效。
+- 暗色主题需要发光时，给 §2.1 的可选质感 token `--glow-blur` / `--glow-mix` 赋值即可，不要另起名字；
+- 需要其他额外质感 token 时可以新增，但部件引用时必须带回退（如 `var(--glow-blur,0px)`），保证换回其他主题时不失效。

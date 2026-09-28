@@ -21,9 +21,82 @@
     'zoom-pop','blur-in','glitch-in','typewriter','neon-glow','shimmer-sweep',
     'gradient-flow','stagger-list','counter-up','path-draw','parallax-tilt',
     'card-flip-3d','cube-rotate-3d','page-turn-3d','perspective-zoom',
-    'marquee-scroll','kenburns','confetti-burst','spotlight','morph-shape','ripple-reveal'];
+    'marquee-scroll','kenburns','confetti-burst','spotlight','morph-shape','ripple-reveal',
+    'grow-x','glow-in','strike-draw'];
 
   function ready(fn){ if(document.readyState!='loading')fn(); else document.addEventListener('DOMContentLoaded',fn);}
+
+  /* ========== Counter ==========
+   * <span class="counter" data-to="2370000" data-sep data-prefix="¥">0</span>
+   *   data-to        终值（必需；缺省时读取元素文本，忽略逗号）
+   *   data-from      起始值，默认 0
+   *   data-dur       时长 ms，默认 1200
+   *   data-delay     延迟 ms，默认 0（进入页面后等待多久再开始滚动）
+   *   data-decimals  小数位；默认取 data-to 的小数位数
+   *   data-sep       千分位分隔符；只写属性不写值 = ","
+   *   data-prefix    前缀（如 ¥ $ +）
+   *   data-suffix    后缀（如 % 天 kW）
+   *   data-unit="cn" 中文量词：≥1 万显示为「x 万」，≥1 亿显示为「x 亿」
+   * 每次进入页面都会从 data-from 重新滚动；减少动效偏好下直接显示终值。
+   */
+  const reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  function decimalsOf(str){ const m = /\.(\d+)/.exec(String(str)); return m ? m[1].length : 0; }
+  function autoDec(x){
+    for (let d = 0; d <= 2; d++) { const k = x * Math.pow(10, d); if (Math.abs(Math.round(k) - k) < 1e-6) return d; }
+    return 2;
+  }
+  function fmtNum(v, dec, sep){
+    let s = Math.abs(v).toFixed(dec);
+    if (sep) { const p = s.split('.'); p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, sep); s = p.join('.'); }
+    return (v < 0 && parseFloat(s) !== 0 ? '-' : '') + s;
+  }
+  function fmtCN(v, dec, sep){
+    const a = Math.abs(v);
+    if (a >= 1e8) return fmtNum(v / 1e8, dec, sep) + '亿';
+    if (a >= 1e4) return fmtNum(v / 1e4, dec, sep) + '万';
+    return fmtNum(v, 0, sep);
+  }
+
+  function runCounter(el, instant){
+    const rawTo = el.getAttribute('data-to');
+    if (rawTo == null && el.__counterTo == null) el.__counterTo = String(el.textContent).replace(/,/g, '').replace(/[^\d.\-]/g, '');
+    const toStr = rawTo != null ? rawTo : el.__counterTo;
+    const target = parseFloat(toStr);
+    if (isNaN(target)) return;
+    const from = parseFloat(el.getAttribute('data-from') || '0') || 0;
+    const dur = Math.max(0, parseInt(el.getAttribute('data-dur') || '1200', 10));
+    const delay = Math.max(0, parseInt(el.getAttribute('data-delay') || '0', 10));
+    const sepAttr = el.getAttribute('data-sep');
+    const sep = sepAttr == null ? '' : (sepAttr === '' ? ',' : sepAttr);
+    const prefix = el.getAttribute('data-prefix') || '';
+    const suffix = el.getAttribute('data-suffix') || '';
+    const cn = el.getAttribute('data-unit') === 'cn';
+    const decAttr = el.getAttribute('data-decimals');
+    let dec;
+    if (decAttr != null) dec = parseInt(decAttr, 10) || 0;
+    else if (cn) { const a = Math.abs(target); dec = autoDec(a >= 1e8 ? a / 1e8 : a >= 1e4 ? a / 1e4 : a); }
+    else dec = decimalsOf(toStr);
+
+    const render = v => { el.textContent = prefix + (cn ? fmtCN(v, dec, sep) : fmtNum(v, dec, sep)) + suffix; };
+    const token = (el.__counterToken = (el.__counterToken || 0) + 1);
+    if (el.__counterTimer) { clearTimeout(el.__counterTimer); el.__counterTimer = null; }
+
+    if (instant || reduceMotion || dur === 0) { render(target); return; }
+    render(from);
+
+    function start(){
+      const t0 = performance.now();
+      function tick(now){
+        if (token !== el.__counterToken) return;
+        const t = Math.min(1, (now - t0) / dur);
+        render(t < 1 ? from + (target - from) * (1 - Math.pow(1 - t, 3)) : target);
+        if (t < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+    if (delay) el.__counterTimer = setTimeout(start, delay); else start();
+  }
 
   /* ========== Parse URL for preview-only mode ==========
    * When loaded as iframe.src = "index.html?preview=3", runtime enters a
@@ -57,6 +130,7 @@
             s.style.opacity = '1';
             s.style.transform = 'none';
             s.style.pointerEvents = 'auto';
+            s.querySelectorAll('.counter').forEach(el => runCounter(el, true));
           }
         });
       }
@@ -248,19 +322,7 @@
       });
 
       // counter-up
-      slides[n].querySelectorAll('.counter').forEach(el => {
-        const target = parseFloat(el.getAttribute('data-to')||el.textContent);
-        const dur = parseInt(el.getAttribute('data-dur')||'1200',10);
-        const start = performance.now();
-        const from = 0;
-        function tick(now){
-          const t = Math.min(1,(now-start)/dur);
-          const v = from + (target-from)*(1-Math.pow(1-t,3));
-          el.textContent = (target % 1 === 0) ? Math.round(v) : v.toFixed(1);
-          if (t<1) requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-      });
+      slides[n].querySelectorAll('.counter').forEach(runCounter);
 
       // Broadcast to other window (audience ↔ presenter)
       if (!fromRemote && bc) {

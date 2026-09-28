@@ -1,0 +1,28 @@
+/* theme: ops-cyan — 深蓝数据测算风：深蓝黑底 + 青色强调 + 翠绿正向 / 玫红负向，细网格 + 顶部光晕 + 发光 */
+:root{
+  --bg:#0a0f17;--bg-soft:#0d1420;--surface:#111a27;--surface-2:#162234;
+  --border:rgba(125,200,255,.12);--border-strong:rgba(34,211,238,.45);
+  --text-1:#f1f5f9;--text-2:#a8b3c4;--text-3:#64748b;
+  --accent:#22d3ee;--accent-2:#2ee6a8;--accent-3:#60a5fa;
+  --good:#2ee6a8;--warn:#fbbf24;--bad:#f4566a;
+  --grad:linear-gradient(135deg,#22d3ee,#2ee6a8);
+  --grad-soft:linear-gradient(135deg,rgba(34,211,238,.14),rgba(46,230,168,.10));
+  --radius:12px;--radius-sm:8px;--radius-lg:18px;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --shadow-lg:0 24px 60px rgba(0,0,0,.5);
+  --font-sans:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-display:'Inter','Noto Sans SC',sans-serif;
+  --letter-tight:-.02em;
+
+  /* 可选质感 token（见 references/themes.md §2.1）：发光半径与浓度 */
+  --glow-blur:28px;
+  --glow-mix:32%;
+}
+.deck,body.single{
+  background-color:var(--bg);
+  background-image:
+    radial-gradient(70% 45% at 50% 18%,rgba(34,211,238,.09),transparent 70%),
+    linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+  background-size:auto,40px 40px,40px 40px;
+}

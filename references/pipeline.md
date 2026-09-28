@@ -127,7 +127,9 @@ S0 理解 ─→ S1 定调 ─→ S2 拆稿 ─→ S3 分镜 ─→ S4 实现 �
 ```
 sp:timeline            = templates/single-page/timeline.html
 deck#3                 = templates/deck.html 第 3 页
+cs#31                  = templates/component-showcase.html 第 31 页（部件陈列）
 base:.card-accent      = assets/base.css 中的现成部件
+comp:.c-formula        = assets/components.css 中的现成部件
 —                      = 无参照（仅当距离为 author 时允许）
 ```
 

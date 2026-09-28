@@ -41,7 +41,7 @@ Animation = 页面的**时间维度**。一页的动效不是若干孤立效果�
 
 ### 2.2 时长档位
 
-只用下列 5 档：
+下列 5 档是**默认值与推荐值，不强制**。内容或口播节奏需要时可以偏离（例如 `video` 形态下数字滚动用 2.0 s 与条形生长同步），偏离时在分镜的编排记法里写明实际时长即可。
 
 | 档位 | 时长 | 用于 |
 |---|---|---|
@@ -94,11 +94,27 @@ kicker fade-down(.1s) → h2 rise-in(.3s) → card×4 fade-up(.9s 起, 间隔 .3
 | 进入页面时自动播放 | ✅ `[data-anim]` 每次进入该页都重播 |
 | 延迟编排 | ✅ 用 `style="animation-delay:…"` |
 | 列表错峰 | ✅ `data-anim="stagger-list"`，最多 8 级，第 9 项起同时出现 |
-| 数字滚动 | ✅ `<span class="counter" data-to="2100" data-dur="1200">0</span>`；**进入页面立即开始，不支持延迟；不带千分位；小数只保留 1 位** |
+| 数字滚动 | ✅ `<span class="counter" data-to="2100" data-dur="1200">0</span>`，每次进入页面从起始值重新滚动。可选属性见下表 |
+| 讲解型动效 | ✅ `grow-x`（条形生长）、`ring`（环形生长）、`glow-in`（入场发光）、`strike-draw`（删除线划过），都会继承元素上的 `animation-delay` |
 | canvas FX | ✅ 需在页面引入 `assets/animations/fx-runtime.js`；进入页启动，离开页停止 |
 | 按键分步（每按一次出现一条） | ❌ 不支持。需要逐条出现时，用延迟编排 |
 | 自动翻页 | ❌ 不支持 |
 | 悬停动效（`parallax-tilt`） | ⚠️ 只在鼠标交互时有效；录屏与导出图片中不可见 |
+
+**counter 属性**（`assets/runtime.js`）：
+
+| 属性 | 默认 | 作用 | 例 |
+|---|---|---|---|
+| `data-to` | 元素文本 | 终值 | `data-to="2370000"` |
+| `data-from` | `0` | 起始值 | `data-from="18"` |
+| `data-dur` | `1200` | 时长（ms） | `data-dur="2000"` |
+| `data-delay` | `0` | 进入页面后延迟多久开始（ms），用来和其他元素编排 | `data-delay="900"` |
+| `data-decimals` | `data-to` 的小数位 | 小数位数 | `data-to="0.19" data-decimals="2"` |
+| `data-sep` | 无 | 千分位分隔符；只写属性不写值时为 `,` | `data-sep` → `2,370,000` |
+| `data-prefix` / `data-suffix` | 无 | 前后缀 | `data-prefix="¥"`、`data-suffix=" 天"` |
+| `data-unit="cn"` | — | 中文量词：≥1 万显示「x 万」，≥1 亿显示「x 亿」 | `data-to="21000000" data-unit="cn"` → `2100万` |
+
+`data-delay` 用毫秒，而 CSS 的 `animation-delay` 用秒。counter 的容器如果有入场动效，`data-delay` 应不早于容器的 `animation-delay`。演讲者视图的预览窗口里，counter 直接显示终值。
 
 ---
 
@@ -116,9 +132,11 @@ kicker fade-down(.1s) → h2 rise-in(.3s) → card×4 fade-up(.9s 起, 间隔 .3
 | 左右对比 | enter | 左 `fade-left` → 右 `fade-right` | `card-flip-3d`（揭晓式对比） |
 | 关键数字 | change | `counter` + 容器 `zoom-pop` | FX `counter-explosion`（仅封面 / 结尾） |
 | 线条、流程、箭头 | change | `path-draw` | — |
-| 条形、环形生长 | change | 自创 `grow-x` / `ring`（见 §5） | — |
+| 条形、进度条生长 | change | `grow-x` + 数值 `counter`（同时开始） | — |
+| 环形生长 | change | `ring` + 中心数值 `counter` | — |
+| 推翻旧观点 | change | `strike-draw` → 替代文字 `fade-up` | 旧观点淡出 |
 | 警示、转折 | enter | `drop-in` | `glitch-in`（技术 / 故障语境） |
-| 结论揭晓 | emphasize | `zoom-pop` / `spotlight` | `neon-glow`（深色主题） |
+| 结论揭晓 | emphasize | `zoom-pop` / `spotlight` | `glow-in`（深色主题，卡片 / 结论胶囊）；`neon-glow`（深色主题，文字） |
 | 章节过渡 | transition | `ripple-reveal` / `cube-rotate-3d` | `page-turn-3d`（叙事 / 杂志风） |
 | 命令、代码 | enter | `typewriter` | FX `typewriter-multi` |
 | 庆祝、致谢 | ambient | `confetti-burst` | FX `confetti-cannon` / `firework` |
@@ -135,13 +153,14 @@ kicker fade-down(.1s) → h2 rise-in(.3s) → card×4 fade-up(.9s 起, 间隔 .3
 | `hand-drawn` | `path-draw`、`fade-up` | 3D 类 |
 | `aurora` | `blur-in`、`gradient-flow` | `glitch-in` |
 | `swiss-grid` | `fade-left/right`、`stagger-list`，克制 | 氛围类、3D 类 |
+| `ops-cyan` | `fade-up`、`grow-x`、`ring`、`counter`、`glow-in`，节奏快 | 3D 类、`glitch-in` |
 
 ### 3.3 与交付形态匹配
 
 | 形态 | 原则 |
 |---|---|
 | `talk` | 少而准。页内 3 s 内全部到位，之后画面静止，让观众听讲 |
-| `video` | 每个 beat 对应一次视觉增量，延迟对齐口播节奏；多用 change 类 |
+| `video` | 每个 beat 对应一次视觉增量，延迟对齐口播节奏；多用 change 类。数字滚动推荐 2.0 s，与条形 / 环形生长同时开始 |
 | `post` | 导出为静态图，动效不可见；只需保证所有元素**最终状态**正确 |
 
 ---
@@ -150,7 +169,7 @@ kicker fade-down(.1s) → h2 rise-in(.3s) → card×4 fade-up(.9s 起, 间隔 .3
 
 实现都在 `assets/animations/animations.css`。浏览全部：`templates/animation-showcase.html`（每种一页，进入即播放）；任意 deck 中按 **A** 在当前页试播随机动效。
 
-### 4.1 CSS 动效（27 种，按角色）
+### 4.1 CSS 动效（31 种，按角色）
 
 | 角色 | 名称 | 效果 |
 |---|---|---|
@@ -169,9 +188,13 @@ kicker fade-down(.1s) → h2 rise-in(.3s) → card×4 fade-up(.9s 起, 间隔 .3
 | | `shimmer-sweep` | 光泽扫过（循环） |
 | | `gradient-flow` | 渐变文字流动（循环） |
 | | `confetti-burst` | 伪元素闪光爆发 |
-| change | `counter-up` | 数字滚动（`.counter`，由 runtime 驱动） |
-| | `path-draw` | SVG 描边画出（加在 `<svg>` 上） |
+| | `glow-in` | 入场时内发光与描边由强到弱，只播一次（只改变透明度）；目标需为定位元素 |
+| change | `counter-up` | 数字滚动（`.counter`，由 runtime 驱动，属性见 §2.5） |
+| | `path-draw` | SVG 描边画出（加在 `<svg>` 或 `<g>` 上，写在它上面的 `animation-delay` 会传给直接子路径；长路径写 `pathLength="1000"`） |
 | | `morph-shape` | SVG 路径变形（循环） |
+| | `grow-x` | 条形 / 进度条从左向右生长（`scaleX` 0 → 1，1.2 s ease-out） |
+| | `ring` | 环形弧线生长（加在 `<circle>` 上，从 `--c` 生长到自身 `stroke-dashoffset`） |
+| | `strike-draw` | 删除线从左向右划过，用于否定 |
 | ambient | `marquee-scroll` | 水平无限滚动 |
 | | `kenburns` | 图片 14 s 缓慢推拉 |
 | | `parallax-tilt` | 悬停 3D 倾斜（仅交互） |
@@ -192,34 +215,30 @@ kicker fade-down(.1s) → h2 rise-in(.3s) → card×4 fade-up(.9s 起, 间隔 .3
 
 ## §5 自创（author）
 
-库里没有合适的动效时（最常见的是条形生长、环形生长），自创：
+库里没有合适的动效时，自创：
 
 1. **命名**：关键帧 `kf-<名称>`，类 `.anim-<名称>`。这样 `data-anim="<名称>"` 能直接触发，减少动效偏好也会自动生效。
 2. **只动允许的属性**：`transform`、`opacity`、`stroke-dashoffset`、数值（见 2.1 第 4 条）。
-3. **时长取档位**，缓动按 2.1 第 8 条。
+3. **时长参照档位**（§2.2，推荐而非强制），缓动按 2.1 第 8 条。
 4. **写在 deck 的 `<style>` 中**，登记到分镜的「自创记录」，全 deck 复用。
+5. **动效画在伪元素上时**，给伪元素写 `animation-delay: inherit`，这样作者在元素上写的 `animation-delay` 仍然有效（参考库中 `glow-in`、`strike-draw` 的写法）。
 
-示例一 · 条形从左向右生长：
+原先作为自创示例的条形生长与环形生长，已经收入库中，成为 `grow-x` 和 `ring`，写法可以当作自创模板：
 
 ```css
 @keyframes kf-grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 .anim-grow-x { transform-origin: left center; animation: kf-grow-x 1.2s cubic-bezier(.2,.8,.2,1) both; }
-```
 
-```html
-<div class="bar-track"><div class="bar-fill" data-anim="grow-x" style="width:72%;animation-delay:.6s"></div></div>
-```
-
-示例二 · 环形弧线生长（周长 C = 2πr，占比 p）：
-
-```css
-@keyframes kf-ring { from { stroke-dashoffset: var(--c); } }
+@keyframes kf-ring { from { stroke-dashoffset: var(--c,100); } }
 .anim-ring { animation: kf-ring 1.2s cubic-bezier(.2,.8,.2,1) both; }
 ```
 
 ```html
-<!-- r=100 → C≈628；p=90% → offset = 628 × (1 − 0.9) ≈ 63 -->
-<circle r="100" cx="130" cy="130" fill="none" stroke="var(--accent)" stroke-width="24"
-        stroke-dasharray="628" stroke-dashoffset="63" style="--c:628"
-        transform="rotate(-90 130 130)" data-anim="ring"/>
+<div class="track"><div class="fill" data-anim="grow-x" style="width:72%;animation-delay:.6s"></div></div>
+
+<!-- pathLength="100"：周长按 100 计，p=90% → dashoffset = 10 -->
+<circle r="100" cx="130" cy="130" pathLength="100" class="arc"
+        style="stroke-dasharray:100;stroke-dashoffset:10;--c:100" data-anim="ring"/>
 ```
+
+条形、进度条、环形的完整部件实现见 `assets/components.css`（`c-bar` `c-progress` `c-ring`）。

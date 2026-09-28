@@ -37,6 +37,21 @@
   }
   .fx-replay:hover{ filter:brightness(1.1); transform:translateY(-1px); }
   .fx-indicator{position:absolute;top:24px;right:40px;font-family:var(--font-mono);font-size:11px;color:var(--text-3);letter-spacing:.1em}
+  .anim-demo{margin:24px auto 0;width:720px;min-height:240px;display:flex;align-items:center;justify-content:center}
+  .demo-bars{width:100%}
+  .demo-bar{display:grid;grid-template-columns:120px 1fr 110px;gap:16px;align-items:center;margin:14px 0;font-size:18px}
+  .demo-bar .t{height:14px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+  .demo-bar .f{height:100%;border-radius:999px;background:var(--bad)}
+  .demo-bar b{color:var(--bad);text-align:right}
+  .demo-ring{width:240px;height:240px}
+  .demo-ring circle{fill:none;stroke-width:22}
+  .demo-ring .trk{stroke:var(--surface-2)}
+  .demo-ring .arc{stroke:var(--accent);stroke-dasharray:100;stroke-linecap:round;transform:rotate(-90deg);transform-origin:130px 130px}
+  .demo-ring text{fill:var(--text-1);font-size:44px;font-weight:800}
+  .demo-glow{width:420px;--tone:var(--accent)}
+  .demo-glow .big{font-size:72px;font-weight:800;color:var(--accent);line-height:1.1}
+  .demo-glow small{font-size:22px;color:var(--text-2);font-weight:500}
+  .demo-strike{font-size:28px}
   .anim-box{margin:24px auto 0;width:640px;height:240px;border-radius:var(--radius-lg);background:var(--grad-soft);display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:800;color:var(--text-1);box-shadow:var(--shadow-lg);border:1px solid var(--border)}
 </style>
 </head>
@@ -94,7 +109,23 @@ const CSS_ANIMS = [
   ['confetti-burst','Pseudo confetti.'],
   ['spotlight','Circular clip reveal.'],
   ['morph-shape','SVG d morph.'],
-  ['ripple-reveal','Corner ripple.']
+  ['ripple-reveal','Corner ripple.'],
+  ['grow-x','条形 / 进度条从左向右生长（change · 1.2s ease-out）。',
+    `<div class="demo-bars">
+       <div class="demo-bar"><span>八卡满载</span><div class="t"><div class="f" data-anim="grow-x" style="width:70%;animation-delay:.2s"></div></div><b>11.2 kW</b></div>
+       <div class="demo-bar"><span>整机</span><div class="t"><div class="f" data-anim="grow-x" style="width:87%;animation-delay:.6s"></div></div><b>14.0 kW</b></div>
+       <div class="demo-bar"><span>电网取电</span><div class="t"><div class="f" data-anim="grow-x" style="width:100%;animation-delay:1s"></div></div><b>16.0 kW</b></div>
+     </div>`],
+  ['ring','环形弧线生长（change）：circle 写 pathLength="100"，dashoffset = 100 − 百分比。',
+    `<svg class="demo-ring" viewBox="0 0 260 260">
+       <circle cx="130" cy="130" r="100" pathLength="100" class="trk"/>
+       <circle cx="130" cy="130" r="100" pathLength="100" class="arc" style="stroke-dashoffset:10;--c:100;animation-delay:.2s" data-anim="ring"/>
+       <text x="130" y="142" text-anchor="middle">90%</text>
+     </svg>`],
+  ['glow-in','入场时发光由强到弱，只播一次（emphasize）。只改变透明度。',
+    `<div class="card demo-glow" data-anim="glow-in" style="animation-delay:.2s"><p class="dim2">Kimi Code</p><div class="big">¥99<small> / 月</small></div><p class="dim">Kimi K3 · 256K</p></div>`],
+  ['strike-draw','删除线从左向右划过（change），用于否定 / 推翻旧观点。',
+    `<div class="demo-strike"><p class="dim">理想：<span data-anim="strike-draw" style="animation-delay:.4s">靠模型赚钱</span></p><p class="h3" data-anim="fade-up" style="animation-delay:1.1s">现实：先活下来</p></div>`]
 ];
 
 const deck = document.querySelector('.deck');
@@ -161,7 +192,7 @@ CSS_ANIMS.forEach((a, i) => {
     <p class="kicker">CSS anim · ${String(idx).padStart(2,'0')}</p>
     <h1 class="h1"><span class="gradient-text">${a[0]}</span></h1>
     <p class="lede">${a[1]}</p>
-    <div class="anim-box anim-${a[0]}" data-anim="${a[0]}" data-anim-target>${a[0]}</div>
+    ${a[2] ? `<div class="anim-demo">${a[2]}</div>` : `<div class="anim-box anim-${a[0]}" data-anim="${a[0]}" data-anim-target>${a[0]}</div>`}
     <div class="deck-footer"><span class="dim2">Press A to cycle</span><span class="slide-number" data-current="${idx}" data-total="${total}"></span></div>
   `;
   deck.appendChild(sec);

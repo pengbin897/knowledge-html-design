@@ -1,0 +1,366 @@
+/* html-ppt :: components.css — 部件资源库
+ * 对应 references/components.md §2.6 谱系。陈列页：templates/component-showcase.html
+ * 引入顺序：fonts.css → base.css → themes/<name>.css → components.css → animations.css
+ *
+ * 约定
+ *   · 只引用 token，不写色值。
+ *   · 色调：修饰类 accent / good / warn / bad / muted 设置 --tone，部件内部只读 --tone。
+ *     --tone 会继承，所以给容器加色调，里面的部件跟着变；子元素也可以单独加修饰类。
+ *   · 发光：读取主题的可选 token --glow-blur / --glow-mix；主题没有定义时自动变成「无发光」。
+ *   · 通用部件（kicker / h1~h4 / lede / card / pill / counter …）在 base.css 中，这里不重复。
+ */
+
+/* ================= 色调 ================= */
+:root{--tone:var(--accent)}
+.accent{--tone:var(--accent)}
+.good{--tone:var(--good)}
+.warn{--tone:var(--warn)}
+.bad{--tone:var(--bad)}
+.muted{--tone:var(--text-2)}
+
+/* ================= A 文字 ================= */
+
+/* keyword · 句中重点（色调版；渐变版用 base.css 的 .gradient-text） */
+.c-key{color:var(--tone);font-weight:700;
+  text-shadow:0 0 var(--glow-blur,0px) color-mix(in srgb,currentColor var(--glow-mix,0%),transparent)}
+
+/* quote · 引文 + 出处 */
+.c-quote{position:relative;padding-left:64px;max-width:1100px}
+.c-quote::before{content:"\201C";position:absolute;left:0;top:-.12em;font-family:var(--font-serif);
+  font-size:120px;line-height:1;color:var(--tone)}
+.c-quote .text{font-family:var(--font-serif);font-size:32px;line-height:1.5;color:var(--text-1);margin:0}
+.c-quote .by{margin-top:18px;font-size:14px;color:var(--text-3);letter-spacing:.08em}
+
+/* strike · 被否定文字（删除线）+ 替代文字；删除线可配 data-anim="strike-draw" */
+.c-strike{display:flex;flex-direction:column;align-items:flex-start;gap:18px}
+.c-strike .was{margin:0;font-size:22px;color:var(--text-3)}
+.c-strike .old,.c-strike-old{position:relative;color:var(--text-3)}
+.c-strike .old::after,.c-strike-old::after{content:"";position:absolute;left:-.08em;right:-.08em;top:52%;height:max(2px,.08em);
+  background:currentColor;border-radius:1px;transform-origin:left center;pointer-events:none}
+.c-strike .now{margin:0;font-size:32px;font-weight:700;color:var(--text-1);padding:12px 22px;
+  border:1.5px solid color-mix(in srgb,var(--tone) 55%,transparent);border-radius:var(--radius-sm);
+  background:color-mix(in srgb,var(--tone) 8%,transparent);
+  box-shadow:0 0 var(--glow-blur,0px) color-mix(in srgb,var(--tone) var(--glow-mix,0%),transparent)}
+.c-strike .now .new{color:var(--tone)}
+
+/* ================= B 数值 ================= */
+
+/* stat · 数值 + 单位 + 标签（+ 变化量 / 来源） */
+.c-stat{--stat-size:180px}
+.c-stat .value{font-family:var(--font-display);font-size:var(--stat-size);font-weight:800;line-height:1;
+  letter-spacing:var(--letter-tight);color:var(--tone);font-variant-numeric:tabular-nums;white-space:nowrap;
+  text-shadow:0 0 var(--glow-blur,0px) color-mix(in srgb,currentColor var(--glow-mix,0%),transparent)}
+.c-stat .unit{font-size:.28em;font-weight:600;margin-left:.1em;color:var(--text-2);text-shadow:none;letter-spacing:0}
+.c-stat .label{margin-top:18px;font-size:22px;color:var(--text-2)}
+.c-stat .meta{margin-top:6px;font-size:14px;color:var(--text-3)}
+
+/* kpi · 标签 + 数值 + 变化量 */
+.c-kpi{background:var(--surface);border:1px solid color-mix(in srgb,var(--tone) 28%,var(--border));
+  border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow);position:relative}
+.c-kpi .label{font-size:14px;color:var(--text-3);letter-spacing:.04em}
+.c-kpi .value{margin-top:6px;font-size:54px;font-weight:800;line-height:1.1;color:var(--tone);
+  font-variant-numeric:tabular-nums;white-space:nowrap;
+  text-shadow:0 0 var(--glow-blur,0px) color-mix(in srgb,currentColor var(--glow-mix,0%),transparent)}
+.c-kpi .unit{font-size:.4em;font-weight:600;color:var(--text-2);margin-left:4px;text-shadow:none}
+.c-kpi .foot{margin-top:10px;font-size:14px;color:var(--text-3)}
+
+/* delta · 方向符号 + 数值 + 对比基准 */
+.c-delta{display:inline-flex;align-items:baseline;gap:6px;color:var(--tone);font-weight:700;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.c-delta .base{color:var(--text-3);font-weight:400;font-size:.8em}
+.c-delta.lg{font-size:54px;font-weight:800;line-height:1.1;
+  text-shadow:0 0 var(--glow-blur,0px) color-mix(in srgb,currentColor var(--glow-mix,0%),transparent)}
+.c-delta.lg .base{font-size:14px;text-shadow:none}
+
+/* ================= C 量比 ================= */
+
+/* bar · 标签 + 轨道 + 填充（width = 值）+ 数值；填充可配 data-anim="grow-x" */
+.c-bar + .c-bar{margin-top:22px}
+.c-bar .head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:10px}
+.c-bar .label{font-size:18px;color:var(--text-1)}
+.c-bar .value{font-size:22px;font-weight:700;color:var(--tone);font-variant-numeric:tabular-nums;white-space:nowrap}
+.c-bar .track{height:14px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.c-bar .fill{height:100%;border-radius:inherit;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--tone) 65%,transparent),var(--tone))}
+
+/* progress · 轨道 + 填充 + 百分比；.dual = 剩余段也着色 */
+.c-progress{--rest:var(--surface-2)}
+.c-progress.dual{--rest:var(--accent-3)}
+.c-progress + .c-progress{margin-top:28px}
+.c-progress .head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:10px;font-size:14px}
+.c-progress .label{color:var(--tone);font-weight:600}
+.c-progress .pct{color:var(--tone);font-weight:700;font-variant-numeric:tabular-nums}
+.c-progress .rest{color:var(--text-3)}
+.c-progress.dual .rest{color:var(--rest)}
+.c-progress .track{height:16px;border-radius:999px;background:var(--rest);overflow:hidden}
+.c-progress .fill{height:100%;border-radius:inherit;background:var(--tone)}
+
+/* ring · 底环 + 弧（style="--p:90"）+ 中心数值；弧可配 data-anim="ring" */
+.c-ring{position:relative;width:var(--ring-size,280px);aspect-ratio:1;flex:none}
+.c-ring svg{width:100%;height:100%;transform:rotate(-90deg);overflow:visible}
+.c-ring circle{fill:none;stroke-width:var(--ring-w,11px)}
+.c-ring .trk{stroke:var(--surface-2)}
+.c-ring .arc{stroke:var(--tone);stroke-linecap:round;stroke-dasharray:100;
+  stroke-dashoffset:calc(100 - var(--p,0));--c:100}
+.c-ring .center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.c-ring .value{font-size:54px;font-weight:800;line-height:1;color:var(--tone);font-variant-numeric:tabular-nums;
+  text-shadow:0 0 var(--glow-blur,0px) color-mix(in srgb,currentColor var(--glow-mix,0%),transparent)}
+.c-ring .label{margin-top:8px;font-size:14px;color:var(--text-2)}
+
+/* chart · 坐标 + 系列 + 标签（SVG）；折线可配 data-anim="path-draw"（加在包裹的 <g> 上） */
+.c-chart{width:100%}
+.c-chart svg{width:100%;height:auto;overflow:visible;display:block}
+.c-chart .grid line{stroke:var(--border);stroke-width:1px}
+.c-chart .axis text,.c-chart .lbl{fill:var(--text-3);font-size:13px;font-family:var(--font-sans)}
+.c-chart .line{fill:none;stroke:var(--tone);stroke-width:4px;stroke-linecap:round;stroke-linejoin:round}
+.c-chart .area{fill:color-mix(in srgb,var(--tone) 12%,transparent);stroke:none}
+.c-chart .ref{stroke:var(--tone);stroke-width:2px;stroke-dasharray:8 6;fill:none}
+.c-chart .dot{fill:var(--bg);stroke:var(--tone);stroke-width:3px}
+.c-chart .val{fill:var(--tone);font-size:18px;font-weight:700;font-family:var(--font-sans)}
+
+/* ================= D 条目 ================= */
+
+/* list-item · 状态标记 + 文本（+ 标签） */
+.c-list{list-style:none;margin:0;padding:0}
+.c-list li{display:flex;align-items:center;gap:16px;padding:14px 18px;border-radius:var(--radius-sm);
+  background:var(--surface);border:1px solid var(--border)}
+.c-list li + li{margin-top:10px}
+.c-list .mark{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+  font-size:14px;font-weight:800;color:var(--tone);
+  border:1.5px solid color-mix(in srgb,var(--tone) 55%,transparent);background:color-mix(in srgb,var(--tone) 12%,transparent)}
+.c-list .text{font-size:20px;color:var(--text-1)}
+.c-list .tag{margin-left:auto;flex:none;font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px;
+  color:var(--tone);background:color-mix(in srgb,var(--tone) 14%,transparent);border:1px solid color-mix(in srgb,var(--tone) 45%,transparent)}
+.c-list li.off .text{color:var(--text-3)}
+.c-list.plain li{background:transparent;border:0;border-bottom:1px solid var(--border);border-radius:0}
+.c-list.plain li + li{margin-top:0}
+
+/* agenda-row · 编号 + 标题（+ 说明 / 时长）；.on 当前项，.lock 未解锁 */
+.c-agenda{list-style:none;margin:0;padding:0}
+.c-agenda li{display:flex;align-items:center;gap:18px;padding:16px 22px;border:1px solid var(--border);
+  border-radius:var(--radius-sm);background:var(--surface)}
+.c-agenda li + li{margin-top:12px}
+.c-agenda .no{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  border:1.5px solid var(--border-strong);font-size:14px;font-weight:700;color:var(--text-2)}
+.c-agenda .title{font-size:22px;font-weight:600;color:var(--text-1)}
+.c-agenda .desc{font-size:14px;color:var(--text-3)}
+.c-agenda .time{margin-left:auto;flex:none;font-size:14px;color:var(--text-3)}
+.c-agenda li.on{border-color:color-mix(in srgb,var(--tone) 60%,transparent);
+  background:color-mix(in srgb,var(--tone) 7%,var(--surface));
+  box-shadow:0 0 var(--glow-blur,0px) color-mix(in srgb,var(--tone) var(--glow-mix,0%),transparent)}
+.c-agenda li.on .no{background:var(--tone);border-color:var(--tone);color:var(--bg)}
+.c-agenda li.on .title{color:var(--tone)}
+.c-agenda li.lock{border-style:dashed;background:transparent}
+.c-agenda li.lock :is(.no,.title,.desc,.time){color:var(--text-3)}
+.c-agenda li.lock .time::before{content:"\1F512  "}
+
+/* record-row · 标记 + 事项 + 负责人 / 标签 */
+:where(.c-record){--tone:var(--good)}
+.c-record{list-style:none;margin:0;padding:0}
+.c-record li{display:grid;grid-template-columns:32px 1fr auto;gap:16px;align-items:center;
+  padding:16px 4px;border-bottom:1px solid var(--border)}
+.c-record .mark{color:var(--tone);font-weight:800;font-size:20px;text-align:center}
+.c-record .what{font-size:20px;color:var(--text-1)}
+.c-record .who{font-size:13px;color:var(--text-2);padding:3px 10px;border-radius:999px;
+  background:var(--surface-2);border:1px solid var(--border)}
+.c-record li.muted .what{color:var(--text-3)}
+
+/* table · 表头 + 行 + 对齐的数值列；.hl 高亮行；单元格可加色调 */
+.c-table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.c-table th{font-size:14px;font-weight:600;color:var(--text-3);text-align:left;padding:12px 18px;
+  border-bottom:1px solid var(--border-strong);letter-spacing:.04em}
+.c-table td{font-size:20px;padding:16px 18px;border-bottom:1px solid var(--border);color:var(--text-1)}
+.c-table .num{text-align:right}
+.c-table tr.hl td{background:color-mix(in srgb,var(--tone) 8%,transparent)}
+.c-table td:is(.accent,.good,.warn,.bad){color:var(--tone);font-weight:700}
+.c-table tfoot td{font-size:14px;color:var(--text-3);border-bottom:0}
+.c-table tfoot td:is(.accent,.good,.warn,.bad){font-size:18px}
+
+/* ================= E 容器（card / pill 见 base.css） ================= */
+
+/* pill.verdict · 结论胶囊 */
+:where(.pill.verdict){--tone:var(--good)}
+.pill.verdict{padding:10px 26px;font-size:22px;font-weight:700;color:var(--tone);
+  background:color-mix(in srgb,var(--tone) 12%,transparent);border:1.5px solid color-mix(in srgb,var(--tone) 60%,transparent);
+  box-shadow:0 0 var(--glow-blur,0px) color-mix(in srgb,var(--tone) var(--glow-mix,0%),transparent)}
+
+/* callout · 标签或图标 + 一句话 */
+.c-callout{display:flex;gap:14px;align-items:flex-start;padding:18px 22px;border-left:4px solid var(--tone);
+  background:color-mix(in srgb,var(--tone) 8%,var(--surface));border-radius:var(--radius-sm);
+  font-size:20px;line-height:1.5;color:var(--text-1)}
+.c-callout .ic{flex:none;font-size:22px;line-height:1.35}
+.c-callout .lab{color:var(--tone);font-weight:700;margin-right:8px}
+
+/* alert · 警示图标 + 标题 + 编号项；默认 warn，风险用 .bad */
+:where(.c-alert){--tone:var(--warn)}
+.c-alert{border:1.5px solid color-mix(in srgb,var(--tone) 55%,transparent);
+  background:color-mix(in srgb,var(--tone) 7%,var(--surface));border-radius:var(--radius);padding:26px 28px;
+  box-shadow:var(--shadow),0 0 var(--glow-blur,0px) color-mix(in srgb,var(--tone) var(--glow-mix,0%),transparent)}
+.c-alert .head{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--tone);text-align:center}
+.c-alert .ic{font-size:36px;line-height:1}
+.c-alert .title{font-size:22px;font-weight:700}
+.c-alert .meta{margin-top:10px;text-align:center;font-size:14px;color:var(--text-3)}
+.c-alert ol{list-style:none;counter-reset:c-alert;margin:18px 0 0;padding:0}
+.c-alert li{counter-increment:c-alert;display:flex;gap:14px;align-items:baseline;padding:12px 16px;
+  border-radius:var(--radius-sm);background:var(--surface-2);font-size:18px;color:var(--text-1)}
+.c-alert li + li{margin-top:8px}
+.c-alert li::before{content:counter(c-alert);color:var(--tone);font-weight:800}
+
+/* price-card · 档名 + 价格 + 权益；.hero = 突出档 */
+.c-price{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px 30px;box-shadow:var(--shadow);position:relative}
+.c-price .top{display:flex;align-items:baseline;gap:10px}
+.c-price .tier{font-size:22px;font-weight:700;color:var(--text-1)}
+.c-price .badge{font-size:13px;font-weight:600;color:var(--tone)}
+.c-price .price{display:flex;align-items:baseline;gap:4px;margin-top:14px;color:var(--tone);font-weight:800;line-height:1;
+  text-shadow:0 0 var(--glow-blur,0px) color-mix(in srgb,currentColor var(--glow-mix,0%),transparent)}
+.c-price .cur{font-size:32px}
+.c-price .num{font-size:72px;letter-spacing:var(--letter-tight);font-variant-numeric:tabular-nums}
+.c-price .per{font-size:18px;font-weight:500;color:var(--text-2);margin-left:6px;text-shadow:none}
+.c-price .sub{margin-top:8px;font-size:18px;color:var(--text-2)}
+.c-price .feat{list-style:none;margin:18px 0 0;padding:14px 0 0;border-top:1px solid var(--border);font-size:14px;color:var(--text-2)}
+.c-price .feat li + li{margin-top:4px}
+.c-price .feat li::before{content:"\00B7  ";color:var(--tone);font-weight:800}
+.c-price.hero{border-color:color-mix(in srgb,var(--tone) 60%,transparent);
+  box-shadow:var(--shadow),0 0 var(--glow-blur,0px) color-mix(in srgb,var(--tone) var(--glow-mix,0%),transparent)}
+
+/* sticker · 短文本 + 旋转 + 描边 */
+.c-sticker{display:inline-block;padding:8px 16px;font-size:18px;font-weight:800;color:var(--tone);
+  border:2px solid currentColor;border-radius:var(--radius-sm);transform:rotate(var(--rot,-6deg));
+  background:color-mix(in srgb,var(--tone) 10%,var(--bg));white-space:nowrap}
+
+/* ================= F 关系 ================= */
+
+/* node + connector · 流程；.c-flow 横向，.c-flow.v 纵向 */
+.c-flow{display:flex;align-items:center;gap:14px}
+.c-flow.v{flex-direction:column;align-items:stretch}
+.c-node{flex:1;min-width:0;background:var(--surface);border:1px solid color-mix(in srgb,var(--tone) 35%,var(--border));
+  border-radius:var(--radius);padding:22px 20px;text-align:center;position:relative}
+.c-node .no{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;margin-bottom:10px;
+  font-size:14px;font-weight:800;color:var(--tone);border:1.5px solid color-mix(in srgb,var(--tone) 60%,transparent)}
+.c-node .title{font-size:22px;font-weight:600;color:var(--text-1)}
+.c-node .desc{margin-top:4px;font-size:14px;color:var(--text-3)}
+.c-node.on{border-color:color-mix(in srgb,var(--tone) 65%,transparent);background:color-mix(in srgb,var(--tone) 8%,var(--surface));
+  box-shadow:0 0 var(--glow-blur,0px) color-mix(in srgb,var(--tone) var(--glow-mix,0%),transparent)}
+.c-node.on .title{color:var(--tone)}
+.c-connector{flex:none;width:64px;height:18px;overflow:visible;align-self:center}
+.c-connector.v{width:18px;height:44px}
+.c-connector path,.c-connector line{fill:none;stroke:var(--tone);stroke-width:2px;stroke-linecap:round;stroke-linejoin:round}
+.c-op{align-self:center;flex:none;font-size:22px;font-weight:600;color:var(--text-3);line-height:1;text-align:center}
+
+/* timeline-dot · 圆点 + 时间 + 事件；.on 当前节点 */
+.c-timeline{position:relative;display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:22px}
+.c-timeline::before{content:"";position:absolute;left:0;right:0;top:47px;height:2px;background:var(--border-strong)}
+.c-timeline .item{position:relative;padding-top:84px;text-align:center}
+.c-timeline .time{position:absolute;top:0;left:0;right:0;font-size:14px;font-weight:600;color:var(--text-3);letter-spacing:.08em}
+.c-timeline .dot{position:absolute;top:36px;left:50%;transform:translateX(-50%);width:24px;height:24px;border-radius:50%;
+  background:var(--surface);border:3px solid var(--tone)}
+.c-timeline .title{font-size:22px;font-weight:600;color:var(--text-1)}
+.c-timeline .desc{margin-top:4px;font-size:14px;color:var(--text-2)}
+.c-timeline .item.on .dot{background:var(--tone);
+  box-shadow:0 0 0 6px color-mix(in srgb,var(--tone) 20%,transparent),0 0 var(--glow-blur,0px) var(--tone)}
+.c-timeline .item.on .title,.c-timeline .item.on .time{color:var(--tone)}
+
+/* vs · 左部件 + 中轴标记 + 右部件；.v 上下排列 */
+.c-vs{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:28px}
+.c-vs.v{grid-template-columns:1fr;gap:14px}
+.c-vs .axis{font-size:32px;font-weight:900;font-style:italic;color:var(--text-3);letter-spacing:.04em;text-align:center}
+.c-vs.v .axis{font-size:14px;font-style:normal;letter-spacing:.2em}
+
+/* formula · 项 + 运算符 + 项 + = + 结果（结果带色调） */
+.c-formula{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:.35em;row-gap:4px;font-size:32px;font-weight:700;
+  font-variant-numeric:tabular-nums;color:var(--text-1);line-height:1.3}
+.c-formula .op,.c-formula .eq{color:var(--text-3);font-weight:500}
+.c-formula small{font-size:.5em;font-weight:500;color:var(--text-3);margin-left:2px}
+.c-formula .term:is(.accent,.good,.warn,.bad){color:var(--tone)}
+.c-formula .result{color:var(--tone);
+  text-shadow:0 0 var(--glow-blur,0px) color-mix(in srgb,currentColor var(--glow-mix,0%),transparent)}
+.c-formula .note{flex-basis:100%;margin-top:6px;font-size:14px;font-weight:400;color:var(--text-3)}
+
+/* ladder · 级标签 + 数值，级间 ↓；.final 为最后一级 */
+.c-ladder{display:inline-flex;flex-direction:column;align-items:center;gap:6px}
+.c-ladder .step{display:grid;grid-template-columns:5em auto;align-items:baseline;gap:16px}
+.c-ladder .lvl{font-size:18px;color:var(--text-3);text-align:right}
+.c-ladder .val{font-size:32px;font-weight:800;color:var(--tone);font-variant-numeric:tabular-nums;white-space:nowrap}
+.c-ladder .arrow{font-size:22px;line-height:1;color:var(--text-3)}
+.c-ladder .arrow small{font-size:14px;margin-left:8px}
+.c-ladder .step.final .val{font-size:54px;
+  text-shadow:0 0 var(--glow-blur,0px) color-mix(in srgb,currentColor var(--glow-mix,0%),transparent)}
+
+/* cycle · 中心标签 + N 个编号节点沿圆周分布 + 弧线；style="--n:5"，节点 style="--i:0..n-1"
+ * 节点定位用 transform，入场动效请加在节点内部的 .in 上，避免覆盖定位。 */
+.c-cycle{--size:440px;--r:calc(var(--size) * .375);position:relative;width:var(--size);height:var(--size);flex:none}
+.c-cycle .ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);overflow:visible}
+.c-cycle .ring circle{fill:none;stroke:color-mix(in srgb,var(--tone) 55%,transparent);stroke-width:.5px}
+.c-cycle .core{position:absolute;inset:0;margin:auto;width:calc(var(--size) * .34);height:calc(var(--size) * .34);
+  border-radius:50%;display:grid;place-items:center;text-align:center;background:var(--surface);
+  border:1.5px solid var(--border-strong);font-size:32px;font-weight:800;color:var(--tone);
+  text-shadow:0 0 var(--glow-blur,0px) color-mix(in srgb,currentColor var(--glow-mix,0%),transparent)}
+.c-cycle .node{position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%) rotate(calc(360deg / var(--n,5) * var(--i,0))) translateY(calc(-1 * var(--r)))
+            rotate(calc(-360deg / var(--n,5) * var(--i,0)))}
+.c-cycle .in{position:relative}
+.c-cycle .no{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--surface);
+  border:2px solid var(--tone);color:var(--tone);font-size:14px;font-weight:800}
+.c-cycle .lab{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:8px;white-space:nowrap;
+  font-size:14px;font-weight:600;color:var(--text-1)}
+
+/* sum · N 行「量 → 小计」+ 行间 + + 合计（带色调） */
+.c-sum{display:flex;flex-direction:column;gap:6px;width:min(100%,720px)}
+.c-sum .line{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:14px;padding:14px 20px;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm)}
+.c-sum .qty{font-size:22px;font-weight:700;color:var(--tone);font-variant-numeric:tabular-nums}
+.c-sum .name{font-size:14px;color:var(--text-3)}
+.c-sum .arrow{color:var(--text-3)}
+.c-sum .sub{font-size:22px;font-weight:700;color:var(--text-1);text-align:right;line-height:1.2}
+.c-sum .sub small{display:block;font-size:12px;font-weight:400;color:var(--text-3)}
+.c-sum .plus{text-align:center;font-size:18px;line-height:1;color:var(--text-3)}
+.c-sum .total{margin-top:14px;text-align:center}
+.c-sum .total .label{font-size:14px;color:var(--text-2)}
+.c-sum .total .value{font-size:72px;font-weight:800;line-height:1.1;color:var(--tone);font-variant-numeric:tabular-nums;
+  text-shadow:0 0 var(--glow-blur,0px) color-mix(in srgb,currentColor var(--glow-mix,0%),transparent)}
+.c-sum .total .meta{font-size:14px;color:var(--tone)}
+
+/* ================= G 媒介 ================= */
+
+/* window / code · 标题栏（红黄绿三点）+ 内容 */
+.c-window,.c-code{background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius);
+  overflow:hidden;box-shadow:var(--shadow-lg)}
+.c-window .bar,.c-code .bar{display:flex;align-items:center;gap:8px;padding:12px 16px;background:var(--surface-2);
+  border-bottom:1px solid var(--border)}
+.c-window .bar i,.c-code .bar i{width:12px;height:12px;border-radius:50%;background:var(--bad)}
+.c-window .bar i:nth-child(2),.c-code .bar i:nth-child(2){background:var(--warn)}
+.c-window .bar i:nth-child(3),.c-code .bar i:nth-child(3){background:var(--good)}
+.c-window .bar .title,.c-code .bar .title{margin-left:10px;font-family:var(--font-mono);font-size:13px;color:var(--text-3)}
+.c-window .body{padding:24px 26px}
+.c-code pre{margin:0;padding:22px 26px;font-family:var(--font-mono);font-size:18px;line-height:1.75;color:var(--text-1);
+  white-space:pre;overflow:hidden}
+.c-code .c{color:var(--text-3);font-style:italic}
+.c-code .k{color:var(--accent)}
+.c-code .s{color:var(--good)}
+.c-code .n{color:var(--warn)}
+.c-code .p{color:var(--accent-3)}
+
+/* image · 图 + 圆角（+ 标注 / 悬浮数据卡） */
+.c-image{position:relative;margin:0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:var(--surface-2)}
+.c-image img,.c-image .ph{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.c-image .ph{display:grid;place-items:center;font-size:14px;letter-spacing:.12em;color:var(--text-3);
+  background:repeating-linear-gradient(135deg,var(--surface) 0 14px,var(--surface-2) 14px 28px)}
+.c-image figcaption{position:absolute;left:0;right:0;bottom:0;padding:14px 18px;font-size:14px;color:var(--text-2);
+  background:linear-gradient(transparent,color-mix(in srgb,var(--bg) 88%,transparent))}
+.c-image .float{position:absolute;top:18px;left:18px}
+.c-image .pin{position:absolute;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--text-1)}
+.c-image .pin::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--tone);
+  box-shadow:0 0 0 5px color-mix(in srgb,var(--tone) 25%,transparent)}
+
+/* icon · emoji 或 SVG */
+.c-icon{display:inline-grid;place-items:center;flex:none;width:var(--icon-size,64px);height:var(--icon-size,64px);
+  border-radius:var(--radius-sm);font-size:calc(var(--icon-size,64px) * .5);line-height:1;color:var(--tone);
+  background:color-mix(in srgb,var(--tone) 12%,transparent);border:1px solid color-mix(in srgb,var(--tone) 30%,transparent)}
+.c-icon svg{width:55%;height:55%;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ================= 通用修饰 ================= */
+
+/* .glow · 让任意容器部件带色调描边与发光（主题无发光 token 时只剩描边） */
+.glow{border-color:color-mix(in srgb,var(--tone) 55%,transparent);
+  box-shadow:var(--shadow),0 0 var(--glow-blur,0px) color-mix(in srgb,var(--tone) var(--glow-mix,0%),transparent)}
