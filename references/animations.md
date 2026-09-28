@@ -1,130 +1,225 @@
-# 动画目录
+# Animation · 动效
 
-所有动画都在 `assets/animations/animations.css`。给任意元素加上 `class="anim-<name>"` 或 `data-anim="<name>"` 即可使用（`runtime.js` 会在幻灯片变为当前页时重新触发 `data-anim` 元素，因此每次翻到该页都会播放入场效果）。
+> 回答：**元素何时出现、以何种方式出现、出现后是否变化。** 作用于时间轴，在 S3 分镜时逐页编排。
 
-打开 `templates/animation-showcase.html` 可以浏览全部动画 — 每种动画一页，进入该页时自动播放。在任意页按 **A**，会在当前页上循环一个随机动画。
+---
 
-## 方向淡入
+## §1 定义
 
-| 名称 | 效果 | 适用 |
-|---|---|---|
-| `fade-up` | 从 +32 px 上移并淡入。 | 段落和卡片入场的默认选择。 |
-| `fade-down` | 从 -32 px 下移并淡入。 | 标题 / 横幅 / 提示条。 |
-| `fade-left` | 从 -40 px 移入。 | 双栏布局的左栏。 |
-| `fade-right` | 从 +40 px 移入。 | 双栏布局的右栏。 |
+Animation = 页面的**时间维度**。一页的动效不是若干孤立效果，而是一段**编排**：谁先出现、谁后出现、谁在变化。
 
-## 戏剧性入场
+按叙事功能，动效分为 5 种角色：
 
-| 名称 | 效果 | 适用 |
-|---|---|---|
-| `rise-in` | 上移 60 px，同时模糊消散。 | 幻灯片标题、主视觉大标题。 |
-| `drop-in` | 下移 60 px，略微缩放。 | 横幅、警示条。 |
-| `zoom-pop` | 缩放 0.6 → 1.04 → 1。 | 按钮、数据数字、行动号召。 |
-| `blur-in` | 18 px 模糊逐渐清晰。 | 封面揭晓。 |
-| `glitch-in` | 裁剪路径分步 + 抖动。 | 技术 / 赛博 / 错误状态。 |
-
-## 文字效果
-
-| 名称 | 效果 | 适用 |
-|---|---|---|
-| `typewriter` | 等宽风格的打字显现。 | 一句话、口号。 |
-| `neon-glow` | 文字阴影循环脉冲。 | terminal-green 主题。 |
-| `shimmer-sweep` | 白色光泽扫过。 | 金属感按钮、高级卡片。 |
-| `gradient-flow` | 水平渐变无限滑动。 | 品牌字标。 |
-
-## 列表与数字
-
-| 名称 | 效果 | 适用 |
-|---|---|---|
-| `stagger-list` | 子元素逐个上浮入场。 | 任意 `<ul>` 或 `.grid`。 |
-| `counter-up` | 数字从 0 跳到目标值。 | KPI、数据高亮页。 |
-
-计数器标记：
-```html
-<span class="counter" data-to="1248">0</span>
-```
-
-## SVG / 几何
-
-| 名称 | 效果 | 适用 |
-|---|---|---|
-| `path-draw` | 描边自行画出。 | 线条、箭头、示意图。 |
-| `morph-shape` | 路径 `d` 变形。 | 背景形状。 |
-
-在 `<svg>` 上加 `class="anim-path-draw"`；内部每条 path/line/circle 都会被画出。
-
-## 3D 与透视
-
-| 名称 | 效果 | 适用 |
-|---|---|---|
-| `parallax-tilt` | 悬停时 3D 倾斜。 | 主视觉卡片、产品图。 |
-| `card-flip-3d` | 绕 Y 轴翻转 90°。 | 前后对比揭晓。 |
-| `cube-rotate-3d` | 从立方体侧面旋入。 | 章节分隔页。 |
-| `page-turn-3d` | 以左缘为轴翻页。 | 杂志风 / 叙事流。 |
-| `perspective-zoom` | 从 Z 轴 -400 拉近。 | 封面开场。 |
-
-## 氛围 / 持续
-
-| 名称 | 效果 | 适用 |
-|---|---|---|
-| `marquee-scroll` | 水平无限循环。 | 客户 logo 条。 |
-| `kenburns` | 图片 14 秒缓慢缩放。 | 主视觉背景。 |
-| `confetti-burst` | 伪元素闪光爆发。 | 致谢 / 庆祝页。 |
-| `spotlight` | 圆形裁剪路径揭晓。 | 重大揭晓时刻。 |
-| `ripple-reveal` | 从角落起源的涟漪揭晓。 | 章节过渡。 |
-
-## 尊重动效偏好
-
-当系统设置为 `prefers-reduced-motion: reduce` 时，所有动画会自动关闭。不要覆盖这一行为。
-
-## 提示
-
-- 优先用 `data-anim="..."`，少用 `class="anim-..."`，这样运行时会在幻灯片变为当前页时重新触发动画。
-- 单页最多用 1–2 种不同动画。混 5 种会显得杂乱。
-- 列表错开入场 + 一个主视觉入场 = 干净的节奏。
-- `counter-up` 用在需要强调单个数字的页面上。
-
-## 特效（canvas）
-
-CSS 动画是一次性入场效果。**FX** 是持续运行的 canvas/DOM 特效：所在幻灯片变为当前页时启动，离开时停止。由 `assets/animations/fx-runtime.js` 加载，它会动态拉取 `assets/animations/fx/*.js` 下的每个模块，并监听 `.slide.is-active` 来跑生命周期。
-
-在任意页面加入：
-```html
-<script src="../assets/animations/fx-runtime.js"></script>
-```
-
-然后在任意幻灯片里放一个：
-```html
-<div data-fx="particle-burst" style="width:100%;height:360px;"></div>
-```
-
-容器只要有尺寸即可 — 特效会用 `ResizeObserver` + 设备像素比校正，自动把 canvas 撑满容器。颜色读取当前主题（`--accent`、`--accent-2`、`--ok`、`--warn`、`--danger`）。
-
-| 名称 | 效果 | 适用场景 | 触发方式 |
+| 角色 | 作用 | 典型 | 何时用 |
 |---|---|---|---|
-| `particle-burst` | 粒子从中心炸开，受重力并淡出，每 2.5 秒再爆发一次。 | 揭晓时刻、数据页。 | `<div data-fx="particle-burst">` |
-| `confetti-cannon` | 彩色旋转矩形从底部两角弧线射出。 | 致谢 / 成功页。 | `<div data-fx="confetti-cannon">` |
-| `firework` | 火箭从底部升起后炸成彩色火花，持续播放。 | 庆祝、发布页。 | `<div data-fx="firework">` |
-| `starfield` | 3D 透视星空向外飞驰。 | 科幻 / 深空背景。 | `<div data-fx="starfield">` |
-| `matrix-rain` | 绿色片假名与十六进制字符列下落。 | 赛博 / 安全 / 数据主题。 | `<div data-fx="matrix-rain">` |
-| `knowledge-graph` | 力导向图，28 个带标签节点、约 50 条边，实时物理。 | 知识 / RAG / 图谱页。 | `<div data-fx="knowledge-graph">` |
-| `neural-net` | 4-6-6-3 前馈网络，脉冲沿边传播。 | 机器学习 / 模型架构页。 | `<div data-fx="neural-net">` |
-| `constellation` | 漂移的点，距离 150 px 内连线，透明度随距离变化。 | 氛围主视觉背景。 | `<div data-fx="constellation">` |
-| `orbit-ring` | 5 圈同心环，环上圆点速度不同，带径向光晕。 | 系统 / 行星 / 分层概念。 | `<div data-fx="orbit-ring">` |
-| `galaxy-swirl` | 约 800 个粒子的对数螺线，缓慢旋转。 | 封面、开场。 | `<div data-fx="galaxy-swirl">` |
-| `word-cascade` | 词语从顶部落下，在底部堆积。 | 词汇 / 概念云页面。 | `<div data-fx="word-cascade">` |
-| `letter-explode` | 标题字母从随机方向飞入，约每 4.5 秒循环。 | 大标题、主视觉文字。 | `<div data-fx="letter-explode" data-fx-text-value="EXPLODE">` |
-| `chain-react` | 8 个圆，多米诺脉冲波横穿而过。 | 流水线 / 顺序流程。 | `<div data-fx="chain-react">` |
-| `magnetic-field` | 粒子沿贝塞尔/正弦曲线运动并留下拖尾。 | 能量 / 流动 / 抽象。 | `<div data-fx="magnetic-field">` |
-| `data-stream` | 一行行滚动的十六进制/二进制文字，赛博朋克风。 | 数据、API、安全。 | `<div data-fx="data-stream">` |
-| `gradient-blob` | 4 团漂移的模糊径向渐变（叠加混合）。 | 柔和主视觉背景。 | `<div data-fx="gradient-blob">` |
-| `sparkle-trail` | 跟随指针的闪光发射器（静止时自动轻微摆动）。 | 交互揭晓、悬停画布。 | `<div data-fx="sparkle-trail">` |
-| `shockwave` | 从中心循环扩散的环。 | 冲击、发布、警示。 | `<div data-fx="shockwave">` |
-| `typewriter-multi` | 3 行同时打字，带闪烁方块光标（DOM）。 | 终端、智能体启动日志。 | `<div data-fx="typewriter-multi" data-fx-line1="> boot...">` |
-| `counter-explosion` | 数字从 0 计到目标值，爆发粒子，4 秒后重置。 | KPI 揭晓、纪录新高。 | `<div data-fx="counter-explosion" data-fx-to="2400">` |
+| **enter 入场** | 让元素出现 | 淡入、上浮、缩放弹出、错峰列表 | 几乎每页 |
+| **emphasize 强调** | 让已出现的元素被注意 | 发光脉冲、光泽扫过 | 结论、关键词，少用 |
+| **change 变化** | 表达数值或形状的变化 | 数字滚动、画线、条形生长 | 数据页、流程页 |
+| **transition 转场** | 页与页之间的衔接 | 翻页、章节揭晓 | 章节切换 |
+| **ambient 氛围** | 持续运行的背景 | canvas 特效、缓慢缩放 | 封面、章节、结尾 |
 
-特效提示：
-- 一页一个特效几乎总是够用。再叠普通 CSS `data-anim` 效果，层次会更干净。
-- 容器需要明确尺寸（高度）— canvas 会铺满 100%。
-- 每个模块都遵循主题自定义属性。在幻灯片或元素上设置 `--accent` / `--accent-2` 即可即时改色。
-- 生命周期自动管理：进入幻灯片启动特效，离开时停止并释放 canvas。也可以手动调用 `window.__hpxReinit(el)`。
+动效服务于理解：**它回答「先看什么、再看什么」**，而不是为了热闹。
+
+---
+
+## §2 规范（MUST）
+
+### 2.1 动效纪律
+
+1. **顺序**：发生顺序 = 阅读顺序 = 因果顺序。先因后果，先定义后引用。
+2. **单主线**：同一时刻，主线上只有一个元素在运动（氛围层除外）。
+3. **方向即语义**：上涨向上、推进向右、汇聚向内、扩张向外；否定用淡出或划掉。
+4. **属性恒定**：动效只改变位置、尺寸、透明度、描边进度、数值。颜色、线宽、圆角、底色在整段动效中不变。
+5. **用 `data-anim` 触发**：写 `data-anim="fade-up"`，不要直接写 `class="anim-fade-up"`。前者每次翻到该页都会重播；后者只在页面加载时播放一次，翻到时早已结束。
+6. **尊重减少动效偏好**：`prefers-reduced-motion` 时所有 `anim-*` 自动关闭，不要覆盖。
+
+以下为默认值（SHOULD），有理由可偏离：
+
+7. **幅度**：讲解型位移（指示、推进、微移）≤ 画布宽的 0.8%（1920 宽约 15px）。入场位移沿用库中预设：`fade-*`（32~40px）用于卡片级元素；`rise-in` / `drop-in`（60px）只用于标题级元素。
+8. **缓动**：画线与量值生长用 ease-out（快起慢收）；位移用 ease-in-out；匀速循环用 linear。
+9. **错峰**：相邻元素的间隔 = 前一个元素时长的 40%~60%。
+
+### 2.2 时长档位
+
+只用下列 5 档：
+
+| 档位 | 时长 | 用于 |
+|---|---|---|
+| micro | 0.2 s | 胶囊、标签的闪现 |
+| quick | 0.4 s | 眉题、小元素入场，强调 |
+| base | 0.7 s | 默认入场（= `--anim-dur`） |
+| slow | 1.2 s | 数字滚动（counter 默认值）、大标题 |
+| grow | 2.0 s | 画线（`path-draw`）、量值生长 |
+
+### 2.3 编排写法
+
+页面切换本身有 0.5 s 的淡入（`.slide` 的 transition），所以**第一个元素延迟 0.1~0.3 s** 再开始。后续元素用 `animation-delay` 串起来：
+
+```html
+<section class="slide" data-layout="grid">
+  <p  class="kicker" data-anim="fade-down" style="animation-delay:.1s">本周指标</p>
+  <h2 class="h2"     data-anim="rise-in"   style="animation-delay:.3s">转化率连续 8 周上涨</h2>
+  <div class="grid g4">
+    <div class="card" data-anim="fade-up" style="animation-delay:.9s">…</div>
+    <div class="card" data-anim="fade-up" style="animation-delay:1.2s">…</div>
+    <div class="card" data-anim="fade-up" style="animation-delay:1.5s">…</div>
+    <div class="card" data-anim="fade-up" style="animation-delay:1.8s">…</div>
+  </div>
+</section>
+```
+
+列表要紧跟页面立即出现时，可以用简写 `data-anim="stagger-list"`（加在父元素上，子元素自动错峰 0.1 s）。需要列表**等标题出现后**再开始，就用上面逐项写延迟的方式。
+
+分镜表中的编排记法：
+
+```
+kicker fade-down(.1s) → h2 rise-in(.3s) → card×4 fade-up(.9s 起, 间隔 .3s)
+```
+
+### 2.4 预算
+
+| 项 | 上限 |
+|---|---|
+| 单页入场动效的种类 | 2 种 |
+| 单页持续循环的动效（`neon-glow`、`shimmer-sweep`、`gradient-flow`、`marquee-scroll`、`kenburns`） | 1 个，且不用于正文 |
+| canvas FX | 每页 1 个；全 deck 2 个；只放在封面、章节页、结尾 |
+| 页内编排总时长 | `talk`：3 s 内全部到位；`video`：跟随口播，每个 beat 一次增量 |
+
+### 2.5 运行时能力边界
+
+写 HTML 前必须知道当前 `assets/runtime.js` 能做什么、不能做什么：
+
+| 能力 | 现状 |
+|---|---|
+| 进入页面时自动播放 | ✅ `[data-anim]` 每次进入该页都重播 |
+| 延迟编排 | ✅ 用 `style="animation-delay:…"` |
+| 列表错峰 | ✅ `data-anim="stagger-list"`，最多 8 级，第 9 项起同时出现 |
+| 数字滚动 | ✅ `<span class="counter" data-to="2100" data-dur="1200">0</span>`；**进入页面立即开始，不支持延迟；不带千分位；小数只保留 1 位** |
+| canvas FX | ✅ 需在页面引入 `assets/animations/fx-runtime.js`；进入页启动，离开页停止 |
+| 按键分步（每按一次出现一条） | ❌ 不支持。需要逐条出现时，用延迟编排 |
+| 自动翻页 | ❌ 不支持 |
+| 悬停动效（`parallax-tilt`） | ⚠️ 只在鼠标交互时有效；录屏与导出图片中不可见 |
+
+---
+
+## §3 决策（SHOULD）
+
+### 3.1 叙事时刻 → 动效
+
+| 时刻 | 角色 | 首选 | 备选 |
+|---|---|---|---|
+| 封面揭晓 | enter | `blur-in` / `perspective-zoom` | `rise-in`；FX `galaxy-swirl` / `starfield` |
+| 眉题 | enter | `fade-down`（quick） | — |
+| 页标题 | enter | `rise-in` | `fade-up` |
+| 卡片、段落 | enter | `fade-up` | `zoom-pop`（小卡片） |
+| 并列列表 | enter | `stagger-list` | 逐项 `fade-up` + 延迟 |
+| 左右对比 | enter | 左 `fade-left` → 右 `fade-right` | `card-flip-3d`（揭晓式对比） |
+| 关键数字 | change | `counter` + 容器 `zoom-pop` | FX `counter-explosion`（仅封面 / 结尾） |
+| 线条、流程、箭头 | change | `path-draw` | — |
+| 条形、环形生长 | change | 自创 `grow-x` / `ring`（见 §5） | — |
+| 警示、转折 | enter | `drop-in` | `glitch-in`（技术 / 故障语境） |
+| 结论揭晓 | emphasize | `zoom-pop` / `spotlight` | `neon-glow`（深色主题） |
+| 章节过渡 | transition | `ripple-reveal` / `cube-rotate-3d` | `page-turn-3d`（叙事 / 杂志风） |
+| 命令、代码 | enter | `typewriter` | FX `typewriter-multi` |
+| 庆祝、致谢 | ambient | `confetti-burst` | FX `confetti-cannon` / `firework` |
+| 氛围背景 | ambient | `kenburns`（图片） | FX `constellation` / `gradient-blob` |
+| 品牌字标 | emphasize | `gradient-flow` / `shimmer-sweep` | — |
+
+### 3.2 与主题的气质匹配
+
+| 主题 | 倾向 | 避免 |
+|---|---|---|
+| `terminal-green` | `typewriter`、`glitch-in`、`neon-glow` | 柔和慢速的 `blur-in` |
+| `editorial-serif` / `japanese-minimal` | `blur-in`、`fade-up`，偏慢 | `zoom-pop`、`glitch-in` |
+| `neo-brutalism` / `pixel` | `zoom-pop`、`drop-in`，干脆 | 慢速淡入 |
+| `hand-drawn` | `path-draw`、`fade-up` | 3D 类 |
+| `aurora` | `blur-in`、`gradient-flow` | `glitch-in` |
+| `swiss-grid` | `fade-left/right`、`stagger-list`，克制 | 氛围类、3D 类 |
+
+### 3.3 与交付形态匹配
+
+| 形态 | 原则 |
+|---|---|
+| `talk` | 少而准。页内 3 s 内全部到位，之后画面静止，让观众听讲 |
+| `video` | 每个 beat 对应一次视觉增量，延迟对齐口播节奏；多用 change 类 |
+| `post` | 导出为静态图，动效不可见；只需保证所有元素**最终状态**正确 |
+
+---
+
+## §4 示例（MAY · 参照）
+
+实现都在 `assets/animations/animations.css`。浏览全部：`templates/animation-showcase.html`（每种一页，进入即播放）；任意 deck 中按 **A** 在当前页试播随机动效。
+
+### 4.1 CSS 动效（27 种，按角色）
+
+| 角色 | 名称 | 效果 |
+|---|---|---|
+| enter · 方向 | `fade-up` `fade-down` `fade-left` `fade-right` | 32~40px 位移 + 淡入 |
+| enter · 戏剧 | `rise-in` | 上移 60px + 模糊消散 |
+| | `drop-in` | 下落 60px + 轻微缩放 |
+| | `zoom-pop` | 0.6 → 1.04 → 1 弹出 |
+| | `blur-in` | 18px 模糊渐清晰 |
+| | `glitch-in` | 裁剪分步 + 抖动 |
+| enter · 揭晓 | `spotlight` | 圆形从中心展开 |
+| | `ripple-reveal` | 从左下角涟漪展开 |
+| enter · 3D | `card-flip-3d` `cube-rotate-3d` `page-turn-3d` `perspective-zoom` | 翻转 / 立方体 / 翻页 / Z 轴拉近 |
+| enter · 文字 | `typewriter` | 逐字打出 + 光标 |
+| enter · 列表 | `stagger-list` | 子元素逐个上浮 |
+| emphasize | `neon-glow` | 文字发光脉冲（循环） |
+| | `shimmer-sweep` | 光泽扫过（循环） |
+| | `gradient-flow` | 渐变文字流动（循环） |
+| | `confetti-burst` | 伪元素闪光爆发 |
+| change | `counter-up` | 数字滚动（`.counter`，由 runtime 驱动） |
+| | `path-draw` | SVG 描边画出（加在 `<svg>` 上） |
+| | `morph-shape` | SVG 路径变形（循环） |
+| ambient | `marquee-scroll` | 水平无限滚动 |
+| | `kenburns` | 图片 14 s 缓慢推拉 |
+| | `parallax-tilt` | 悬停 3D 倾斜（仅交互） |
+
+### 4.2 canvas FX（20 种）
+
+在页面中引入 `<script src="…/assets/animations/fx-runtime.js"></script>`，再放一个有明确高度的容器 `<div data-fx="<名称>" style="height:360px"></div>`。颜色自动读取当前主题的 `--accent` 等 token。
+
+| 类别 | 名称 |
+|---|---|
+| 庆祝 / 冲击 | `particle-burst` `confetti-cannon` `firework` `shockwave` `counter-explosion`（`data-fx-to="2400"`） |
+| 科技氛围 | `starfield` `matrix-rain` `data-stream` `galaxy-swirl` `constellation` `gradient-blob` `magnetic-field` `orbit-ring` |
+| 概念图示 | `knowledge-graph` `neural-net` `chain-react` |
+| 文字 | `word-cascade` `letter-explode`（`data-fx-text-value="…"`） `typewriter-multi`（`data-fx-line1="…"`） |
+| 交互 | `sparkle-trail` |
+
+---
+
+## §5 自创（author）
+
+库里没有合适的动效时（最常见的是条形生长、环形生长），自创：
+
+1. **命名**：关键帧 `kf-<名称>`，类 `.anim-<名称>`。这样 `data-anim="<名称>"` 能直接触发，减少动效偏好也会自动生效。
+2. **只动允许的属性**：`transform`、`opacity`、`stroke-dashoffset`、数值（见 2.1 第 4 条）。
+3. **时长取档位**，缓动按 2.1 第 8 条。
+4. **写在 deck 的 `<style>` 中**，登记到分镜的「自创记录」，全 deck 复用。
+
+示例一 · 条形从左向右生长：
+
+```css
+@keyframes kf-grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.anim-grow-x { transform-origin: left center; animation: kf-grow-x 1.2s cubic-bezier(.2,.8,.2,1) both; }
+```
+
+```html
+<div class="bar-track"><div class="bar-fill" data-anim="grow-x" style="width:72%;animation-delay:.6s"></div></div>
+```
+
+示例二 · 环形弧线生长（周长 C = 2πr，占比 p）：
+
+```css
+@keyframes kf-ring { from { stroke-dashoffset: var(--c); } }
+.anim-ring { animation: kf-ring 1.2s cubic-bezier(.2,.8,.2,1) both; }
+```
+
+```html
+<!-- r=100 → C≈628；p=90% → offset = 628 × (1 − 0.9) ≈ 63 -->
+<circle r="100" cx="130" cy="130" fill="none" stroke="var(--accent)" stroke-width="24"
+        stroke-dasharray="628" stroke-dashoffset="63" style="--c:628"
+        transform="rotate(-90 130 130)" data-anim="ring"/>
+```

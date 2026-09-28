@@ -1,0 +1,202 @@
+# Component · 部件
+
+> 回答：**用什么视觉单元来表达这条信息。** 作用于页内元素，在 S3 分镜时按区域决定。
+
+---
+
+## §1 定义
+
+Component = 表达**一种信息形态**的最小视觉单元。一个大数字、一根条形、一张卡片、一个流程节点，都是部件。
+
+每个部件由四件事定义：
+
+| 属性 | 含义 | 例（stat 大数字） |
+|---|---|---|
+| **构成** | 由哪些部分组成，哪些必需、哪些可选 | 数值（必需）+ 单位（有则必需）+ 标签（必需）+ 变化量 / 来源（可选） |
+| **色调** | 承载什么语义 | 默认强调色；表示成本时用 `bad` |
+| **尺寸** | 用哪个字号档位 | 数值用 display，标签用 caption |
+| **可动部分** | 哪些部分可以做动效 | 数值可滚动；整体可入场 |
+
+部件只关心「这条信息长什么样」，不关心它放在页面哪里（layout）和何时出现（animation）。
+
+---
+
+## §2 规范（MUST）
+
+### 2.1 构成完整
+
+用一个部件时，它的**必需部分一个都不能少**。一个没有标签的大数字、一根没有数值的条形，观众无法理解。各部件的构成见 2.6 谱系表。
+
+### 2.2 色调走修饰类
+
+部件的语义色通过修饰类表达，统一为 4 个：`accent`（默认，可省略）、`good`、`warn`、`bad`。实现方式固定为「修饰类设置 `--tone`，部件内部只读 `--tone`」：
+
+```css
+.c-kpi            { --tone: var(--accent); }
+.c-kpi.good       { --tone: var(--good); }
+.c-kpi.warn       { --tone: var(--warn); }
+.c-kpi.bad        { --tone: var(--bad); }
+.c-kpi .value     { color: var(--tone); }
+.c-kpi .bar-fill  { background: var(--tone); }
+```
+
+色调的含义以 Brief 中「语义色」一行为准，全 deck 不变（见 `themes.md` §2.3）。
+
+### 2.3 尺寸走字号档位
+
+部件内部的文字只用 `layouts.md` §2.4 的档位。一个部件内部最多 2 个档位（例如数值 display + 标签 caption）。
+
+### 2.4 容器克制
+
+- 卡片的内边距、圆角、阴影沿用 `.card`（内边距 26×28，`--radius`，`--shadow`）。
+- 卡片最多嵌套一层（卡片里可以有 pill，不要再套卡片）。
+- 同一页的同类部件，尺寸、间距、对齐完全一致。
+
+### 2.5 命名
+
+| 情况 | 命名 |
+|---|---|
+| `assets/base.css` 已有的通用部件 | 直接用：`.card` `.pill` `.kicker` `.h2` `.counter`… |
+| 在 deck 内自创的部件 | `c-<名称>`，子元素用短类名并挂在其下：`.c-stat .value` |
+| 修饰 | 色调：`good` / `warn` / `bad` / `accent`；变体：语义化短词，如 `hero`、`pro`、`done` |
+
+### 2.6 部件谱系
+
+按**信息形态**分为 7 族。「示例」列指向 §4 中的现成实现；标「—」的只有规范、暂无示例，按构成自创。
+
+#### A 文字
+
+| 部件 | 表达 | 构成 | 示例 |
+|---|---|---|---|
+| kicker 眉题 | 章节 / 分类 | 短文本（≤12 字） | `.kicker` `.eyebrow` |
+| headline 标题 | 本页 claim | 主句 + 可选强调片段 | `.h1` `.h2` |
+| lede 导语 | 补充说明 | 1~2 句 | `.lede` |
+| keyword 关键词 | 句中重点 | 行内片段 | `.gradient-text`；`xhs-white-editorial` 的 `.xw-focus` |
+| quote 引文 | 引用 / 金句 | 引文 + 出处 | `xhs-pastel-card#4` |
+| strike 否定 | 推翻旧观点 | 被否定文字（删除线）+ 替代文字 | `testing-safety-alert#1` 标题中的 `.strike`；`sp:todo-checklist` 已完成项 |
+| caption 注释 | 来源 / 补充 | 短文本 | `.dim2` |
+
+#### B 数值
+
+| 部件 | 表达 | 构成 | 示例 |
+|---|---|---|---|
+| stat 大数字 | 一个关键数 | 数值 + 单位 + 标签（+ 变化量 / 来源） | `deck#3`；`pitch-deck` 的 `.mega`；`xhs-white-editorial` 的 `.xw-big-stat` |
+| kpi 指标卡 | 并列指标之一 | 标签 + 数值 + 变化量（带色调） | `weekly-report#2` 的 `.kpi.good/.warn/.bad`；`pitch-deck` 的 `.metric` |
+| delta 变化量 | 涨跌 / 倍数 | 方向符号 + 数值 + 对比基准 | `weekly-report#2` 卡内的 `.delta.up/.flat` |
+| counter 滚动数 | 数值动效载体 | `<span class="counter" data-to="…" data-dur="…">` | `assets/runtime.js` |
+
+#### C 量比
+
+| 部件 | 表达 | 构成 | 示例 |
+|---|---|---|---|
+| bar 条形 | 一项量值 | 标签 + 轨道 + 填充（长度 = 值）+ 数值 | `pitch-deck#7` 的 `.traction-bar`；`weekly-report#4` 的 `.chart-bars` |
+| progress 进度 | 完成度 / 占比 | 轨道 + 填充 + 百分比 | — |
+| ring 环形 | 单一占比 | 底环 + 弧（`stroke-dashoffset` = 值）+ 中心数值 | `xhs-pastel-card#6` SVG 环形图 |
+| chart 图表 | 趋势 / 分布 | 坐标 + 系列 + 标签 | `xhs-white-editorial#6`（SVG 柱）；`testing-safety-alert#5`（堆叠柱） |
+
+#### D 条目
+
+| 部件 | 表达 | 构成 | 示例 |
+|---|---|---|---|
+| list-item 清单项 | 带状态的一条 | 状态标记 + 文本（+ 标签） | `sp:todo-checklist` 的 `.todo li.done` |
+| agenda-row 议程行 | 有序一项 | 编号 + 标题（+ 说明 / 时长） | `tech-sharing#2` 的 `.agenda-row` |
+| record-row 事项行 | 完成事项 | 标记 + 事项 + 负责人 / 标签 | `weekly-report#3` 的 `.ship-item` |
+| table 表格 | 多维精确数据 | 表头 + 行 + 对齐的数值列 | — |
+
+#### E 容器
+
+| 部件 | 表达 | 构成 | 示例 |
+|---|---|---|---|
+| card 卡片 | 一个要点 | 标题 + 正文（+ 图标 / 数字） | `.card` `.card-soft` `.card-outline` `.card-accent` |
+| pill 胶囊 | 标签 / 属性 | 短文本 | `.pill` `.pill-accent` |
+| callout 提示 | 洞察 / 补充 | 标签或图标 + 一句话 | `course-module` 的 `.callout`；`knowledge-arch-blueprint` 的 `.kb-insight` |
+| alert 警示框 | 风险 / 前提 | 警示图标 + 标题 + 编号项（带色调） | `testing-safety-alert` 的 `.ts-alert-box` |
+| price-card 定价卡 | 方案 / 档位 | 档名 + 价格 + 权益 + 突出档 | `product-launch#7` 的 `.price-card.pro` |
+| sticker 贴纸 | 俏皮强调 | 短文本 + 旋转 + 描边 | `xhs-post` 的 `.sticker` |
+
+#### F 关系
+
+| 部件 | 表达 | 构成 | 示例 |
+|---|---|---|---|
+| node 节点 | 流程中的一步 | 编号 + 标题（+ 说明） | `knowledge-arch-blueprint` 的 `.kb-step`（`.hero` 突出）；`product-launch#6` 的 `.step` |
+| connector 连接 | 先后 / 因果 | 线或箭头（SVG） | `knowledge-arch-blueprint#5` 的虚线回路 |
+| timeline-dot 时间点 | 时间节点 | 圆点 + 时间 + 事件 | `sp:timeline` 的 `.tl .dot` |
+| vs 对比轴 | 两方对立 | 左部件 + 中轴标记 + 右部件 | — |
+| formula 算式 | 一步计算 | 项 + 运算符 + 项 + `=` + 结果（结果带色调） | — |
+| ladder 推演阶梯 | 逐级放大 / 换算 | 级标签 + 数值，级间用 `↓` 连接 | — |
+
+#### G 媒介
+
+| 部件 | 表达 | 构成 | 示例 |
+|---|---|---|---|
+| window 模拟窗口 | 界面 / 产品截面 | 标题栏（红绿灯）+ 内容 | `hermes-cyber-terminal` 的 `.hc-chrome` |
+| code 代码块 | 代码 / 命令 | 标题栏 + 等宽代码 + 语法色 | `tech-sharing#6` 的 `.terminal` |
+| image 图片框 | 实物 / 截图 | 图 + 圆角（+ 标注） | `product-launch#1` 的 `.hero-shot` |
+| icon 图标 | 概念符号 | emoji 或 SVG | `xhs-post` 的 `.big-emoji` |
+
+---
+
+## §3 决策（SHOULD）
+
+**优先级：能用数据表达，就不用图示；能用图示表达，就不用文字。** 纯文字页，让关键词醒目。
+
+| 我要表达… | 用 | 不要用 |
+|---|---|---|
+| 一个关键数字 | stat（+ counter） | 一句含数字的话 |
+| 一个数字和它的变化 | stat + delta，或 kpi | 两个没有标签的数字 |
+| 2~4 个同级指标 | kpi × N | 表格 |
+| 一个占比 / 完成度 | ring 或 progress | 只有一个值的饼图 |
+| 几项量值的大小比较 | bar × N（按值排序） | 多个 stat |
+| 随时间的趋势 | chart（柱 / 线） | 一排 kpi |
+| 多维度精确数据 | table | 很多根 bar |
+| 两方对比 | card × 2（+ vs） | 一段文字 |
+| 并列要点 | card × N，或 list-item | 长段落 |
+| 有先后的步骤 | node × N + connector | 无序列表 |
+| 带完成状态的事项 | list-item（带色调） | 普通列表 |
+| 本页结论 | card-accent、keyword 或 stat | 与正文同样式的文字 |
+| 推翻一个旧观点 | strike | 只换个颜色 |
+| 风险、前提、限定条件 | alert | 普通卡片 |
+| 一步计算 | formula | 一句含算式的话 |
+| 多步换算 / 逐级放大 | ladder | 一个表格 |
+| 引用 | quote | 普通正文 |
+| 代码 / 命令 | code | 截图 |
+| 产品 / 界面 | image 或 window | 文字描述 |
+
+**数量**：同一页同类部件最多 4 个并排；超过 4 个改用条目族（D）或拆页。
+
+---
+
+## §4 示例（MAY · 参照）
+
+找示例的方式：打开 §2.6 表中「示例」列指向的页面，在浏览器中看效果，在源码中搜类名看结构。
+
+| 位置 | 能看到的部件 |
+|---|---|
+| `assets/base.css` | 文字族全部、`.card` 四种变体、`.pill`、`.divider`、`.counter`、页面 chrome |
+| `templates/deck.html` | 封面标题、卡片网格、超大数字、双栏卡片 |
+| `templates/single-page/` | 封面组合（cover）、时间点（timeline）、带状态清单（todo-checklist） |
+| `weekly-report` | 带色调的 kpi、柱状图、事项行 |
+| `pitch-deck` | 超大数字 `.mega`、指标 `.metric`、增长柱 `.traction-bar` |
+| `product-launch` | 定价卡、功能卡、编号步骤、主视觉图 |
+| `knowledge-arch-blueprint` | 流水线节点（含突出态）、洞察提示、SVG 回路 |
+| `testing-safety-alert` | 警示框（三种色调）、删除线标题、状态清单、堆叠柱 |
+| `tech-sharing` / `presenter-mode-reveal` | 议程行、终端代码块 |
+| `hermes-cyber-terminal` | 模拟窗口标题栏、描边柱状图 |
+| `xhs-post` / `xhs-pastel-card` / `xhs-white-editorial` | 贴纸、编号圆点、环形图、关键词胶囊、大数字 |
+| `course-module` | 提示框、选择题 `.mcq` |
+
+---
+
+## §5 自创（author）
+
+谱系里没有、或示例不合用时，自创部件：
+
+1. **先写构成**：用一句话列出必需与可选部分（例：「formula = 左项 + 运算符 + 右项 + `=` + 结果，结果必须带色调」）。
+2. **只用 token**：颜色、圆角、阴影、字体全部是 `var(--token)`；色调按 §2.2 的 `--tone` 模式。
+3. **尺寸取档位**：内部文字按 `layouts.md` §2.4。
+4. **标出可动部分**：写明哪一部分会做什么动效（例：「结果数值用 counter；左右两项淡入」）。
+5. **命名为 `c-<名称>`**，样式写在 deck 的 `<style>` 中。
+6. **登记并复用**：写进分镜的「自创记录」；同一 deck 再遇到同类信息，复用同一实现。
+7. **质量对齐**：找谱系中最接近的现成部件，边框、圆角、间距、字重向它看齐。
+
+一个合格的自创部件，放到这个 deck 的任何一页都不会显得是「外来的」。

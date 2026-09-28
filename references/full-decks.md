@@ -1,4 +1,6 @@
-# 完整演示模板
+# 完整演示模板 · 整套参照
+
+> 在四维框架中，full-deck 是 **theme + layout + component + animation 合一**的整套示例，是最具象的质量目标。S1 定调时先看这里：场景高度吻合的，直接作为本 deck 的「整套参照」；不吻合的，也可以按页取用它们的版式与部件作为单页参照（记法 `<名称>#N`，见 `references/pipeline.md` S3）。
 
 自包含的多页 HTML 演示，位于 `templates/full-decks/<name>/`。每个文件夹包含：
 
@@ -86,7 +88,7 @@
 
 每个文件夹：`index.html`、带作用域的 `style.css`（前缀 `.tpl-<name>`）、`README.md`。`xhs-post` 模板把默认 `.slide` 盒子改成固定 `810×1080`，用于 3:4 竖版。
 
-> 🎤 **任何演讲场景（技术分享 / 课程 / 路演）都推荐用 `presenter-mode-reveal`**，或者参考 [presenter-mode.md](./presenter-mode.md) 指南给其他模板加 `<aside class="notes">` 逐字稿。
+> 🎤 **任何演讲场景（技术分享 / 课程 / 路演）都推荐用 `presenter-mode-reveal`**，或者参考 `templates/full-decks/presenter-mode-reveal/README.md` 给其他模板加 `<aside class="notes">` 逐字稿。
 
 ---
 
